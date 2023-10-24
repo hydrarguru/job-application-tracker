@@ -56,8 +56,8 @@ header h1 {
     margin-bottom: 0.5rem;
 }
 .form label {
+    font-size: 0.925rem;
     color: black;
-    font-size: 0.8rem;
     padding: 0.2rem;
     margin-bottom: 0.2rem;
 }
@@ -100,3 +100,14 @@ header h1 {
 }
 
 /*End Main*/
+
+/*Footer*/
+
+#footer {
+    background-color: var(--one);
+    color: white;
+    height: 2rem;
+    margin-bottom: 0;
+}
+
+/*End Footer*/
