@@ -4,6 +4,10 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="popup.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+        />
         <title>Application Tracker</title>
     </head>
     <body>
@@ -12,7 +16,7 @@
         </header>
         <main id="main">
             <form id="applications-form" name="applications-form" class="form">
-                <label for="companyName">Företag</label>
+                <label for="companyName">Företag:</label>
                 <input
                     class="form-input-field"
                     type="text"
@@ -20,7 +24,7 @@
                     placeholder="(e.g., Google, Microsoft)."
                     required
                 />
-                <label for="jobRole">Jobbroll</label>
+                <label for="jobRole">Jobbroll:</label>
                 <input
                     class="form-input-field"
                     type="text"
@@ -28,7 +32,7 @@
                     placeholder="(e.g.,Frontend Engineer, Backend Engineer)."
                     required
                 />
-                <label for="jobArea">Område</label>
+                <label for="jobArea">Område:</label>
                 <input
                     class="form-input-field"
                     type="text"
@@ -36,7 +40,7 @@
                     placeholder="(e.g., Stockholm, Solna, Umeå)."
                     required
                 />
-                <label for="applicationLink">Ansökningslänk</label>
+                <label for="applicationLink">Ansökningslänk:</label>
                 <input
                     role="presentation"
                     autocomplete="off"
@@ -46,7 +50,7 @@
                     placeholder="Länk till ansökan"
                     required
                 />
-                <label for="form-appliedDate">Ansökningsdatum</label>
+                <label for="form-appliedDate">Ansökningsdatum:</label>
                 <input
                     id="job-form-date"
                     type="date"
@@ -54,8 +58,29 @@
                     name="form-appliedDate"
                     required
                 />
-                <button>Lägg till</button>
-                <button>Återställ</button>
+                <div class="form-buttons">
+                    <button
+                        id="form-submit-button"
+                        type="submit"
+                        name="form-submit-button"
+                    >
+                        <i class="bi bi-database-add"></i> Lägg till
+                    </button>
+                    <button
+                        id="form-reset-button"
+                        type="button"
+                        name="form-reset-button"
+                    >
+                        <i class="bi bi-arrow-counterclockwise"></i> Återställ
+                    </button>
+                    <button
+                        id="form-options-button"
+                        type="button"
+                        name="form-options-button"
+                    >
+                        <i class="bi bi-gear"></i> Inställningar
+                    </button>
+                </div>
             </form>
         </main>
     </body>
