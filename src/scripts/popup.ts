@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formInputs = document.querySelectorAll('input');
     const resetButton = document.querySelector('#form-reset-button');
     const submitButton = document.querySelector('#form-submit-button');
-    const optionsButton = document.querySelector('#form-options-button');
+    const dashbordButton = document.querySelector('#form-dashboard-button');
 
     /*
     Every child input element's value in the form element is reset.
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* The optins button opens the options page. */
-    optionsButton.addEventListener('click', () => {
+    dashbordButton.addEventListener('click', () => {
         chrome.runtime.openOptionsPage();
     });
 });
