@@ -1,3 +1,8 @@
+/**
+ * Returns the current date in the format YYYY-MM-DD.
+ * @remarks
+ * Utility function.
+ */
 export function getCurrentDate() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
