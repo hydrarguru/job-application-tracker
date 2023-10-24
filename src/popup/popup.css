@@ -66,6 +66,11 @@ header h1 {
     margin-top: 0.25rem;
     cursor: pointer;
 }
+
+.form button:hover {
+    background-color: var(--two);
+}
+
 /*Form End*/
 
 /*Main*/
