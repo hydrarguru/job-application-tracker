@@ -18,7 +18,7 @@
             <form id="applications-form" name="applications-form" class="form">
                 <label for="companyName">Företag:</label>
                 <input
-                    class="form-input-field"
+                    name="companyName"
                     type="text"
                     id="companyName"
                     placeholder="(e.g., Google, Microsoft)."
@@ -26,7 +26,7 @@
                 />
                 <label for="jobRole">Jobbroll:</label>
                 <input
-                    class="form-input-field"
+                    name="jobRole"
                     type="text"
                     id="jobRole"
                     placeholder="(e.g.,Frontend Engineer, Backend Engineer)."
@@ -34,7 +34,7 @@
                 />
                 <label for="jobArea">Område:</label>
                 <input
-                    class="form-input-field"
+                    name="jobArea"
                     type="text"
                     id="jobArea"
                     placeholder="(e.g., Stockholm, Solna, Umeå)."
@@ -42,9 +42,9 @@
                 />
                 <label for="applicationLink">Ansökningslänk:</label>
                 <input
+                    name="applicationLink"
                     role="presentation"
                     autocomplete="off"
-                    class="form-input-field"
                     type="text"
                     id="applicationLink"
                     placeholder="Länk till ansökan"
@@ -52,10 +52,10 @@
                 />
                 <label for="form-appliedDate">Ansökningsdatum:</label>
                 <input
+                    name="form-appliedDate"
                     id="job-form-date"
                     type="date"
                     value=""
-                    name="form-appliedDate"
                     required
                 />
                 <div class="form-buttons">
@@ -74,14 +74,15 @@
                         <i class="bi bi-arrow-counterclockwise"></i> Återställ
                     </button>
                     <button
-                        id="form-options-button"
+                        id="form-dashboard-button"
                         type="button"
-                        name="form-options-button"
+                        name="form-dashboard-button"
                     >
-                        <i class="bi bi-gear"></i> Inställningar
+                        <i class="bi bi-gear"></i> Dashboard
                     </button>
                 </div>
             </form>
         </main>
     </body>
+    <script src="popup.js"></script>
 </html>

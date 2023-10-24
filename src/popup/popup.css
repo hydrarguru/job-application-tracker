@@ -20,8 +20,7 @@ body {
 }
 
 body {
-    border: 1px solid var(--one);
-    border-radius: 0.2rem;
+    border: 1px solid var(--three);
 }
 
 /*Header*/
@@ -84,7 +83,7 @@ header h1 {
     width: 6rem;
 }
 
-#form-options-button {
+#form-dashboard-button {
     width: 7.7rem;
 }
 
