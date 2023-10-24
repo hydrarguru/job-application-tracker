@@ -7,6 +7,55 @@
         <title>Application Tracker</title>
     </head>
     <body>
-        <h1>test</h1>
+        <header id="header">
+            <h1>Application Tracker</h1>
+        </header>
+        <main id="main">
+            <form id="applications-form" name="applications-form" class="form">
+                <label for="companyName">Company Name</label>
+                <input
+                    class="form-input-field"
+                    type="text"
+                    id="companyName"
+                    placeholder="Company Name (e.g., Google, Microsoft)."
+                    required
+                />
+                <label for="jobRole">Job Role</label>
+                <input
+                    class="form-input-field"
+                    type="text"
+                    id="jobRole"
+                    placeholder="Job Role (e.g.,Frontend Engineer, Backend Engineer)."
+                    required
+                />
+                <label for="jobArea">Job Area</label>
+                <input
+                    class="form-input-field"
+                    type="text"
+                    id="jobArea"
+                    placeholder="Area (e.g., Stockholm, Solna, Umeå)."
+                    required
+                />
+                <label for="applicationLink">Application Link</label>
+                <input
+                    role="presentation"
+                    autocomplete="off"
+                    class="form-input-field"
+                    type="text"
+                    id="applicationLink"
+                    placeholder="Link to application page."
+                    required
+                />
+                <input
+                    id="job-form-date"
+                    type="date"
+                    value=""
+                    name="form-appliedDate"
+                    required
+                />
+                <button>Lägg till</button>
+                <button>Återställ</button>
+            </form>
+        </main>
     </body>
 </html>

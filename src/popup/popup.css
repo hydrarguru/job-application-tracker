@@ -1,4 +1,77 @@
-html {
-    height: 425px;
-    width: 350px;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap');
+/*https://coolors.co/222d25-233127-25392c-274131-294936*/
+
+* {
+    font-family: 'Noto Sans', sans-serif;
+    --one: #294936;
+    --two: #274131;
+    --three: #233127;
+    --four: #222d25;
 }
+
+html,
+body {
+    height: 550px;
+    width: 350px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/*Header*/
+#header {
+    height: 4rem;
+    background-color: var(--one);
+}
+
+header h1 {
+    color: white;
+    font-size: 1.5rem;
+    margin-top: 0;
+    padding-left: 0.8rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+/*Header End*/
+
+/*Form*/
+.form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    padding-bottom: 0.8rem;
+}
+
+.form input {
+    padding: 0.5rem;
+    border: 1px solid var(--one);
+    border-radius: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+.form label {
+    color: var(--one);
+    font-size: 0.8rem;
+    padding: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+.form button {
+    background-color: var(--one);
+    color: white;
+    border: solid 1px black;
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+/*Form End*/
+
+/*Main*/
+#main {
+    background-color: white;
+    height: auto;
+}
+
+/*End Main*/
