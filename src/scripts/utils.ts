@@ -22,5 +22,5 @@ export function getCurrentMonth() {
     const formattedMonth = currentDate.toLocaleString('default', {
         month: 'long',
     });
-    return formattedMonth;
+    return formattedMonth.toLowerCase();
 }
