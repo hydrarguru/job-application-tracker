@@ -13,6 +13,6 @@ addJobToDatabase('october', {
     jobRole: 'Test Roll',
     jobArea: 'Test Ort',
     applicationLink: 'https://www.test.se',
-    applicationDate: '2021-01-01',
+    appliedDate: '2021-01-01',
 });
 */

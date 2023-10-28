@@ -260,8 +260,8 @@ type JobData = {
     appliedDate: string;
 };
 
-export function createDatabase() {
-    openDB('JAT-DB', 1, {
+export async function createDatabase() {
+    await openDB('JAT-DB', 1, {
         upgrade(db) {
             for (const month of months) {
                 const store = db.createObjectStore(`${month}`, {
