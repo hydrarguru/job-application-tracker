@@ -1,3 +1,4 @@
+import { addJobToDatabase } from './db';
 import { getCurrentDate } from './utils';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,6 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.querySelector('#form-submit-button');
     const dashbordButton = document.querySelector('#form-dashboard-button');
 
+    function clearFormInputs() {
+        formInputs.forEach((input) => {
+            input.value = '';
+        });
+        formInputs[4].value = getCurrentDate(); // sets date input to current date.
+    }
+
     submitButton.addEventListener('click', (e) => {
         e.preventDefault();
         const formInputs = document.querySelectorAll('input');
@@ -14,19 +22,22 @@ document.addEventListener('DOMContentLoaded', () => {
             (input) => input.value !== ''
         );
 
+        /*TODO: Add validation for the date input field. */
+        /*TODO: Notify user on submit */
         if (isEveryInputFilled) {
             const jobApplication = {
                 companyName: formInputs[0].value,
                 jobRole: formInputs[1].value,
                 jobArea: formInputs[2].value,
                 applicationLink: formInputs[3].value,
-                applicationDate: formInputs[4].value,
+                appliedDate: formInputs[4].value,
             };
-            alert(JSON.stringify(jobApplication));
             console.log(jobApplication);
+            addJobToDatabase('october', jobApplication);
         } else {
             alert('Fyll i alla fält! Tomma fält:' + isEveryInputFilled);
         }
+        clearFormInputs();
     });
 
     /*
@@ -34,10 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     The date input field is set to the current date.
     */
     resetButton.addEventListener('click', () => {
-        formInputs.forEach((input) => {
-            input.value = '';
-        });
-        formInputs[4].value = getCurrentDate(); // sets date input to current date.
+        clearFormInputs();
     });
 
     /* The optins button opens the options page. */
