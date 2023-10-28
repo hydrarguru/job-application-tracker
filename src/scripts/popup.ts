@@ -7,6 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.querySelector('#form-submit-button');
     const dashbordButton = document.querySelector('#form-dashboard-button');
 
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const jobApplication = {
+            companyName: formInputs[0].value,
+            jobRole: formInputs[1].value,
+            jobArea: formInputs[2].value,
+            applicationLink: formInputs[3].value,
+            applicationDate: formInputs[4].value,
+        };
+        alert(JSON.stringify(jobApplication));
+        console.log(jobApplication);
+    });
+
     /*
     Every child input element's value in the form element is reset.
     The date input field is set to the current date.
