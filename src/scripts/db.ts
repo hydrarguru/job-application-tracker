@@ -257,7 +257,7 @@ type JobData = {
     jobRole: string;
     jobArea: string;
     applicationLink: string;
-    applicationDate: string;
+    appliedDate: string;
 };
 
 export function createDatabase() {
@@ -309,7 +309,6 @@ export function deleteJobFromDatabase(month: string, id: number) {
  * @param month The month to get the job applications from.
  * @returns An array of job applications from the database.
  */
-
 export function getJobsFromDatabase(month: string) {
     return openDB('JAT-DB', 1).then((db) => {
         const transaction = db.transaction(`${month}`, 'readonly');
