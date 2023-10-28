@@ -1,4 +1,4 @@
-import { openDB } from 'idb';
+import { openDB, DBSchema } from 'idb';
 
 const months = [
     'january',
@@ -15,6 +15,243 @@ const months = [
     'december',
 ];
 
+export interface JobDB extends DBSchema {
+    jobsTable: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+    /*
+    january: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    february: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    march: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    april: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    may: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    june: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    july: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    august: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: string;
+        };
+    };
+
+    september: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: Date;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: Date;
+        };
+    };
+
+    october: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: Date;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: string;
+            appliedDate: Date;
+        };
+    };
+
+    november: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: Date;
+            appliedDate: Date;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: Date;
+            appliedDate: Date;
+        };
+    };
+
+    december: {
+        key: number;
+        value: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: Date;
+            appliedDate: Date;
+        };
+        indexes: {
+            companyName: string;
+            jobRole: string;
+            jobArea: string;
+            applicationLink: Date;
+            appliedDate: Date;
+        };
+    };
+    */
+}
+
 type JobData = {
     companyName: string;
     jobRole: string;
@@ -27,10 +264,15 @@ export function createDatabase() {
     openDB('JAT-DB', 1, {
         upgrade(db) {
             for (const month of months) {
-                db.createObjectStore(`${month}`, {
+                const store = db.createObjectStore(`${month}`, {
                     keyPath: 'id',
                     autoIncrement: true,
                 });
+                store.createIndex('companyName', 'companyName');
+                store.createIndex('jobRole', 'jobRole');
+                store.createIndex('jobArea', 'jobArea');
+                store.createIndex('applicationLink', 'applicationLink');
+                store.createIndex('appliedDate', 'appliedDate');
             }
         },
     });
