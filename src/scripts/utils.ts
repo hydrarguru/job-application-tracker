@@ -11,3 +11,16 @@ export function getCurrentDate() {
     const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
 }
+
+/**
+ * Returns the name of the current month.
+ * @remarks
+ * Utility function.
+ */
+export function getCurrentMonth() {
+    const currentDate = new Date();
+    const formattedMonth = currentDate.toLocaleString('default', {
+        month: 'long',
+    });
+    return formattedMonth;
+}
