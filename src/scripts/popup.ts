@@ -9,15 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     submitButton.addEventListener('click', (e) => {
         e.preventDefault();
-        const jobApplication = {
-            companyName: formInputs[0].value,
-            jobRole: formInputs[1].value,
-            jobArea: formInputs[2].value,
-            applicationLink: formInputs[3].value,
-            applicationDate: formInputs[4].value,
-        };
-        alert(JSON.stringify(jobApplication));
-        console.log(jobApplication);
+        const formInputs = document.querySelectorAll('input');
+        const isEveryInputFilled = Array.from(formInputs).every(
+            (input) => input.value !== ''
+        );
+
+        if (isEveryInputFilled) {
+            const jobApplication = {
+                companyName: formInputs[0].value,
+                jobRole: formInputs[1].value,
+                jobArea: formInputs[2].value,
+                applicationLink: formInputs[3].value,
+                applicationDate: formInputs[4].value,
+            };
+            alert(JSON.stringify(jobApplication));
+            console.log(jobApplication);
+        } else {
+            alert('Fyll i alla fält! Tomma fält:' + isEveryInputFilled);
+        }
     });
 
     /*
