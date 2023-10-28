@@ -92,6 +92,11 @@ header h1 {
     background-color: var(--two);
 }
 
+#form-reset-button:hover {
+    transition: 0.5s;
+    background-color: #d63030;
+}
+
 /*Form End*/
 
 /*Main*/
