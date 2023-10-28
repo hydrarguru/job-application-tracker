@@ -1,5 +1,9 @@
-import { createDatabase, addJobToDatabase } from './db';
-import { getCurrentMonth } from './utils';
+import {
+    createDatabase,
+    addJobToDatabase,
+    getJobsFromDatabase,
+    deleteJobFromDatabase,
+} from './db';
 
 createDatabase();
 
