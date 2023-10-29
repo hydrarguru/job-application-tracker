@@ -15,6 +15,26 @@
             <h1>Job Application Tracker</h1>
         </header>
         <main id="main">
+            <dialog id="formDialog" class="formDialogModal">
+                <form method="dialog">
+                    <img svg="true" src="img/checked-tick.svg" />
+                    <p id="formDialogModalParagraph">
+                        Job application added to database!
+                    </p>
+                    <button>Close dialog</button>
+                </form>
+            </dialog>
+
+            <dialog id="formDialogError" class="formDialogModal">
+                <form method="dialog">
+                    <img svg="true" src="img/checked-tick.svg" />
+                    <p id="formDialogModalParagraph">
+                        Error adding job application to database!
+                    </p>
+                    <button>Close dialog</button>
+                </form>
+            </dialog>
+
             <form id="applications-form" name="applications-form" class="form">
                 <label for="companyName">Företag:</label>
                 <input

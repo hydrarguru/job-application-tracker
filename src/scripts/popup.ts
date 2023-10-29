@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.querySelector('#form-submit-button');
     const dashbordButton = document.querySelector('#form-dashboard-button');
 
+    /* Form Dialog Modal */
+    const formDialogModal = <HTMLDialogElement>(
+        document.querySelector('#formDialog')
+    );
+
+    const formDialogErrorModal = <HTMLDialogElement>(
+        document.querySelector('#formDialogError')
+    );
+
     function clearFormInputs() {
         formInputs.forEach((input) => {
             input.value = '';
@@ -32,10 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 applicationLink: formInputs[3].value,
                 appliedDate: formInputs[4].value,
             };
+            formDialogModal.showModal();
             console.log(jobApplication);
-            addJobToDatabase('october', jobApplication);
+            //addJobToDatabase('october', jobApplication);
         } else {
-            alert('Fyll i alla fält! Tomma fält:' + isEveryInputFilled);
+            formDialogErrorModal.showModal();
         }
         clearFormInputs();
     });
