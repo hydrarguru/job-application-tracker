@@ -74,7 +74,7 @@ export function deleteJobFromDatabase(id: number) {
 /**
  * @returns A promise that resolves to an array of job application objects.
  */
-export async function getJobsFromDatabase(): Promise<any[]> {
+export async function getJobsFromDatabase() {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
