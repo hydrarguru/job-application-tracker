@@ -72,10 +72,10 @@ export function deleteJobFromDatabase(id: number) {
 }
 
 /**
- * @returns An array of job applications from the database.
+ * @returns A promise that resolves to an array of job application objects.
  */
-export async function getJobsFromDatabase() {
-    const db = await openDB('JAT-DB', 1);
+export async function getJobsFromDatabase(): Promise<any[]> {
+    const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
     return await store.getAll();
@@ -86,7 +86,7 @@ export async function getJobsFromDatabase() {
  * @param id The id of the job application to get.
  * @returns A job application object from the database.
  */
-export function getJobFromDatabase(month: string, id: number) {
+export function getJobFromDatabase(id: number) {
     return openDB(DATABASE_NAME, 1).then((db) => {
         const transaction = db.transaction(DATABASE_TABLE, 'readonly');
         const store = transaction.objectStore(DATABASE_TABLE);
