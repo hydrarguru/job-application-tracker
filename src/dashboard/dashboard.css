@@ -71,6 +71,44 @@ body {
     height: 1000px;
 }
 
+.grid-container {
+    display: grid;
+    padding-right: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-gap: 1rem;
+    grid-template-areas:
+        "db-total db-month db-today"
+        "db-view db-view db-view" ;
+}
+
+#db-total {
+    grid-area: db-total;
+}
+
+#db-month {
+    grid-area: db-month;
+}
+
+#db-today {
+    grid-area: db-today;
+}
+
+#db-grid-item {
+    grid-row-start: 2;
+    grid-column-start: span 3;
+    min-height: 100%;
+}
+
+.grid-item {
+    background-color:white;
+    border: 1px solid var(--one);
+    border-radius: 0.2rem;
+    padding: 1rem;
+    font-size: 1.5em;
+    text-align: center;
+}
+
 /* Main End */
 
 /* Footer Start */
