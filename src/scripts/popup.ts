@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             formDialogModal.showModal();
             console.log(jobApplication);
-            //addJobToDatabase('october', jobApplication);
+            addJobToDatabase(jobApplication);
         } else {
             formDialogErrorModal.showModal();
         }

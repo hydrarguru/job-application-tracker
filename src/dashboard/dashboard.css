@@ -7,6 +7,8 @@
     --two: #274131;
     --three: #233127;
     --four: #222d25;
+
+    --nav-width: 12rem;
 }
 
 html,
@@ -17,13 +19,17 @@ body {
     box-sizing: border-box;
 }
 
+body {
+    background-color: #f1f1f1;
+}
+
 /* Header Start */
 #header ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 10rem;
-    background-color: #f1f1f1;
+    width: var(--nav-width);
+    background-color: white;
     position: fixed;
     height: 100%;
     overflow: auto;
@@ -48,13 +54,21 @@ body {
     color: white;
 }
 
+#dashboard-logo {
+    padding-top: 0;
+    padding-left: 0.5rem;
+    font-size: 10em;
+    color: #294936;
+}
+
 /* Header End */
 
 /* Main Start */
 #main {
-    margin-left: 10rem;
+    margin-left: var(--nav-width);
     padding-left: 1rem;
     min-height: 100%;
+    height: 1000px;
 }
 
 /* Main End */
