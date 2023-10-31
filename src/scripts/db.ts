@@ -1,19 +1,7 @@
 import { openDB, DBSchema } from 'idb';
 
-const months = [
-    'january',
-    'february',
-    'march',
-    'april',
-    'may',
-    'juny',
-    'july',
-    'august',
-    'september',
-    'october',
-    'november',
-    'december',
-];
+const DATABASE_NAME = 'JAT-DB';
+const DATABASE_TABLE = 'jobsTable'
 
 export interface JobDB extends DBSchema {
     jobsTable: {
@@ -33,223 +21,6 @@ export interface JobDB extends DBSchema {
             appliedDate: string;
         };
     };
-    /*
-    january: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    february: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    march: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    april: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    may: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    june: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    july: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    august: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
-    };
-
-    september: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: Date;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: Date;
-        };
-    };
-
-    october: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: Date;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: Date;
-        };
-    };
-
-    november: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: Date;
-            appliedDate: Date;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: Date;
-            appliedDate: Date;
-        };
-    };
-
-    december: {
-        key: number;
-        value: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: Date;
-            appliedDate: Date;
-        };
-        indexes: {
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: Date;
-            appliedDate: Date;
-        };
-    };
-    */
 }
 
 type JobData = {
@@ -261,71 +32,64 @@ type JobData = {
 };
 
 export async function createDatabase() {
-    await openDB('JAT-DB', 1, {
+    await openDB<JobDB>(DATABASE_NAME, 1, {
         upgrade(db) {
-            for (const month of months) {
-                const store = db.createObjectStore(`${month}`, {
-                    keyPath: 'id',
-                    autoIncrement: true,
-                });
-                store.createIndex('companyName', 'companyName');
-                store.createIndex('jobRole', 'jobRole');
-                store.createIndex('jobArea', 'jobArea');
-                store.createIndex('applicationLink', 'applicationLink');
-                store.createIndex('appliedDate', 'appliedDate');
-            }
+            const store = db.createObjectStore(DATABASE_TABLE, {
+                keyPath: 'id',
+                autoIncrement: true,
+            });
+            store.createIndex('companyName', 'companyName');
+            store.createIndex('jobRole', 'jobRole');
+            store.createIndex('jobArea', 'jobArea');
+            store.createIndex('applicationLink', 'applicationLink');
+            store.createIndex('appliedDate', 'appliedDate');
         },
     });
 }
 
 /**
  * Add a job application to the database.
- * @param month The month to add the job application to.
  * @param job The job application object to add.
  */
-export function addJobToDatabase(month: string, job: JobData) {
-    openDB('JAT-DB', 1).then((db) => {
-        const transaction = db.transaction(`${month}`, 'readwrite');
-        const store = transaction.objectStore(`${month}`);
+export function addJobToDatabase(job: JobData) {
+    openDB(DATABASE_NAME, 1).then((db) => {
+        const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+        const store = transaction.objectStore(DATABASE_TABLE);
         store.add(job);
     });
 }
 
 /**
  * Delete a job application from the database.
- * @param month The month to get the job applications from.
  * @param id The id of the job application to delete.
  */
-export function deleteJobFromDatabase(month: string, id: number) {
-    openDB('JAT-DB', 1).then((db) => {
-        const transaction = db.transaction(`${month}`, 'readwrite');
-        const store = transaction.objectStore(`${month}`);
+export function deleteJobFromDatabase(id: number) {
+    openDB(DATABASE_NAME, 1).then((db) => {
+        const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+        const store = transaction.objectStore(DATABASE_TABLE);
         store.delete(id);
     });
 }
 
 /**
- *
- * @param month The month to get the job applications from.
  * @returns An array of job applications from the database.
  */
-export async function getJobsFromDatabase(month: string) {
+export async function getJobsFromDatabase() {
     const db = await openDB('JAT-DB', 1);
-    const transaction = db.transaction(`${month}`, 'readonly');
-    const store = transaction.objectStore(`${month}`);
+    const transaction = db.transaction(DATABASE_TABLE, 'readonly');
+    const store = transaction.objectStore(DATABASE_TABLE);
     return await store.getAll();
 }
 
 /**
  * Get a job application from the database.
- * @param month The month to get the job application from.
  * @param id The id of the job application to get.
  * @returns A job application object from the database.
  */
 export function getJobFromDatabase(month: string, id: number) {
-    return openDB('JAT-DB', 1).then((db) => {
-        const transaction = db.transaction(`${month}`, 'readonly');
-        const store = transaction.objectStore(`${month}`);
+    return openDB(DATABASE_NAME, 1).then((db) => {
+        const transaction = db.transaction(DATABASE_TABLE, 'readonly');
+        const store = transaction.objectStore(DATABASE_TABLE);
         return store.get(id);
     });
 }
