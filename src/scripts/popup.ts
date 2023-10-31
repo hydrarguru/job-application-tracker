@@ -3,25 +3,27 @@ import { getCurrentDate } from './utils';
 
 document.addEventListener('DOMContentLoaded', () => {
     /* Button elements are selected when the DOM is loaded. */
-    const formInputs = document.querySelectorAll('input');
-    const resetButton = document.querySelector('#form-reset-button');
-    const submitButton = document.querySelector('#form-submit-button');
-    const dashbordButton = document.querySelector('#form-dashboard-button');
+    const formInputs = document.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
+    const resetButton = document.querySelector('#form-reset-button') as HTMLButtonElement;
+    const submitButton = document.querySelector('#form-submit-button') as HTMLButtonElement;
+    const dashbordButton = document.querySelector('#form-dashboard-button') as HTMLButtonElement;
+    const formDatePicker = formInputs[4] as HTMLInputElement;
 
-    /* Form Dialog Modal */
-    const formDialogModal = <HTMLDialogElement>(
-        document.querySelector('#formDialog')
-    );
+    /* The date input field is set to the current date. */
+    formDatePicker.value = getCurrentDate();
 
-    const formDialogErrorModal = <HTMLDialogElement>(
-        document.querySelector('#formDialogError')
-    );
+    /* Form Dialog Modals */
+    const formDialogModal = document.querySelector('#formDialog') as HTMLDialogElement;
+    const formDialogErrorModal = document.querySelector('#formDialogError') as HTMLDialogElement;
 
+    /*
+    * Clear the input fields in the form element and sets the date input field to the current date.
+    */
     function clearFormInputs() {
         formInputs.forEach((input) => {
             input.value = '';
         });
-        formInputs[4].value = getCurrentDate(); // sets date input to current date.
+        formDatePicker.value = getCurrentDate();
     }
 
     submitButton.addEventListener('click', (e) => {
@@ -32,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         /*TODO: Add validation for the date input field. */
-        /*TODO: Notify user on submit */
         if (isEveryInputFilled) {
             const jobApplication = {
                 companyName: formInputs[0].value,
@@ -44,10 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
             formDialogModal.showModal();
             console.log(jobApplication);
             addJobToDatabase(jobApplication);
+            clearFormInputs();
         } else {
             formDialogErrorModal.showModal();
         }
-        clearFormInputs();
     });
 
     /*
