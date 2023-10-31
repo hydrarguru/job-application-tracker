@@ -51,6 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    formDialogErrorModal.addEventListener('click', (e) => {
+        const dialogDimensions = formDialogErrorModal.getBoundingClientRect()
+        if (
+          e.clientX < dialogDimensions.left ||
+          e.clientX > dialogDimensions.right ||
+          e.clientY < dialogDimensions.top ||
+          e.clientY > dialogDimensions.bottom
+        ) {
+            formDialogErrorModal.close()
+        }
+    })
+
+
     /*
     Every child input element's value in the form element is reset.
     The date input field is set to the current date.
