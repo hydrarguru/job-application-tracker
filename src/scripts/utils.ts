@@ -1,5 +1,5 @@
 /**
- * Returns the current date in the format YYYY-MM-DD.
+ * @returns current date in the format YYYY-MM-DD.
  * @remarks
  * Utility function.
  */
@@ -13,7 +13,7 @@ export function getCurrentDate() {
 }
 
 /**
- * Returns the name of the current month.
+ * @returns name of the current month.
  * @remarks
  * Utility function.
  */
