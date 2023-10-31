@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     formDatePicker.value = getCurrentDate();
 
     /* Form Dialog Modals */
-    const formDialogModal = document.querySelector('#formDialog') as HTMLDialogElement;
-    const formDialogErrorModal = document.querySelector('#formDialogError') as HTMLDialogElement;
+    const formModal = document.querySelector('#formDialog') as HTMLDialogElement;
+    const formErrorModal = document.querySelector('#formDialogError') as HTMLDialogElement;
 
     /*
     * Clear the input fields in the form element and sets the date input field to the current date.
@@ -42,24 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 applicationLink: formInputs[3].value,
                 appliedDate: formInputs[4].value,
             };
-            formDialogModal.showModal();
+            formModal.showModal();
             console.log(jobApplication);
             addJobToDatabase(jobApplication);
             clearFormInputs();
         } else {
-            formDialogErrorModal.showModal();
+            formErrorModal.showModal();
         }
     });
 
-    formDialogErrorModal.addEventListener('click', (e) => {
-        const dialogDimensions = formDialogErrorModal.getBoundingClientRect()
+    formErrorModal.addEventListener('click', (e) => {
+        const dialogDimensions = formErrorModal.getBoundingClientRect()
         if (
           e.clientX < dialogDimensions.left ||
           e.clientX > dialogDimensions.right ||
           e.clientY < dialogDimensions.top ||
           e.clientY > dialogDimensions.bottom
         ) {
-            formDialogErrorModal.close()
+            formErrorModal.close()
         }
     })
 
