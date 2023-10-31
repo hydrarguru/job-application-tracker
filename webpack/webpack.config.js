@@ -11,7 +11,7 @@ module.exports = {
         ),
         content: path.resolve(__dirname, '..', 'src/scripts', 'content.ts'),
         popup: path.resolve(__dirname, '..', 'src/scripts', 'popup.ts'),
-        options: path.resolve(__dirname, '..', 'src/scripts', 'options.ts'),
+        dashboard: path.resolve(__dirname, '..', 'src/scripts', 'dashboard.ts'),
     },
     output: {
         path: path.join(__dirname, '../dist'),
@@ -33,7 +33,7 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 { from: 'public', to: '.' },
-                { from: 'src/options', to: '.' },
+                { from: 'src/dashboard', to: '.' },
                 { from: 'src/popup', to: '.' },
             ],
         }),

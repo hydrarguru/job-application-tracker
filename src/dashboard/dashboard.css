@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap');
+/*https://coolors.co/222d25-233127-25392c-274131-294936*/
+
+* {
+    font-family: 'Noto Sans', sans-serif;
+    --one: #294936;
+    --two: #274131;
+    --three: #233127;
+    --four: #222d25;
+}
+
+html,
+body {
+    height: 515px;
+    width: 350px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}

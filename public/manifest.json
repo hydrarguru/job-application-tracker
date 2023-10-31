@@ -1,32 +1,31 @@
 {
     "manifest_version": 3,
-    "name": "Application Tracker",
+    "name": "Job Application Tracker",
     "version": "0.0.1",
     "description": "",
     "background": {
         "service_worker": "background.js"
     },
     "options_ui": {
-      "page": "options.html",
-      "open_in_tab": true
+        "page": "dashboard.html",
+        "open_in_tab": true
     },
     "action": {
         "default_popup": "popup.html"
     },
-    "permissions": [ "storage", "activeTab"],
+    "permissions": ["storage", "activeTab"],
     "commands": {
-      "_execute_action": {
-        "suggested_key": {
-          "default": "Ctrl+B",
-          "mac": "Command+B"
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+B",
+                "mac": "Command+B"
+            }
         }
-      }
     },
     "content_scripts": [
         {
-          "js": ["content.js"],
-          "matches": ["<all_urls>"]
+            "js": ["content.js"],
+            "matches": ["<all_urls>"]
         }
-      ]
+    ]
 }
-  
