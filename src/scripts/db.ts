@@ -309,12 +309,11 @@ export function deleteJobFromDatabase(month: string, id: number) {
  * @param month The month to get the job applications from.
  * @returns An array of job applications from the database.
  */
-export function getJobsFromDatabase(month: string) {
-    return openDB('JAT-DB', 1).then((db) => {
-        const transaction = db.transaction(`${month}`, 'readonly');
-        const store = transaction.objectStore(`${month}`);
-        return store.getAll();
-    });
+export async function getJobsFromDatabase(month: string) {
+    const db = await openDB('JAT-DB', 1);
+    const transaction = db.transaction(`${month}`, 'readonly');
+    const store = transaction.objectStore(`${month}`);
+    return await store.getAll();
 }
 
 /**
