@@ -17,10 +17,10 @@ export function getCurrentDate() {
  * @remarks
  * Utility function.
  */
-export function getCurrentMonth() {
+export function getCurrentMonth(): string {
     const currentDate = new Date();
     const formattedMonth = currentDate.toLocaleString('default', {
         month: 'long',
     });
-    return formattedMonth.toLowerCase();
+    return formattedMonth;
 }
