@@ -11,10 +11,53 @@
 
 html,
 body {
-    height: 515px;
-    width: 350px;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     box-sizing: border-box;
 }
+
+/* Header Start */
+#header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 14rem;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+#header li a {
+    display: block;
+    color: black;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+#header li a.active {
+    background-color: var(--one);
+    color: white;
+}
+
+#header li a:hover:not(.active) {
+    background-color: var(--two);
+    color: white;
+}
+
+/* Header End */
+
+/* Main Start */
+#main {
+    margin-left: 25%;
+    padding: 1px 16px;
+    height: 1000px;
+}
+
+/* Main End */
+
+/* Footer Start */
+/* Footer End */
