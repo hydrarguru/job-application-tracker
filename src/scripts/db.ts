@@ -3,7 +3,7 @@ import { openDB, DBSchema } from 'idb';
 const DATABASE_NAME = 'JAT-DB';
 const DATABASE_TABLE = 'jobsTable'
 
-export interface JobDB extends DBSchema {
+interface JobDB extends DBSchema {
     jobsTable: {
         key: number;
         value: {
@@ -21,6 +21,22 @@ export interface JobDB extends DBSchema {
             appliedDate: string;
         };
     };
+
+    dashboardData: {
+        key: number;
+        value: {
+            totalJobs: number;
+            totalJobsDay: number;
+            totalJobsWeek: number;
+            totalJobsMonth: number;
+        };
+        indexes: {
+            totalJobs: number;
+            totalJobsDay: number;
+            totalJobsWeek: number;
+            totalJobsMonth: number;
+    };
+    }
 }
 
 type JobData = {
@@ -43,6 +59,7 @@ export async function createDatabase() {
             store.createIndex('jobArea', 'jobArea');
             store.createIndex('applicationLink', 'applicationLink');
             store.createIndex('appliedDate', 'appliedDate');
+            console.log('(db.ts) Databases initialised');
         },
     });
 }
@@ -51,24 +68,24 @@ export async function createDatabase() {
  * Add a job application to the database.
  * @param job The job application object to add.
  */
-export function addJobToDatabase(job: JobData) {
-    openDB(DATABASE_NAME, 1).then((db) => {
-        const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
-        const store = transaction.objectStore(DATABASE_TABLE);
-        store.add(job);
-    });
+export async function addJobToDatabase(job: JobData) {
+    const db = await openDB(DATABASE_NAME, 1);
+    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+    const store = transaction.objectStore(DATABASE_TABLE);
+    store.add(job);
+    console.log('(db.ts) Job added to database');
 }
 
 /**
  * Delete a job application from the database.
  * @param id The id of the job application to delete.
  */
-export function deleteJobFromDatabase(id: number) {
-    openDB(DATABASE_NAME, 1).then((db) => {
-        const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
-        const store = transaction.objectStore(DATABASE_TABLE);
-        store.delete(id);
-    });
+export async function deleteJobFromDatabase(id: number) {
+    const db = await openDB(DATABASE_NAME, 1);
+    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+    const store = transaction.objectStore(DATABASE_TABLE);
+    store.delete(id);
+    console.log('(db.ts) Job deleted from database');
 }
 
 /**
@@ -78,6 +95,8 @@ export async function getJobsFromDatabase() {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
+    db.close();
+    console.log('(db.ts) Jobs retrieved from database');
     return await store.getAll();
 }
 
@@ -86,10 +105,10 @@ export async function getJobsFromDatabase() {
  * @param id The id of the job application to get.
  * @returns A job application object from the database.
  */
-export function getJobFromDatabase(id: number) {
-    return openDB(DATABASE_NAME, 1).then((db) => {
-        const transaction = db.transaction(DATABASE_TABLE, 'readonly');
-        const store = transaction.objectStore(DATABASE_TABLE);
-        return store.get(id);
-    });
+export async function getJobFromDatabase(id: number) {
+    const db = await openDB(DATABASE_NAME, 1);
+    const transaction = db.transaction(DATABASE_TABLE, 'readonly');
+    const store = transaction.objectStore(DATABASE_TABLE);
+    console.log(`(db.ts) Job ${id} retrieved from database`);
+    return store.get(id);
 }
