@@ -2,6 +2,7 @@ import { openDB, DBSchema } from 'idb';
 
 const DATABASE_NAME = 'JAT-DB';
 const DATABASE_TABLE = 'jobsTable'
+const DASHBOARD_TABLE = 'dashboardData'
 
 interface JobDB extends DBSchema {
     jobsTable: {
@@ -48,7 +49,7 @@ type JobData = {
 };
 
 export async function createDatabase() {
-    await openDB<JobDB>(DATABASE_NAME, 1, {
+    openDB<JobDB>(DATABASE_NAME, 1, {
         upgrade(db) {
             const store = db.createObjectStore(DATABASE_TABLE, {
                 keyPath: 'id',
@@ -59,7 +60,15 @@ export async function createDatabase() {
             store.createIndex('jobArea', 'jobArea');
             store.createIndex('applicationLink', 'applicationLink');
             store.createIndex('appliedDate', 'appliedDate');
-            console.log('(db.ts) Databases initialised');
+
+            const dashboardStore = db.createObjectStore(DASHBOARD_TABLE);
+            dashboardStore.createIndex('totalJobs', 'totalJobs');
+            dashboardStore.createIndex('totalJobsDay', 'totalJobsDay');
+            dashboardStore.createIndex('totalJobsWeek', 'totalJobsWeek');
+            dashboardStore.createIndex('totalJobsMonth', 'totalJobsMonth');
+
+
+            console.log(`(db.ts) ${DATABASE_NAME} database initialised`);
         },
     });
 }
