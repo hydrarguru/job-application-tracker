@@ -12,6 +12,7 @@ module.exports = {
         content: path.resolve(__dirname, '..', 'src/scripts', 'content.ts'),
         popup: path.resolve(__dirname, '..', 'src/scripts', 'popup.ts'),
         dashboard: path.resolve(__dirname, '..', 'src/scripts', 'dashboard.ts'),
+        offscreen: path.resolve(__dirname, '..', 'src/scripts', 'offscreen.ts'),
     },
     output: {
         path: path.join(__dirname, '../dist'),
@@ -35,6 +36,7 @@ module.exports = {
                 { from: 'public', to: '.' },
                 { from: 'src/dashboard', to: '.' },
                 { from: 'src/popup', to: '.' },
+                { from: 'src/offscreen', to: '.'}
             ],
         }),
     ],

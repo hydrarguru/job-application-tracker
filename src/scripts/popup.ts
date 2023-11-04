@@ -2,6 +2,7 @@ import { addJobToDatabase } from './db';
 import { getCurrentDate } from './utils';
 
 document.addEventListener('DOMContentLoaded', () => {
+    chrome.runtime.sendMessage('offscreen');
     /* Button elements are selected when the DOM is loaded. */
     const formInputs = document.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
     const resetButton = document.querySelector('#form-reset-button') as HTMLButtonElement;
