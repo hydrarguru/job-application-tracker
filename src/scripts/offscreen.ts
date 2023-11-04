@@ -1,9 +1,13 @@
 import { getJobsFromDatabase } from "./db";
 
-let totalJobs;
 getJobsFromDatabase().then(
     (jobs) => {
-        totalJobs = jobs.length;
-        localStorage.setItem("totalJobs", totalJobs);
+        setLocalStorageValues(jobs.length, 0, 0);
     }
 );
+
+function setLocalStorageValues(total, day, month) {
+    localStorage.setItem("totalJobs", total);
+    localStorage.setItem("totalJobsDay", day);
+    localStorage.setItem("totalJobsMonth", month);
+}
