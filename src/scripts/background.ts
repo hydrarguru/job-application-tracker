@@ -1,6 +1,7 @@
 import { addJobToDatabase, createDatabase, getJobsFromDatabase } from './db';
 createDatabase();
 
+/*
 for (let i = 1; i < 6; i++) {
     addJobToDatabase({
         companyName: `Test Company ${i}`,
@@ -10,6 +11,7 @@ for (let i = 1; i < 6; i++) {
         appliedDate: `Test Date ${i}`,
     });
 }
+*/
 
 /*
 addJobToDatabase({
