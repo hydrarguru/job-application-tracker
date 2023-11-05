@@ -4,7 +4,6 @@ function setLocalStorageValues(total, day, month) {
     localStorage.setItem("totalJobs", total);
     localStorage.setItem("totalJobsDay", day);
     localStorage.setItem("totalJobsMonth", month);
-    alert('localStorage values set!');
 }
 
 getJobsFromDatabase().then(
