@@ -23,7 +23,7 @@ interface JobDB extends DBSchema {
     };
 }
 
-type JobData = {
+export type JobData = {
     companyName: string;
     jobRole: string;
     jobArea: string;
@@ -79,9 +79,10 @@ export async function getJobsFromDatabase() {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
+    const data = await store.getAll();
     db.close();
     console.log('(db.ts) Jobs retrieved from database');
-    return await store.getAll();
+    return data;
 }
 
 /**
