@@ -43,6 +43,8 @@ module.exports = {
             patterns: [
                 { from: 'public', to: '.' },
                 { from: 'src/dashboard', to: '.' },
+                { from: 'src/charts', to: '.' },
+                { from: 'src/settings', to: '.' },
                 { from: 'src/popup', to: '.' },
                 { from: 'src/offscreen', to: '.'}
             ],
