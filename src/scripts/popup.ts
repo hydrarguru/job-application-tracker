@@ -1,7 +1,7 @@
-import { addJobToDatabase } from './db';
+import { JobData, addJobToDatabase } from './db';
 import { getCurrentDate } from './utils';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.sendMessage('offscreen');
     /* Button elements are selected when the DOM is loaded. */
     const formInputs = document.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /*TODO: Add validation for the date input field. */
         if (isEveryInputFilled) {
-            const jobApplication = {
+            const jobApplication : JobData = {
                 companyName: formInputs[0].value,
                 jobRole: formInputs[1].value,
                 jobArea: formInputs[2].value,
