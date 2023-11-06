@@ -1,17 +1,6 @@
 import { addJobToDatabase, createDatabase, getJobsFromDatabase } from './db';
+import { getCurrentTime } from './utils';
 createDatabase();
-
-/*
-for (let i = 1; i < 6; i++) {
-    addJobToDatabase({
-        companyName: `Test Company ${i}`,
-        jobRole: `Test Role ${i}`,
-        jobArea: `Test Area ${i}`,
-        applicationLink: `Test Link ${i}`,
-        appliedDate: `Test Date ${i}`,
-    });
-}
-*/
 
 /*
 addJobToDatabase({
@@ -19,9 +8,11 @@ addJobToDatabase({
     jobRole: 'Test Role 1',
     jobArea: 'Test Area 1',
     applicationLink: 'Test Link 1',
-    appliedDate: 'Test Date 1',
+    appliedDate: ,
 });
 */
+
+console.log(new Date().toLocaleDateString());
 
 async function createOffscreen() {
     if (await chrome.offscreen.hasDocument()) return;
@@ -31,7 +22,7 @@ async function createOffscreen() {
       justification: "storing data in local storage",
     });
     const date = new Date();
-    console.info(`[${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] Created offscreen document.`)
+    console.info(`[${getCurrentTime()}] Created offscreen document.`)
 }
   
 chrome.runtime.onMessage.addListener(async (msg) => {
