@@ -1,4 +1,5 @@
 import { openDB, DBSchema } from 'idb';
+import { getCurrentTime } from './utils';
 
 const DATABASE_NAME = 'JAT-DB';
 const DATABASE_TABLE = 'jobsTable'
@@ -32,6 +33,7 @@ export type JobData = {
 };
 
 export async function createDatabase() {
+    console.log(`[${getCurrentTime()}] (db.ts) opening connection to ${DATABASE_NAME}`);
     openDB<JobDB>(DATABASE_NAME, 1, {
         upgrade(db) {
             const store = db.createObjectStore(DATABASE_TABLE, {
@@ -43,7 +45,7 @@ export async function createDatabase() {
             store.createIndex('jobArea', 'jobArea');
             store.createIndex('applicationLink', 'applicationLink');
             store.createIndex('appliedDate', 'appliedDate');
-            console.log(`(db.ts) ${DATABASE_NAME} database initialised`);
+            console.log(`[${getCurrentTime()}] (db.ts) ${DATABASE_NAME} database initialised`);
         },
     });
 }
@@ -57,7 +59,7 @@ export async function addJobToDatabase(job: JobData) {
     const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
     const store = transaction.objectStore(DATABASE_TABLE);
     store.add(job);
-    console.log('(db.ts) Job added to database');
+    console.log(`[${getCurrentTime()}] (db.ts) Job added to database`);
 }
 
 /**
@@ -69,7 +71,7 @@ export async function deleteJobFromDatabase(id: number) {
     const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
     const store = transaction.objectStore(DATABASE_TABLE);
     store.delete(id);
-    console.log('(db.ts) Job deleted from database');
+    console.log(`[${getCurrentTime()}] (db.ts) Job deleted from database`);
 }
 
 /**
@@ -81,7 +83,7 @@ export async function getJobsFromDatabase() {
     const store = transaction.objectStore(DATABASE_TABLE);
     const data = await store.getAll();
     db.close();
-    console.log('(db.ts) Jobs retrieved from database');
+    console.log(`[${getCurrentTime()}] (db.ts) Jobs retrieved from database`);
     return data;
 }
 
@@ -94,6 +96,6 @@ export async function getJobFromDatabase(id: number) {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
-    console.log(`(db.ts) Job ${id} retrieved from database`);
+    console.log(`[${getCurrentTime()}] (db.ts) Job ${id} retrieved from database`);
     return store.get(id);
 }
