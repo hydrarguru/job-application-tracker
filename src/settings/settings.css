@@ -80,26 +80,19 @@ body {
     grid-template-rows: auto;
     grid-gap: 1rem;
     grid-template-areas:
-        "db-total db-month db-today"
-        "db-view db-view db-view" ;
+        "settings1 settings2 settings3";
 }
 
-#db-total {
-    grid-area: db-total;
+#settings1 {
+    grid-area: settings1;
 }
 
-#db-month {
-    grid-area: db-month;
+#settings2 {
+    grid-area: settings2;
 }
 
-#db-today {
-    grid-area: db-today;
-}
-
-#db-grid-item {
-    grid-row-start: 2;
-    grid-column-start: span 3;
-    min-height: 100%;
+#settings3 {
+    grid-area: settings3;
 }
 
 .grid-item {
@@ -109,12 +102,6 @@ body {
     padding: 1rem;
     font-size: 1.5em;
     text-align: center;
-}
-
-.grid-item:hover {
-    transition: 0.35s;
-    scale: 1.010;
-    border: 1px solid var(--two);
 }
 
 /* Main End */
