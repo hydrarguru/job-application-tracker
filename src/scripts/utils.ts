@@ -24,3 +24,8 @@ export function getCurrentMonth(): string {
     });
     return formattedMonth;
 }
+
+export function getCurrentTime(): string {
+    const date = new Date();
+    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+}
