@@ -3,7 +3,7 @@ import { JobData } from "./db";
 //import { jsPDF } from "jspdf";
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     console.log('Dashboard loaded');
     /* Grabbing elements from HTML and assigning them to variables */
     const totalJobsElement = document.querySelector('#totalJobs') as HTMLParagraphElement;
@@ -13,27 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     totalJobsMonthHeading.textContent = `Antal sökta jobb i ${localStorage.getItem('currentMonth').at(0).toUpperCase() + localStorage.getItem('currentMonth').slice(1)}`;
     totalJobsElement.textContent = localStorage.getItem('totalJobs');
+    totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
+    totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
 
-    let totalJobs = [];
-    getJobsFromDatabase().then((jobs) => {
-        jobs.forEach((job) => {
-            totalJobs.push(job);
-        });
-    });
-    console.log(totalJobs);
-    
-    const tableContainer = document.querySelector('#tableContainer') as HTMLDivElement;
-    tableContainer.innerHTML = totalJobs[0].jobName;
+
+
     
 
     
   
-
-
-
-
-
-
     /*
     const exportToPDFButton = document.querySelector('#exportPDF') as HTMLButtonElement;
     exportToPDFButton.addEventListener('click', async () => {
