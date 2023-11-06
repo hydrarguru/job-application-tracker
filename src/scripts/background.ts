@@ -1,4 +1,4 @@
-import { addJobToDatabase, createDatabase, getJobsFromDatabase } from './db';
+import { createDatabase} from './db';
 import { getCurrentTime } from './utils';
 
 async function createOffscreen() {
@@ -14,7 +14,9 @@ async function createOffscreen() {
 
 (async () => {
     await createDatabase();
-
+    await createOffscreen();
+    chrome.runtime.sendMessage('refreshBadge');
+    /*
     await addJobToDatabase({
         companyName: 'Test Company 1',
         jobRole: 'Test Role 1',
@@ -22,7 +24,5 @@ async function createOffscreen() {
         applicationLink: 'Test Link 1',
         appliedDate: new Date().toLocaleDateString(),
     });
-
-    await createOffscreen();
-
+    */
 })();
