@@ -1,41 +1,61 @@
 import Chart from 'chart.js/auto'
+import { getTotalJobsMonth, getTotalJobsToday } from './db';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  /* Grabbing elements from HTML and assigning them to variables */
-  const totalJobsElement = document.querySelector('#totalJobs') as HTMLParagraphElement;
-  const totalJobsMonthElement = document.querySelector('#totalJobsMonth') as HTMLParagraphElement;
-  const totalJobsTodayElement = document.querySelector('#totalJobsToday') as HTMLParagraphElement;
-  const totalJobsMonthHeading = document.querySelector('#totalMonthHeading') as HTMLHeadingElement;
-
-  /* Getting data from localStorage and assigning it to variables */
-  totalJobsMonthHeading.textContent = `Antal sökta jobb i ${localStorage.getItem('currentMonth').at(0).toUpperCase() + localStorage.getItem('currentMonth').slice(1)}`;
-  totalJobsElement.textContent = localStorage.getItem('totalJobs');
-  totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
-  totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
 });
 
 (async function() {
-  const totalJobData = [
-    { year: 2023, count: Number(localStorage.getItem('totalJobs')) },
-    { year: 2024, count: 0 },
+  const monthsData = {
+    january: Number(await getTotalJobsMonth('01')),
+    february: Number(await getTotalJobsMonth('02')),
+    march: Number(await getTotalJobsMonth('03')),
+    april: Number(await getTotalJobsMonth('04')),
+    may: Number(await getTotalJobsMonth('05')),
+    june: Number(await getTotalJobsMonth('06')),
+    july: Number(await getTotalJobsMonth('07')),
+    august: Number(await getTotalJobsMonth('08')),
+    september: Number(await getTotalJobsMonth('09')),
+    october: Number(await getTotalJobsMonth('10')),
+    november: Number(await getTotalJobsMonth('11')),
+    december: Number(await getTotalJobsMonth('12'))
+  }
+
+
+  const totalJobMonthData = [
+    { month: 'Oktober', count: monthsData.october },
+    { month: 'November', count: monthsData.november },
+    { month: 'December', count: monthsData.december },
   ];
 
-  const totalJobsMonthData = [
-    { month: 'Oktober', count: 0 },
-    { month: 'November', count: Number(localStorage.getItem('totalJobsMonth')) },
-    { month: 'December', count: 0}
+  const totalJobsData = [
+    { month: 'Januari', count: monthsData.january },
+    { month: 'Februari', count: monthsData.february },
+    { month: 'Mars', count: monthsData.march },
+    { month: 'April', count: monthsData.april },
+    { month: 'Maj', count: monthsData.may },
+    { month: 'Juni', count: monthsData.june },
+    { month: 'Juli', count: monthsData.july },
+    { month: 'Augusti', count: monthsData.august },
+    { month: 'September', count: monthsData.september },
+    { month: 'Oktober', count: monthsData.october },
+    { month: 'November', count: monthsData.november },
+    { month: 'December', count: monthsData.december }
   ];
 
   new Chart(
     document.getElementById('totalJobsCanvas') as HTMLCanvasElement,
     {
-      type: 'bar',
+      type: 'line',
       data: {
-        labels: totalJobData.map(row => row.year),
+        labels: totalJobsData.map(row => row.month),
         datasets: [
           {
-            label: 'Totalt antal jobb',
-            data: totalJobData.map(row => row.count)
+            backgroundColor: 'rgba(40, 72, 53, 0.75)',
+            borderColor(ctx, options) {
+              return 'rgba(40, 72, 53, 1)';
+            },
+            label: `Totalt antal jobb under år ${new Date().getFullYear()}`,
+            data: totalJobsData.map(row => row.count)
           }
         ]
       }
@@ -47,11 +67,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     {
       type: 'bar',
       data: {
-        labels: totalJobsMonthData.map(row => row.month),
+        labels: totalJobMonthData.map(row => row.month),
         datasets: [
           {
-            label: `Antal jobb denna månad (${localStorage.getItem('currentMonth').at(0).toUpperCase() + localStorage.getItem('currentMonth').slice(1)}))`,
-            data: totalJobsMonthData.map(row => row.count)
+            backgroundColor: 'rgba(40, 72, 53, 0.75)',
+            borderColor(ctx, options) {
+              return 'rgba(40, 72, 53, 1)';
+            },
+            label: `Totalt antal jobb denna månad (${localStorage.getItem('currentMonth')})`,
+            data: totalJobMonthData.map(row => row.count)
           }
         ]
       }
