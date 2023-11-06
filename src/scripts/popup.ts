@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(jobApplication);
             addJobToDatabase(jobApplication);
             clearFormInputs();
+            chrome.runtime.sendMessage('refreshValues');
         } else {
             formErrorModal.showModal();
         }
