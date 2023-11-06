@@ -13,6 +13,8 @@ module.exports = {
         popup: path.resolve(__dirname, '..', 'src/scripts', 'popup.ts'),
         dashboard: path.resolve(__dirname, '..', 'src/scripts', 'dashboard.ts'),
         offscreen: path.resolve(__dirname, '..', 'src/scripts', 'offscreen.ts'),
+        charts: path.resolve(__dirname, '..', 'src/scripts', 'charts.ts'),
+        settings: path.resolve(__dirname, '..', 'src/scripts', 'settings.ts'),
     },
     output: {
         path: path.join(__dirname, '../dist'),
