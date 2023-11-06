@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap');
+/*https://coolors.co/222d25-233127-25392c-274131-294936*/
+
+* {
+    font-family: 'Noto Sans', sans-serif;
+    --one: #294936;
+    --two: #274131;
+    --three: #233127;
+    --four: #222d25;
+
+    --nav-width: 12rem;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f1f1f1;
+}
+
+/* Header Start */
+#header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: var(--nav-width);
+    background-color: white;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+#header li a {
+    display: block;
+    color: black;
+    font-size: 1rem;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+#header li a.active {
+    background-color: var(--two);
+    color: white;
+}
+
+#header li a:hover:not(.active) {
+    transition: 0.35s;
+    background-color: var(--two);
+    color: white;
+}
+
+#dashboard-logo {
+    padding-top: 0;
+    padding-left: 0.5rem;
+    font-size: 10em;
+    color: #294936;
+}
+
+/* Header End */
+
+/* Main Start */
+#main {
+    margin-left: var(--nav-width);
+    padding-left: 1rem;
+    min-height: 100%;
+    height: 1000px;
+}
+
+.grid-container {
+    display: grid;
+    padding-right: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-gap: 1rem;
+    grid-template-areas:
+        "db-total db-month db-today"
+        "db-view db-view db-view" ;
+}
+
+#db-total {
+    grid-area: db-total;
+}
+
+#db-month {
+    grid-area: db-month;
+}
+
+#db-today {
+    grid-area: db-today;
+}
+
+#db-grid-item {
+    grid-row-start: 2;
+    grid-column-start: span 3;
+    min-height: 100%;
+}
+
+.grid-item {
+    background-color:white;
+    border: 1px solid var(--one);
+    border-radius: 0.2rem;
+    padding: 1rem;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.grid-item:hover {
+    transition: 0.35s;
+    scale: 1.010;
+    border: 1px solid var(--two);
+}
+
+/* Main End */
+
+/* Footer Start */
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+    background-color: var(--one);
+    color: white;
+    text-align: center;
+}
+
+/* Footer End */

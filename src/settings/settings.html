@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="settings.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+        />
+        <title>Inställningar</title>
+    </head>
+    <body>
+        <header id="header">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="dashboard.html"
+                            ><i class="bi bi-speedometer"></i> Översikt</a
+                        >
+                    </li>
+                    <li>
+                        <a href="charts.html"
+                            ><i class="bi bi-bar-chart-fill"></i> Tabeller</a
+                        >
+                    </li>
+                    <li>
+                        <a class="active" href="#"
+                            ><i class="bi bi-gear-fill"></i> Inställningar</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <main id="main">
+            <h1>Inställningar</h1>
+            <section class="grid-container">
+                <section id="total" class="grid-item">
+                    <h1>Antal sökta jobb</h1>
+                    <p id="totalJobs">0</p>
+                </section>
+                <section id="month" class="grid-item">
+                    <h1 id="totalMonthHeading"></h1>
+                    <p id="totalJobsMonth">0</p>
+                </section>
+                <section id="today" class="grid-item">
+                    <h1>Antal sökta jobb i idag</h1>
+                    <p id="totalJobsToday">0</p>
+                </section>
+                <section id="db-grid-item" class="grid-item">
+                    <h1>Databas</h1>
+                </section>
+            </section>
+        </main>
+        <footer id="footer">
+            <p>Footer</p>
+        </footer>
+    </body>
+    <script src="settings.js"></script>
+</html>
