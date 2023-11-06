@@ -99,3 +99,15 @@ export async function getJobFromDatabase(id: number) {
     console.log(`[${getCurrentTime()}] (db.ts) Job ${id} retrieved from database`);
     return store.get(id);
 }
+
+export async function getTotalJobsMonth(month: string): Promise<number> {
+    const db = await openDB(DATABASE_NAME, 1);
+    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`2023-${month}-01`, `2023-${month}-31`));
+    return value.length;
+}
+
+export async function getTotalJobsToday(month: string, day: string): Promise<number> {
+    const db = await openDB(DATABASE_NAME, 1);
+    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`2023-${month}-${day}`, `2023-${month}-${day}`));
+    return value.length;
+}
