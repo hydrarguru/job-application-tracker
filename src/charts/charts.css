@@ -80,7 +80,7 @@ body {
     grid-gap: 1rem;
     grid-template-areas:
         "db-total db-month db-today"
-        "db-view db-view db-view" ;
+        ;
 }
 
 #db-total {

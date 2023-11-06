@@ -15,26 +15,43 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 (async function() {
-  const data = [
-    { year: 2010, count: 10 },
-    { year: 2011, count: 20 },
-    { year: 2012, count: 15 },
-    { year: 2013, count: 25 },
-    { year: 2014, count: 22 },
-    { year: 2015, count: 30 },
-    { year: 2016, count: 28 },
+  const totalJobData = [
+    { year: 2023, count: Number(localStorage.getItem('totalJobs')) },
+    { year: 2024, count: 0 },
+  ];
+
+  const totalJobsMonthData = [
+    { month: 'Oktober', count: 0 },
+    { month: 'November', count: Number(localStorage.getItem('totalJobsMonth')) },
+    { month: 'December', count: 0}
   ];
 
   new Chart(
-    document.getElementById('canvas') as HTMLCanvasElement,
+    document.getElementById('totalJobsCanvas') as HTMLCanvasElement,
     {
       type: 'bar',
       data: {
-        labels: data.map(row => row.year),
+        labels: totalJobData.map(row => row.year),
         datasets: [
           {
-            label: 'Acquisitions by year',
-            data: data.map(row => row.count)
+            label: 'Totalt antal jobb',
+            data: totalJobData.map(row => row.count)
+          }
+        ]
+      }
+    }
+  );
+  
+  new Chart(
+    document.getElementById('totalJobsMonthCanvas') as HTMLCanvasElement,
+    {
+      type: 'bar',
+      data: {
+        labels: totalJobsMonthData.map(row => row.month),
+        datasets: [
+          {
+            label: `Antal jobb denna månad (${localStorage.getItem('currentMonth').at(0).toUpperCase() + localStorage.getItem('currentMonth').slice(1)}))`,
+            data: totalJobsMonthData.map(row => row.count)
           }
         ]
       }

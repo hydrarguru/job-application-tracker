@@ -33,26 +33,18 @@
             </nav>
         </header>
         <main id="main">
-            <h1>Översikt</h1>
+            <h1>Tabeller</h1>
             <!--<button id="exportPDF">Exportera till PDF</button>-->
             <section class="grid-container">
                 <section id="total" class="grid-item">
-                    <h1>Antal sökta jobb</h1>
-                    <p id="totalJobs">0</p>
-                </section>
-                <section id="month" class="grid-item">
-                    <h1 id="totalMonthHeading"></h1>
-                    <p id="totalJobsMonth">0</p>
-                </section>
-                <section id="today" class="grid-item">
-                    <h1>Antal sökta jobb i idag</h1>
-                    <p id="totalJobsToday">0</p>
-                </section>
-                <section id="db-grid-item" class="grid-item">
                     <div style="width: 800px;">
-                        <canvas id="canvas"></canvas>
+                        <canvas id="totalJobsCanvas"></canvas>
                     </div>
                 </section>
+                <section id="month" class="grid-item">
+                    <div style="width: 800px;">
+                        <canvas id="totalJobsMonthCanvas"></canvas>
+                    </div>
             </section>
         </main>
         <footer id="footer">
