@@ -1,1 +1,3 @@
-alert('settings!')
+document.addEventListener('DOMContentLoaded', async () => {
+    
+});
