@@ -1,8 +1,8 @@
 import { openDB, DBSchema } from 'idb';
 import { getCurrentTime } from './utils';
 
-const DATABASE_NAME = 'JAT-DB';
-const DATABASE_TABLE = 'jobsTable'
+export const DATABASE_NAME = 'JAT-DB';
+export const DATABASE_TABLE = 'jobsTable';
 
 interface JobDB extends DBSchema {
     jobsTable: {
