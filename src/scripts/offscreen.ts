@@ -11,9 +11,12 @@ async function refreshBadge() {
 }
 
 async function setLocalStorageValues() {
+    const date = new Date();
+    const currentDay = date.getDay().toString();
+    const currentMonth = date.getMonth().toString();
     localStorage.setItem('totalJobs', (await getJobsFromDatabase()).length.toString());
-    localStorage.setItem('totalJobsDay', (await getTotalJobsToday('11', '06')).toString());
-    localStorage.setItem('totalJobsMonth', (await getTotalJobsMonth('11')).toString());
+    localStorage.setItem('totalJobsDay', (await getTotalJobsToday(currentMonth, currentDay)).toString());
+    localStorage.setItem('totalJobsMonth', (await getTotalJobsMonth(currentMonth)).toString());
     localStorage.setItem('currentMonth', getCurrentMonth());
 }
 
