@@ -83,22 +83,11 @@ body {
         ;
 }
 
-#db-total {
-    grid-area: db-total;
-}
-
-#db-month {
-    grid-area: db-month;
-}
-
-#db-today {
-    grid-area: db-today;
-}
-
-#db-grid-item {
-    grid-row-start: 2;
-    grid-column-start: span 3;
-    min-height: 100%;
+.canvas-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 35rem;
 }
 
 .grid-item {
