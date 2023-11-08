@@ -29,3 +29,34 @@ export function getCurrentTime(): string {
     const date = new Date();
     return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 }
+
+/**
+ * Takes an array and returns a map of the unique elements and their count.
+ * @param array 
+ * @returns A map of the unique elements and their count.
+ */
+export function removeDuplicatesAndCount<T> (array: T[]): Map<T, number> {
+    const elementCount = new Map<T, number>();
+    const uniqueElements: T[] = [];
+
+    /*
+    * Iterate through the array and add each element to the map.
+    * If the element already exists in the map, increment its count.
+    * If the element does not exist in the map, add it to the map and the uniqueElements array.
+     */
+    for(const element of array) {
+        if(elementCount.has(element)) {
+            elementCount.set(element, elementCount.get(element)! + 1);
+        }
+        else {
+            elementCount.set(element, 1);
+            uniqueElements.push(element);
+        }
+    }
+
+    const result = new Map<T, number>();
+    for (const element of uniqueElements) {
+      result.set(element, elementCount.get(element)!);
+    }
+    return result;
+}
