@@ -1,9 +1,9 @@
 import Chart from 'chart.js/auto'
-import { getTotalJobsMonth, getTotalJobsToday } from './db';
+import { getTotalJobsMonth } from './db';
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  
+
 });
 
 (async function() {
@@ -83,4 +83,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
   );
+
+  new Chart(
+    document.getElementById('jobCategoryCanvas') as HTMLCanvasElement,
+    {
+      type: 'pie',
+      data: {
+        labels: [
+          'Red',
+          'Blue',
+          'Yellow'
+        ],
+        datasets: [{
+          label: 'My First Dataset',
+          data: [300, 50, 100],
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)'
+          ],
+          hoverOffset: 4
+        }]
+      }
+    }
+  );
+
 })();
