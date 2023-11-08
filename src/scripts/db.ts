@@ -100,6 +100,17 @@ export async function getJobFromDatabase(id: number) {
     return store.get(id);
 }
 
+/**
+ * @param index The object store index to query.
+*  @returns A promise that resolves to an array of object store index key values.
+*/
+export async function indexKeyValueQuery(index: string): Promise<string[]> {
+    const db = await openDB(DATABASE_NAME, 1);
+    const value = db.getAllFromIndex(DATABASE_TABLE, index);
+    const queryResult: string[] = (await value).map((job) => job.jobRole);
+    return queryResult;
+}
+
 export async function getTotalJobsMonth(month: string): Promise<number> {
     const db = await openDB(DATABASE_NAME, 1);
     const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`2023-${month}-01`, `2023-${month}-31`));

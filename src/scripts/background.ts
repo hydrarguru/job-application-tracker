@@ -1,4 +1,4 @@
-import { createDatabase, addJobToDatabase } from './db';
+import { createDatabase } from './db';
 import { getCurrentTime } from './utils';
 
 async function createOffscreen() {
@@ -16,7 +16,7 @@ async function createOffscreen() {
     await createDatabase();
     await createOffscreen();
     chrome.runtime.sendMessage('refreshBadge');
-
+    
     /*
     for(let i = 1; i < 13; ++i) {
         await addJobToDatabase({
