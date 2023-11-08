@@ -69,25 +69,12 @@ body {
     margin-left: var(--nav-width);
     padding-left: 1rem;
     min-height: 100%;
-    height: 1000px;
 }
 
 .grid-container {
-    display: grid;
-    padding-right: 1rem;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    grid-gap: 1rem;
-    grid-template-areas:
-        "db-total db-month db-today"
-        ;
-}
-
-.canvas-container {
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
-    width: 35rem;
+    padding-right: 1rem;
 }
 
 .grid-item {
@@ -95,8 +82,12 @@ body {
     border: 1px solid var(--one);
     border-radius: 0.2rem;
     padding: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
     font-size: 1.5em;
     text-align: center;
+    height: 300px;
+    width: 600px;
 }
 
 /* Main End */
