@@ -16,7 +16,7 @@
                 <ul>
                     <li>
                         <a href="dashboard.html"
-                            ><i class="bi bi-speedometer"></i> Översikt</a
+                            ><i class="bi bi-speedometer""></i> Översikt</a
                         >
                     </li>
                     <li>
@@ -36,16 +36,35 @@
             <h1>Inställningar</h1>
             <section class="grid-container">
                 <section id="settings1" class="grid-item">
-                    <h1>Generera Dummy Data</h1>
-                    <p>0</p>
-                </section>
-                <section id="settings2" class="grid-item">
-                    <h1>Inställing 2</h1>
-                    <p>0</p>
-                </section>
-                <section id="settings3" class="grid-item">
-                    <h1>Inställing 3</h1>
-                    <p>0</p>
+                    <h1>Generera Månad Dummy Data</h1>
+                    <p style="font-style: italic;">Genererar ett jobb för varje dag i en månad</p>
+                    <form id="generateMonthlyForm">
+                        <label name="generateNumberRange" for="generateNumber">Antal jobbansökningar att generera: 0</label>
+                        <input id="generateNumber" name="generateNumberInput" type="range" min="1" max="31" step="1"></input>
+                        <select name="">
+                            <option value="01">Januari</option>
+                            <option value="02">Februari</option>
+                            <option value="03">Mars</option>
+                            <option value="04">April</option>
+                            <option value="05">Maj</option>
+                            <option value="06">Juni</option>
+                            <option value="07">Juli</option>
+                            <option value="08">Augusti</option>
+                            <option value="09">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <label for="companyName">Företagsnamn:</label>
+                        <input id="companyName" type="text"></input>
+                        <label for="jobRole">Jobbroll:</label>
+                        <input id="jobRole" type="text"></input>
+                        <label for="jobArea" >Jobbområde:</label>
+                        <input id="jobArea" type="text"></input>
+                        <label for="applicationLink">Ansökningslänk:</label>
+                        <input id="applicationLink" type="text"></input>
+                        <button id="generateMonthlyButton" type="submit">Generera</button>
+                    </form>
                 </section>
             </section>
         </main>
