@@ -1,4 +1,4 @@
-import { createDatabase} from './db';
+import { createDatabase, addJobToDatabase } from './db';
 import { getCurrentTime } from './utils';
 
 async function createOffscreen() {
@@ -16,13 +16,16 @@ async function createOffscreen() {
     await createDatabase();
     await createOffscreen();
     chrome.runtime.sendMessage('refreshBadge');
+
     /*
-    await addJobToDatabase({
-        companyName: 'Test Company 1',
-        jobRole: 'Test Role 1',
-        jobArea: 'Test Area 1',
-        applicationLink: 'Test Link 1',
-        appliedDate: new Date().toLocaleDateString(),
-    });
+    for(let i = 1; i < 13; ++i) {
+        await addJobToDatabase({
+            companyName: `Test Company ${i}`,
+            jobRole: `Test Role ${i}`,
+            jobArea: `Test Area ${i}`,
+            applicationLink: `https://www.findwork.com/${i}`,
+            appliedDate: new Date(`2023-05-${i}`).toLocaleDateString(),
+        });
+    }
     */
 })();

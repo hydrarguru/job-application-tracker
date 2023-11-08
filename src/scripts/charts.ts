@@ -2,6 +2,8 @@ import Chart from 'chart.js/auto'
 import { getTotalJobsMonth, getTotalJobsToday } from './db';
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+  
 });
 
 (async function() {
@@ -74,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             borderColor(ctx, options) {
               return 'rgba(40, 72, 53, 1)';
             },
-            label: `Totalt antal jobb denna månad (${localStorage.getItem('currentMonth')})`,
+            label: `Totalt antal jobb denna månad (${new Date().toLocaleString('sv-SE', { month: 'long' })})`,
             data: totalJobMonthData.map(row => row.count)
           }
         ]
