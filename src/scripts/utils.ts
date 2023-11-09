@@ -24,7 +24,10 @@ export function getCurrentMonth(): string {
     });
     return formattedMonth;
 }
-
+/**
+ * 
+ * @returns current time in the format HH:MM:SS.
+ */
 export function getCurrentTime(): string {
     const date = new Date();
     return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
