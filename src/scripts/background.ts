@@ -15,7 +15,6 @@ async function createOffscreen() {
 (async () => {
     await createDatabase();
     await createOffscreen();
-    chrome.runtime.sendMessage('refreshBadge');
     
     /*
     for(let i = 1; i < 13; ++i) {

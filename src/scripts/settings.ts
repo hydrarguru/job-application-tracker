@@ -1,5 +1,4 @@
 import { addJobToDatabase } from "./db";
-import { getCurrentMonth } from "./utils";
 
 document.addEventListener('DOMContentLoaded', async () => {
     let generateNumberAmount = 1;
