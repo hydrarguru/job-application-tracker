@@ -1,14 +1,5 @@
-import { openDB } from "idb";
-import { getJobsFromDatabase, DATABASE_NAME, DATABASE_TABLE, getTotalJobsToday, getTotalJobsMonth } from "./db";
+import { getJobsFromDatabase, getTotalJobsToday, getTotalJobsMonth } from "./db";
 import { getCurrentMonth } from "./utils";
-
-
-
-async function refreshBadge() {
-    chrome.action.setBadgeBackgroundColor({ color: '#294936' });
-    chrome.action.setBadgeTextColor({ color: '#ffffff' });
-    chrome.action.setBadgeText({text: '100' });
-}
 
 async function setLocalStorageValues() {
     const date = new Date();
@@ -23,9 +14,6 @@ async function setLocalStorageValues() {
 chrome.runtime.onMessage.addListener(async (msg) => {
     if (msg === 'refreshValues') {
         await setLocalStorageValues();
-    }
-    if (msg === 'refreshBadge') {
-        await refreshBadge();
     }
 });
 
