@@ -78,6 +78,8 @@ body {
 }
 
 .grid-item {
+    display: flex;
+    flex-wrap: wrap;
     background-color:white;
     border: 1px solid var(--one);
     border-radius: 0.2rem;
