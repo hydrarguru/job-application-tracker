@@ -107,7 +107,7 @@ export async function getJobFromDatabase(id: number) {
 export async function indexKeyValueQuery(index: string): Promise<string[]> {
     const db = await openDB(DATABASE_NAME, 1);
     const value = db.getAllFromIndex(DATABASE_TABLE, index);
-    const queryResult: string[] = (await value).map((job) => job.jobRole);
+    const queryResult: string[] = (await value).map((job) => job[index]);
     return queryResult;
 }
 
