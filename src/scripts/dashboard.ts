@@ -4,6 +4,7 @@ import { JobData } from "./db";
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    chrome.runtime.sendMessage('refreshValues');
     /* Grabbing elements from HTML and assigning them to variables */
     const totalJobsElement = document.querySelector('#totalJobs') as HTMLParagraphElement;
     const totalJobsMonthElement = document.querySelector('#totalJobsMonth') as HTMLParagraphElement;

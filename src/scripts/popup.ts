@@ -3,6 +3,7 @@ import { getCurrentDate } from './utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.sendMessage('offscreen');
+    chrome.runtime.sendMessage('refreshValues');
     /* Button elements are selected when the DOM is loaded. */
     const formInputs = document.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
     const resetButton = document.querySelector('#form-reset-button') as HTMLButtonElement;
