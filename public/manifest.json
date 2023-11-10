@@ -10,13 +10,10 @@
         "page": "dashboard.html",
         "open_in_tab": true
     },
-    "side_panel": {
-        "default_path": "sidepanel.html"
-    },
     "action": {
         "default_popup": "popup.html"
     },
-    "permissions": ["storage", "activeTab", "offscreen", "sidePanel"],
+    "permissions": ["storage", "activeTab", "offscreen"],
     "content_scripts": [
         {
             "js": ["content.js"],
