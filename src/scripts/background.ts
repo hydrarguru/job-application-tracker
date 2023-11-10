@@ -15,16 +15,4 @@ async function createOffscreen() {
 (async () => {
     await createDatabase();
     await createOffscreen();
-    
-    /*
-    for(let i = 1; i < 13; ++i) {
-        await addJobToDatabase({
-            companyName: `Test Company ${i}`,
-            jobRole: `Test Role ${i}`,
-            jobArea: `Test Area ${i}`,
-            applicationLink: `https://www.findwork.com/${i}`,
-            appliedDate: new Date(`2023-05-${i}`).toLocaleDateString(),
-        });
-    }
-    */
 })();
