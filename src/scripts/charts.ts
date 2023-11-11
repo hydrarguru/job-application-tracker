@@ -6,16 +6,28 @@ document.addEventListener('DOMContentLoaded', async () => {});
 
 (async function() {
   const pieChartColors = [
-    'rgba(246, 109, 68, 0.2)',
-    'rgba(254, 174, 101, 0.2)',
-    'rgba(170, 222, 167, 0.2)',
-    'rgba(45, 135, 187, 0.2)'
+    'rgba(246, 109, 68, 0.5)',
+    'rgba(254, 174, 101, 0.5)',
+    'rgba(170, 222, 167, 0.5)',
+    'rgba(45, 135, 187, 0.5)',
+    'rgba(255, 99, 132, 0.5)',
+    'rgba(255, 159, 64, 0.5)',
+    'rgba(255, 205, 86, 0.5)',
+    'rgba(75, 192, 192, 0.5)',
+    'rgba(54, 162, 235, 0.5)',
+    'rgba(153, 102, 255, 0.5)',
   ];
   const pieChartBorderColors = [
-    'rgba(246, 109, 68, 0.8)',
-    'rgba(254, 174, 101, 0.8)',
-    'rgba(170, 222, 167, 0.8)',
-    'rgba(45, 135, 187, 0.8)'
+    'rgba(246, 109, 68, 1)',
+    'rgba(254, 174, 101, 1)',
+    'rgba(170, 222, 167, 1)',
+    'rgba(45, 135, 187, 1)',
+    'rgba(255, 99, 132, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(255, 205, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(153, 102, 255, 1)',
   ];
   const monthsData = {
     january: Number(await getTotalJobsMonth('01')),
