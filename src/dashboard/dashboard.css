@@ -70,7 +70,7 @@ body {
     margin-left: var(--nav-width);
     padding-left: 1rem;
     min-height: 100%;
-    height: 1000px;
+    height: 2000px;
 }
 
 .grid-container {
@@ -99,7 +99,6 @@ body {
 #db-grid-item {
     grid-row-start: 2;
     grid-column-start: span 3;
-    min-height: 100%;
 }
 
 .grid-item {
@@ -118,17 +117,3 @@ body {
 }
 
 /* Main End */
-
-/* Footer Start */
-
-#footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 2.5rem;
-    background-color: var(--one);
-    color: white;
-    text-align: center;
-}
-
-/* Footer End */
