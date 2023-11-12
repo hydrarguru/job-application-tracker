@@ -105,7 +105,7 @@ body {
 }
 
 #db-grid-item table {
-    font-size: 0.5rem;
+    font-size: 1.2rem;
     width: 100%;
     border-collapse: collapse;
     padding-bottom: 1rem;
@@ -126,6 +126,16 @@ body {
     text-align: left;
 }
 
+#db-grid-item table tr button {
+    margin-top: 10px;
+    background-color: var(--one);
+    color: white;
+    border: solid 1px black;
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
 
 
 .grid-item {
