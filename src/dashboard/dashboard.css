@@ -101,6 +101,30 @@ body {
     grid-column-start: span 3;
 }
 
+#db-grid-item table {
+    font-size: 0.5rem;
+    width: 100%;
+    border-collapse: collapse;
+    padding-bottom: 1rem;
+}
+
+#db-grid-item table td {
+    padding: 0.5rem;
+    border: 1px solid var(--one);
+}
+
+#db-grid-item table th {
+    text-align: left;
+    padding: 0.5rem;
+    border: 1px solid var(--one);
+}
+
+#db-grid-item table td {
+    text-align: left;
+}
+
+
+
 .grid-item {
     background-color:white;
     border: 1px solid var(--one);
