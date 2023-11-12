@@ -1,1 +1,1 @@
-console.log('content.ts/js');
+alert('test!');

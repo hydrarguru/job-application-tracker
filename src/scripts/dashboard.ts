@@ -38,7 +38,10 @@ async function createTableFromData(data: JobData[]) {
         dataTable.appendChild(tr); // Append the table row to the table
         
         let button = document.createElement("button");
-        button.innerText = "Delete";
+        let icon = document.createElement("i");
+        icon.className = "bi bi-trash";
+        button.appendChild(icon);
+        button.innerHTML = " Ta bort";
         button.addEventListener("click", () => {
             tr.remove();
             deleteJobFromDatabase(item.id);
@@ -61,19 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
     totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
 
-    const jobEntries = await getJobsFromDatabase(10);
+    const jobEntries = await getJobsFromDatabase(25);
     await createTableFromData(jobEntries);
-
-    
-  
-    /*
-    const exportToPDFButton = document.querySelector('#exportPDF') as HTMLButtonElement;
-    exportToPDFButton.addEventListener('click', async () => {
-        const jobs = JSON.stringify(await getJobsFromDatabase());
-        jobs.split(',').join('\n');
-        const doc = new jsPDF();
-        doc.text(jobs., 10, 10, { align: 'left', maxWidth: 180, lineHeightFactor: 1.5 });
-        doc.save('test.pdf');
-    });
-    */
 });
