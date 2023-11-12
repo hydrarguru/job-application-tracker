@@ -26,6 +26,12 @@ async function createTableFromData(data: JobData[]) {
     dataTable.appendChild(tableHeads);
 
     parsedData.forEach((item) => {
+        let button = document.createElement("button");
+        button.innerText = "Delete";
+        button.addEventListener("click", () => {
+        });
+
+
         let tr = document.createElement("tr");
         let vals = Object.values(item); // Get the values of the current object in the JSON data
         // Loop through the values and create table cells
@@ -36,6 +42,7 @@ async function createTableFromData(data: JobData[]) {
           tr.appendChild(td); // Append the table cell to the table row
         });
         dataTable.appendChild(tr); // Append the table row to the table
+        tr.appendChild(button);
     });
 }
 
