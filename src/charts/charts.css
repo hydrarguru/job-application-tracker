@@ -20,6 +20,9 @@ body {
 
 body {
     background-color: #f1f1f1;
+    background-image: radial-gradient(rgb(145, 145, 145) 1.2px, transparent 0);
+    background-size: 35px 35px;
+    background-position: -15px -19px;
 }
 
 /* Header Start */

@@ -21,6 +21,9 @@ body {
 
 body {
     background-color: #f1f1f1;
+    background-image: radial-gradient(rgb(145, 145, 145) 1.2px, transparent 0);
+    background-size: 35px 35px;
+    background-position: -15px -19px;
 }
 
 /* Header Start */
@@ -110,13 +113,13 @@ body {
 
 #db-grid-item table td {
     padding: 0.5rem;
-    border: 1px solid var(--one);
+    border: 1px solid black;
 }
 
 #db-grid-item table th {
     text-align: left;
     padding: 0.5rem;
-    border: 1px solid var(--one);
+    border: 1px solid black;
 }
 
 #db-grid-item table td {
