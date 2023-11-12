@@ -85,15 +85,24 @@ export async function deleteJobFromDatabase(id: number) {
  * Retrieves all jobs from the database.
  * @returns {Promise<Array>} A promise that resolves with an array of job objects.
  */
-export async function getJobsFromDatabase() {
+export async function getJobsFromDatabase(numberOfJobs?: number) {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
-    const data = await store.getAll();
-    db.close();
-    console.log(`[${getCurrentTime()}] (db.ts) Jobs retrieved from database`);
-    return data;
+    if(numberOfJobs !== undefined) {
+        const data = await store.getAll(null, numberOfJobs);
+        db.close();
+        console.log(`[${getCurrentTime()}] (db.ts) Jobs retrieved from database`);
+        return data;
+    }
+    else {
+        const data = await store.getAll();
+        db.close();
+        console.log(`[${getCurrentTime()}] (db.ts) Jobs retrieved from database`);
+        return data;
+    }
 }
+
 
 /**
  * Retrieves a job from the database by its ID.
