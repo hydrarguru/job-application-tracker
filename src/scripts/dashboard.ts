@@ -2,6 +2,42 @@ import { getJobsFromDatabase } from "./db";
 import { JobData } from "./db";
 //import { jsPDF } from "jspdf";
 
+async function createTableFromData(data: JobData[]) {
+    const parsedData = JSON.parse(JSON.stringify(data));
+
+    const dataTable = document.querySelector('#db-table') as HTMLTableElement;
+    const tableBody = document.createElement('tbody');
+    dataTable.append(tableBody);
+
+    const tableCols = Object.keys(parsedData[0]);
+    const tableHeads = document.createElement("thead");
+    const tableRows = document.createElement("tr");
+
+    tableCols.forEach((item) => {
+        let th = document.createElement("th");
+        th.setAttribute("scope", "col");
+        th.innerHTML = item
+          .replace(/([a-z])([A-Z])/g, "$1 $2")
+          .replace(/^./, (str) => str.toUpperCase());
+        tableRows.appendChild(th);
+    });
+
+    tableHeads.appendChild(tableRows);
+    dataTable.appendChild(tableHeads);
+
+    parsedData.forEach((item) => {
+        let tr = document.createElement("tr");
+        let vals = Object.values(item); // Get the values of the current object in the JSON data
+        // Loop through the values and create table cells
+        vals.forEach((element) => {
+          let td = document.createElement("td");
+          td.id = element.toString();
+          td.innerText = element.toString();
+          tr.appendChild(td); // Append the table cell to the table row
+        });
+        dataTable.appendChild(tr); // Append the table row to the table
+    });
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.sendMessage('refreshValues');
@@ -17,9 +53,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
     totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
 
-
-
-    
+    const jobEntries = await getJobsFromDatabase(10);
+    await createTableFromData(jobEntries);
 
     
   
