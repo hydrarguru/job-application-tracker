@@ -24,9 +24,9 @@ body {
 
 body {
     background-color: #f1f1f1;
-    background-image: radial-gradient(rgb(145, 145, 145) 1.2px, transparent 0);
+    background-image: radial-gradient(rgb(145, 145, 145) 1.4px, transparent 0);
     background-size: 35px 35px;
-    background-position: -15px -19px;
+    background-position: -15px -35px;
 }
 
 /* Header Start */
@@ -163,6 +163,54 @@ body {
     background-color: #942316;
 }
 
+dialog {
+    border: 1.5px dotted var(--one);
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+#modifyDialogFormContainer {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.2rem;
+}
+
+#modifyDialogFormContainer label {
+    align-self: left;
+    font-weight: bold;
+}
+
+#modifyDialogFormContainer input {
+    margin: 0.2rem;
+    padding: 0.2rem;
+    border: 1px solid var(--one);
+    border-radius: 0.2rem;
+    font-size: 1rem;
+}
+
+#modifyDialogFormContainer #modifyDialogId {
+    background-color: rgb(218, 218, 218);
+    cursor: not-allowed;
+}
+
+dialog button {
+    background-color: var(--one);
+    color: white;
+    border: solid 1px black;
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+
+dialog button:hover {
+    transition: 0.35s;
+    scale: 1.010;
+    background-color: var(--two);
+}
+
 .grid-item {
     background-color:white;
     border: 1px solid var(--one);
@@ -172,7 +220,7 @@ body {
     text-align: center;
 }
 
-.grid-item:hover {
+#total:hover, #month:hover, #today:hover {
     transition: 0.35s;
     scale: 1.010;
     border: 1px solid var(--two);

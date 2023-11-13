@@ -61,16 +61,35 @@
             </section>
         </main>
         <dialog id="modifyDialog">
+            <h1>Modifiera objekt</h1>
             <form method="dialog">
-                <p id="formDialogModalParagraph">
-                    Job application added to database!
-                </p>
-                <button>Close</button>
+                <div id="modifyDialogFormContainer">
+                <label for="modifyDialogId">Id:</label>
+                <input id="modifyDialogId" type="text" value="" readonly></input>
+
+                <label for="modifyDialogCompanyName">Företag:</label>
+                <input id="modifyDialogCompanyName" type="text"></input>
+
+                <label for="modifyDialogJobRole">Tjänst:</label>
+                <input id="modifyDialogJobRole" type="text"></input>
+
+                <label for="modifyDialogJobArea">Ort:</label>
+                <input id="modifyDialogJobArea" type="text"></input>
+
+                <label for="modifyDialogJobLink">Länk:</label>
+                <input id="modifyDialogJobLink" type="text"></input>
+
+                <label for="modifyDialogAppliedDate">Ansökningsdatum:</label>
+                <input id="modifyDialogAppliedDate" type="date"></input>
+             </div>
             </form>
+            <button id="modifyDialogSave">Spara</button>
+            <button id="modifyDialogClose">Stäng</button>
         </dialog>
         <dialog id="deleteDialog">
             <form method="dialog">
-                <h1>Are you sure you want to delete this job application?</h1>
+                <h1>Är du säker?</h1>
+                <p>Denna åtgärd är permanent</p>
                 <button id="deleteDialogConfirm">Yes</button>
                 <button id="deleteDialogCancel">No</button>
             </form>

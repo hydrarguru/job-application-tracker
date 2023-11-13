@@ -6,8 +6,15 @@ const modifyDialog = document.querySelector('#modifyDialog') as HTMLDialogElemen
 
 async function editDataDialog(modal: HTMLDialogElement, entryId: number) {
     modal.showModal();
-    modifyDialog.addEventListener('close', async () => {
-        console.log('Jobbet har ändrats!');
+    const modifyDialogSaveButton = document.querySelector('#modifyDialogSave') as HTMLButtonElement;
+    const modifyDialogCloseButton = document.querySelector('#modifyDialogClose') as HTMLButtonElement;
+
+    modifyDialogSaveButton.addEventListener('click', async () => {
+        modifyDialog.close();
+    });
+
+    modifyDialogCloseButton.addEventListener('click', () => {
+        modifyDialog.close();
     });
 }
 
