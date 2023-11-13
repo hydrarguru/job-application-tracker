@@ -1,4 +1,4 @@
-import { deleteJobFromDatabase, getJobsFromDatabase } from "./db";
+import { deleteJobFromDatabase, getJobFromDatabase, getJobsFromDatabase, updateJobInDatabase } from "./db";
 import { JobData } from "./db";
 
 const deleteDialog = document.querySelector('#deleteDialog') as HTMLDialogElement;
@@ -9,7 +9,33 @@ async function editDataDialog(modal: HTMLDialogElement, entryId: number) {
     const modifyDialogSaveButton = document.querySelector('#modifyDialogSave') as HTMLButtonElement;
     const modifyDialogCloseButton = document.querySelector('#modifyDialogClose') as HTMLButtonElement;
 
+    const modifyDialogId = document.querySelector('#modifyDialogId') as HTMLInputElement;
+    const modifyDialogCompanyName = document.querySelector('#modifyDialogCompanyName') as HTMLInputElement;
+    const modifyDialogJobRole = document.querySelector('#modifyDialogJobRole') as HTMLInputElement;
+    const modifyDialogJobArea = document.querySelector('#modifyDialogJobArea') as HTMLInputElement;
+    const modifyDialogJobLink = document.querySelector('#modifyDialogJobLink') as HTMLInputElement;
+    const modifyDialogAppliedDate = document.querySelector('#modifyDialogAppliedDate') as HTMLInputElement;
+    const modifyDialogTextArea = document.querySelector('#modifyDialogTextArea') as HTMLTextAreaElement;
+
+    const jobEntry: JobData = await getJobFromDatabase(entryId);
+    modifyDialogTextArea.textContent = JSON.stringify(jobEntry);
+
+    modifyDialogId.value = entryId.toString();
+    modifyDialogCompanyName.value = jobEntry.companyName;
+    modifyDialogJobRole.value = jobEntry.jobRole;
+    modifyDialogJobArea.value = jobEntry.jobArea;
+    modifyDialogJobLink.value = jobEntry.applicationLink;
+    modifyDialogAppliedDate.value = jobEntry.appliedDate;
+
     modifyDialogSaveButton.addEventListener('click', async () => {
+        const newData: JobData = {
+            companyName: modifyDialogCompanyName.value,
+            jobRole: modifyDialogJobRole.value,
+            jobArea: modifyDialogJobArea.value,
+            applicationLink: modifyDialogJobLink.value,
+            appliedDate: modifyDialogAppliedDate.value,
+        }
+        await updateJobInDatabase(newData, entryId);
         modifyDialog.close();
     });
 
