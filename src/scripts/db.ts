@@ -67,6 +67,17 @@ export async function addJobToDatabase(job: JobData) {
 }
 
 
+
+
+
+export async function updateJobInDatabase(job: JobData, id: number) {
+    const db = await openDB(DATABASE_NAME, 1);
+    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+    const store = transaction.objectStore(DATABASE_TABLE);
+    store.put(job, id);
+    console.log(`[${getCurrentTime()}] (db.ts) Job updated in database`);
+}
+
 /**
  * Deletes a job from the database.
  * @param id - The ID of the job to be deleted.
