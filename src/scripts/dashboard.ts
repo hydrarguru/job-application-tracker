@@ -1,6 +1,29 @@
 import { deleteJobFromDatabase, getJobsFromDatabase } from "./db";
 import { JobData } from "./db";
-//import { jsPDF } from "jspdf";
+
+const deleteDialog = document.querySelector('#deleteDialog') as HTMLDialogElement;
+const modifyDialog = document.querySelector('#modifyDialog') as HTMLDialogElement;
+
+async function editDataDialog(modal: HTMLDialogElement, entryId: number) {
+    modal.showModal();
+    modifyDialog.addEventListener('close', async () => {
+        console.log('Jobbet har ändrats!');
+    });
+}
+
+async function deleteDataDialog(modal: HTMLDialogElement, entryId: number, rowElement: HTMLTableRowElement) {
+    modal.showModal();
+    const confirmDeleteButton = document.querySelector('#deleteDialogConfirm') as HTMLButtonElement;
+    const cancelDeleteButton = document.querySelector('#deleteDialogCancel') as HTMLButtonElement;
+    confirmDeleteButton.addEventListener('click', async () => {
+        rowElement.remove();
+        await deleteJobFromDatabase(entryId);
+        deleteDialog.close();
+    });
+    cancelDeleteButton.addEventListener('click', () => {
+        deleteDialog.close();
+    });
+}
 
 async function createTableFromData(data: JobData[]) {
     const parsedData = JSON.parse(JSON.stringify(data));
@@ -37,16 +60,21 @@ async function createTableFromData(data: JobData[]) {
         });
         dataTable.appendChild(tr); // Append the table row to the table
         
-        let button = document.createElement("button");
-        let icon = document.createElement("i");
-        icon.className = "bi bi-trash";
-        button.appendChild(icon);
-        button.innerHTML = " Ta bort";
-        button.addEventListener("click", () => {
-            tr.remove();
-            deleteJobFromDatabase(item.id);
+        const modifyButton = document.createElement("button");
+        modifyButton.id = "modifyButton";
+        modifyButton.innerHTML = "Ändra";
+        modifyButton.addEventListener("click", () => {
+            editDataDialog(modifyDialog, item.id)
         });
-        tr.appendChild(button);
+        tr.appendChild(modifyButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.id = "deleteButton";
+        deleteButton.innerHTML = "Ta bort";
+        deleteButton.addEventListener("click", () => {
+            deleteDataDialog(deleteDialog, item.id, tr);
+        });
+        tr.appendChild(deleteButton);
     });
 }
 
@@ -63,6 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalJobsElement.textContent = localStorage.getItem('totalJobs');
     totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
     totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
+
 
     const jobEntries = await getJobsFromDatabase(25);
     await createTableFromData(jobEntries);
