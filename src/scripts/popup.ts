@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         /*TODO: Add validation for the date input field. */
         if (isEveryInputFilled) {
             const jobApplication : JobData = {
+                jobId: crypto.randomUUID(),
                 companyName: formInputs[0].value,
                 jobRole: formInputs[1].value,
                 jobArea: formInputs[2].value,

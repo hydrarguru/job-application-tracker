@@ -5,6 +5,7 @@ async function generateMonthlyData(numberAmount: number, month:string, companyNa
     {
         for(let i = 1; i < numberAmount + 1; i++) {
             await addJobToDatabase({
+                jobId: crypto.randomUUID(),
                 companyName: `${companyName}`,
                 jobRole: `${jobRole}`,
                 jobArea: `${jobArea}`,
@@ -16,6 +17,7 @@ async function generateMonthlyData(numberAmount: number, month:string, companyNa
     if(numberAmount > 10) {
         for(let i = 1; i <= 10; i++) {
             await addJobToDatabase({
+                jobId: crypto.randomUUID(),
                 companyName: `${companyName}`,
                 jobRole: `${jobRole}`,
                 jobArea: `${jobArea}`,
@@ -25,6 +27,7 @@ async function generateMonthlyData(numberAmount: number, month:string, companyNa
         }
         for(let i = 11; i < numberAmount + 1; i++) {
             await addJobToDatabase({
+                jobId: crypto.randomUUID(),
                 companyName: `${companyName}`,
                 jobRole: `${jobRole}`,
                 jobArea: `${jobArea}`,

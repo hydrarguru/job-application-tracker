@@ -7,6 +7,7 @@ interface JobDB extends DBSchema {
     jobsTable: {
         key: number;
         value: {
+            jobId: string;
             companyName: string;
             jobRole: string;
             jobArea: string;
@@ -14,6 +15,7 @@ interface JobDB extends DBSchema {
             appliedDate: string;
         };
         indexes: {
+            jobId: string;
             companyName: string;
             jobRole: string;
             jobArea: string;
@@ -24,6 +26,7 @@ interface JobDB extends DBSchema {
 }
 
 export type JobData = {
+    jobId?: string;
     companyName: string;
     jobRole: string;
     jobArea: string;
@@ -43,6 +46,7 @@ export async function createDatabase() {
                 keyPath: 'id',
                 autoIncrement: true,
             });
+            store.createIndex('jobId', 'jobId', { unique: true });
             store.createIndex('companyName', 'companyName');
             store.createIndex('jobRole', 'jobRole');
             store.createIndex('jobArea', 'jobArea');
@@ -63,19 +67,19 @@ export async function addJobToDatabase(job: JobData) {
     const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
     const store = transaction.objectStore(DATABASE_TABLE);
     store.add(job);
-    console.log(`[${getCurrentTime()}] (db.ts) Job added to database`);
+    console.log(`[${getCurrentTime()}] (addJobToDatabase) Job added to database`);
 }
 
 
 
 
 
-export async function updateJobInDatabase(job: JobData, id: number) {
+export async function updateJobInDatabase(job: JobData) {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
-    const store = transaction.objectStore(DATABASE_TABLE);
-    store.put(job, id);
-    console.log(`[${getCurrentTime()}] (db.ts) Job updated in database`);
+    const store = transaction.objectStore(DATABASE_TABLE);    
+    store.put(job);
+    console.log(`[${getCurrentTime()}] (updateJobInDatabase) Job updated in database`);
 }
 
 /**
@@ -83,12 +87,12 @@ export async function updateJobInDatabase(job: JobData, id: number) {
  * @param id - The ID of the job to be deleted.
  * @returns A Promise that resolves when the job is successfully deleted.
  */
-export async function deleteJobFromDatabase(id: number) {
+export async function deleteJobFromDatabase(id: string) {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
     const store = transaction.objectStore(DATABASE_TABLE);
     store.delete(id);
-    console.log(`[${getCurrentTime()}] (db.ts) Job deleted from database`);
+    console.log(`[${getCurrentTime()}] (deleteJobFromDatabase) Job deleted from database`);
 }
 
 
@@ -120,12 +124,13 @@ export async function getJobsFromDatabase(numberOfJobs?: number) {
  * @param id - The ID of the job to retrieve.
  * @returns A promise that resolves with the job object if found, or undefined if not found.
  */
-export async function getJobFromDatabase(id: number) {
+export async function getJobFromDatabase(id) {
     const db = await openDB(DATABASE_NAME, 1);
     const transaction = db.transaction(DATABASE_TABLE, 'readonly');
     const store = transaction.objectStore(DATABASE_TABLE);
     console.log(`[${getCurrentTime()}] (db.ts) Job ${id} retrieved from database`);
     return store.get(id);
+   //return db.getFromIndex(DATABASE_TABLE, 'jobId', id)
 }
 
 /**

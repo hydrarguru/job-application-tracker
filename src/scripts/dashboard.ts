@@ -19,23 +19,24 @@ async function editDataDialog(modal: HTMLDialogElement, entryId: number) {
 
     const jobEntry: JobData = await getJobFromDatabase(entryId);
     modifyDialogTextArea.textContent = JSON.stringify(jobEntry);
-
-    modifyDialogId.value = entryId.toString();
+    modifyDialogId.value = jobEntry.jobId;
     modifyDialogCompanyName.value = jobEntry.companyName;
     modifyDialogJobRole.value = jobEntry.jobRole;
     modifyDialogJobArea.value = jobEntry.jobArea;
     modifyDialogJobLink.value = jobEntry.applicationLink;
     modifyDialogAppliedDate.value = jobEntry.appliedDate;
 
+
     modifyDialogSaveButton.addEventListener('click', async () => {
         const newData: JobData = {
+            jobId: jobEntry.jobId,
             companyName: modifyDialogCompanyName.value,
             jobRole: modifyDialogJobRole.value,
             jobArea: modifyDialogJobArea.value,
             applicationLink: modifyDialogJobLink.value,
             appliedDate: modifyDialogAppliedDate.value,
         }
-        await updateJobInDatabase(newData, entryId);
+        await updateJobInDatabase(newData);
         modifyDialog.close();
     });
 
@@ -44,7 +45,7 @@ async function editDataDialog(modal: HTMLDialogElement, entryId: number) {
     });
 }
 
-async function deleteDataDialog(modal: HTMLDialogElement, entryId: number, rowElement: HTMLTableRowElement) {
+async function deleteDataDialog(modal: HTMLDialogElement, entryId: string, rowElement: HTMLTableRowElement) {
     modal.showModal();
     const confirmDeleteButton = document.querySelector('#deleteDialogConfirm') as HTMLButtonElement;
     const cancelDeleteButton = document.querySelector('#deleteDialogCancel') as HTMLButtonElement;
@@ -80,6 +81,7 @@ async function createTableFromData(data: JobData[]) {
 
     tableHeads.appendChild(tableRows);
     dataTable.appendChild(tableHeads);
+    //data
 
     parsedData.forEach((item) => {
         let tr = document.createElement("tr");
@@ -126,6 +128,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
 
 
-    const jobEntries = await getJobsFromDatabase(25);
+    const jobEntries = await getJobsFromDatabase(35);
     await createTableFromData(jobEntries);
 });
