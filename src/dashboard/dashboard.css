@@ -109,11 +109,10 @@ body {
 }
 
 #db-grid-item table {
-    font-size: 1.2rem;
+    font-size: 1rem;
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 1rem;
-    margin-left: 1rem;
     margin-right: 1rem;
 }
 
