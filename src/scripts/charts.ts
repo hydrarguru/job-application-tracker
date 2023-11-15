@@ -238,4 +238,47 @@ document.addEventListener('DOMContentLoaded', async () => {});
       }
     }
   );
+
+
+  //Total Unique Locations Chart
+  const uniqueLocationDataMap = removeDuplicatesAndCount(await indexKeyValueQuery('jobArea'));
+  const uniqueLocationData = Array.from(uniqueLocationDataMap, ([location, count]) => ({ location, count }));
+  new Chart(
+    document.getElementById('uniqueLocationCanvas') as HTMLCanvasElement,
+    {
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+          title: {
+            font: {
+              size: 20
+            },
+            display: true,
+            text: 'Unika jobbroller'
+          },
+          subtitle: {
+            font: {
+              size: 14
+            },
+            display: true,
+            text: `${uniqueLocationData.length} unika orter.`
+          }
+        }
+      },
+      type: 'doughnut',
+      data: {
+        labels: uniqueLocationData.map(row => row.location),
+        datasets: [{
+          label: `Antal`,
+          data: uniqueLocationData.map(row => row.count),
+          backgroundColor: pieChartColors,
+          borderColor: pieChartBorderColors,
+          hoverOffset: 4
+        }]
+      }
+    }
+  );
 })();
