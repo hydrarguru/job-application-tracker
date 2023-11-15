@@ -6,7 +6,7 @@ async function setLocalStorageValues() {
     const currentDay = date.getDay().toString();
     const currentMonth = date.getMonth().toString();
     localStorage.setItem('totalJobs', (await getJobsFromDatabase()).length.toString());
-    localStorage.setItem('totalJobsDay', (await getTotalJobsToday(currentMonth, currentDay)).toString());
+    localStorage.setItem('totalJobsDay', ((await getTotalJobsToday('11', '16')).toString()));
     localStorage.setItem('totalJobsMonth', (await getTotalJobsMonth(currentMonth)).toString());
     localStorage.setItem('currentMonth', getCurrentMonth());
 }

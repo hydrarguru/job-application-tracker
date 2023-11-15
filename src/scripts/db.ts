@@ -165,6 +165,6 @@ export async function getTotalJobsMonth(month: string): Promise<number> {
  */
 export async function getTotalJobsToday(month: string, day: string): Promise<number> {
     const db = await openDB(DATABASE_NAME, 1);
-    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`2023-${month}-${day}`, `2023-${month}-${day}`));
+    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.only(`2023-${month}-${day}`));
     return value.length;
 }
