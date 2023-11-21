@@ -16,9 +16,12 @@ Do keep mind because IndexDB is being used as a database, it can be easily erase
 -  idb for interfacing with IndexDB
 
 
-#Screenshots
+# Screenshots
+### Popup
 ![Popup](screenshots/screenshot1.png)
 
-![Dashboard / Overwiew](screenshots/screenshot2.png)
+### Dashboard / Overview
+![Dashboard / Overview](screenshots/screenshot2.png)
 
+### Statistics
 ![Statistics](screenshots/screenshot3.png)
