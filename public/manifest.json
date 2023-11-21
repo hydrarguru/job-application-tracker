@@ -19,11 +19,5 @@
     "action": {
         "default_popup": "popup.html"
     },
-    "permissions": ["storage", "activeTab", "offscreen"],
-    "content_scripts": [
-        {
-            "js": ["content.js"],
-            "matches": ["<all_urls>"]
-        }
-    ]
+    "permissions": ["storage", "activeTab", "offscreen"]
 }
