@@ -14,3 +14,11 @@ Do keep mind because IndexDB is being used as a database, it can be easily erase
 # Libraries used
 -  Chart.JS for charts & diagrams.
 -  idb for interfacing with IndexDB
+
+
+#Screenshots
+![Popup](screenshots/screenshot1.png)
+
+![Dashboard / Overwiew](screenshots/screenshot2.png)
+
+![Statistics](screenshots/screenshot3.png)
