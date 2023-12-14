@@ -2,6 +2,8 @@
 
 J.A.T is a browser extension(only chrome for now.) that helps you keep track of the jobs that you apply for.
 
+J.A.T also have integration with Arbetsförmedlingen's website and allows the extension to automate the process of reporting your activites(**Aktivitetsrapportering**)
+
 J.A.T uses IndexDB to store your job applications locally on your machine which means no personal data will be sent to any type of server.
 
 > [!WARNING]
