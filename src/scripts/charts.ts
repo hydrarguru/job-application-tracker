@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', async () => {});
               size: 20
             },
             display: true,
-            text: 'Unika jobbroller'
+            text: 'Unika orter'
           },
           subtitle: {
             font: {
