@@ -70,6 +70,31 @@ body {
     color: #294936;
 }
 
+#header li.language {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+#header li.language select {
+    font-size: 1rem;
+    padding: 0.25rem;
+    border: 1px solid #767676;
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+}
+
+#header li.language select:focus-visible {
+    outline: 2px solid var(--one);
+    outline-offset: 2px;
+}
+
 /* Header End */
 
 /* Main Start */

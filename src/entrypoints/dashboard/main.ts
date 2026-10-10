@@ -1,5 +1,6 @@
 import { deleteJobFromDatabase, getJobFromDatabase, getJobsFromDatabase, updateJobInDatabase } from "@/utils/db";
 import { JobData } from "@/utils/db";
+import { monthName, setupPageLanguage, type MessageKey, type Translate } from "@/lib/i18n";
 
 const deleteDialog = document.querySelector('#deleteDialog') as HTMLDialogElement;
 const modifyDialog = document.querySelector('#modifyDialog') as HTMLDialogElement;
@@ -59,10 +60,12 @@ async function deleteDataDialog(modal: HTMLDialogElement, entryId: string, rowEl
     });
 }
 
-async function createTableFromData(data: JobData[]) {
+async function createTableFromData(data: JobData[], t: Translate) {
     const parsedData = JSON.parse(JSON.stringify(data));
 
     const dataTable = document.querySelector('#db-table') as HTMLTableElement;
+    /* Cleared first because the table is rebuilt when the language changes. */
+    dataTable.replaceChildren();
     const tableBody = document.createElement('tbody');
     dataTable.append(tableBody);
 
@@ -73,9 +76,7 @@ async function createTableFromData(data: JobData[]) {
     tableCols.forEach((item) => {
         let th = document.createElement("th");
         th.setAttribute("scope", "col");
-        th.innerHTML = item
-          .replace(/([a-z])([A-Z])/g, "$1 $2")
-          .replace(/^./, (str) => str.toUpperCase());
+        th.textContent = t(`column.${item}` as MessageKey);
         tableRows.appendChild(th);
     });
 
@@ -97,7 +98,7 @@ async function createTableFromData(data: JobData[]) {
         
         const modifyButton = document.createElement("button");
         modifyButton.id = "modifyButton";
-        modifyButton.innerHTML = "Ändra";
+        modifyButton.textContent = t('dashboard.edit');
         modifyButton.addEventListener("click", () => {
             editDataDialog(modifyDialog, item.id)
         });
@@ -105,7 +106,7 @@ async function createTableFromData(data: JobData[]) {
 
         const deleteButton = document.createElement("button");
         deleteButton.id = "deleteButton";
-        deleteButton.innerHTML = "Ta bort";
+        deleteButton.textContent = t('dashboard.delete');
         deleteButton.addEventListener("click", () => {
             deleteDataDialog(deleteDialog, item.id, tr);
         });
@@ -122,12 +123,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const totalJobsMonthHeading = document.querySelector('#totalMonthHeading') as HTMLHeadingElement;
 
     /* Getting data from localStorage and assigning it to variables */
-    totalJobsMonthHeading.textContent = `Antal sökta jobb i ${localStorage.getItem('currentMonth').at(0).toUpperCase() + localStorage.getItem('currentMonth').slice(1)}`;
     totalJobsElement.textContent = localStorage.getItem('totalJobs');
     totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
     totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
 
 
-    const jobEntries = await getJobsFromDatabase(35);
-    await createTableFromData(jobEntries);
+    await setupPageLanguage(async (language, t) => {
+        totalJobsMonthHeading.textContent = t('dashboard.jobsInMonth', { month: monthName(language, new Date().getMonth()) });
+        await createTableFromData(await getJobsFromDatabase(35), t);
+    });
 });
