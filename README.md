@@ -26,6 +26,7 @@ J.A.T is built with [WXT](https://wxt.dev/).
 Pages live in `src/entrypoints/`, shared code in `src/utils/` and static files (icons) in `public/`. The manifest is generated from `wxt.config.ts`.
 
 # Libraries used
+-  [React](https://react.dev/), [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/) for the UI.
 -  [Chart.JS](https://www.chartjs.org/) for charts & diagrams.
 -  [idb](https://www.npmjs.com/package/idb) for interfacing with IndexDB & TypeScript Support
 

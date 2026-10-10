@@ -1,6 +1,7 @@
 {
 	"extends": "./.wxt/tsconfig.json",
 	"compilerOptions": {
+		"jsx": "react-jsx",
 		"strict": false,
 		"noUncheckedIndexedAccess": false,
 		"verbatimModuleSyntax": false
