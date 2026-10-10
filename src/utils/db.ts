@@ -118,6 +118,16 @@ export async function getJobsFromDatabase(numberOfJobs?: number) {
     }
 }
 
+/**
+ * Returns the total number of jobs in the database.
+ */
+export async function getTotalJobs(): Promise<number> {
+    const db = await openDB(DATABASE_NAME, 1);
+    const value = await db.count(DATABASE_TABLE);
+    db.close();
+    return value;
+}
+
 
 /**
  * Retrieves a job from the database by its ID.
@@ -147,24 +157,24 @@ export async function indexKeyValueQuery(index: string): Promise<string[]> {
 
 /**
  * Gets the total number of jobs applied in a given month.
+ * @param year - The year of the month. Format: 'YYYY'.
  * @param month - The month to get the total number of jobs applied. Format: 'MM'.
  * @returns A promise that resolves to the total number of jobs applied in the given month.
  */
-export async function getTotalJobsMonth(month: string): Promise<number> {
+export async function getTotalJobsMonth(year: string, month: string): Promise<number> {
     const db = await openDB(DATABASE_NAME, 1);
-    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`2023-${month}-01`, `2023-${month}-31`));
+    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`${year}-${month}-01`, `${year}-${month}-31`));
     return value.length;
 }
 
 
 /**
  * Returns the total number of jobs applied on a specific day.
- * @param month - The month of the day in string format (e.g. "01" for January).
- * @param day - The day of the month in string format (e.g. "01" for the first day of the month).
+ * @param date - The day in string format YYYY-MM-DD (e.g. "2026-01-31").
  * @returns A promise that resolves to the total number of jobs applied on the specified day.
  */
-export async function getTotalJobsToday(month: string, day: string): Promise<number> {
+export async function getTotalJobsToday(date: string): Promise<number> {
     const db = await openDB(DATABASE_NAME, 1);
-    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.only(`2023-${month}-${day}`));
+    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.only(date));
     return value.length;
 }

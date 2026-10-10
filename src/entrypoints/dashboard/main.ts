@@ -1,4 +1,5 @@
-import { deleteJobFromDatabase, getJobFromDatabase, getJobsFromDatabase, updateJobInDatabase } from "@/utils/db";
+import { deleteJobFromDatabase, getJobFromDatabase, getJobsFromDatabase, getTotalJobs, getTotalJobsMonth, getTotalJobsToday, updateJobInDatabase } from "@/utils/db";
+import { getCurrentDate, getCurrentMonth } from "@/utils/utils";
 import { JobData } from "@/utils/db";
 
 const deleteDialog = document.querySelector('#deleteDialog') as HTMLDialogElement;
@@ -114,18 +115,20 @@ async function createTableFromData(data: JobData[]) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    chrome.runtime.sendMessage('refreshValues');
     /* Grabbing elements from HTML and assigning them to variables */
     const totalJobsElement = document.querySelector('#totalJobs') as HTMLParagraphElement;
     const totalJobsMonthElement = document.querySelector('#totalJobsMonth') as HTMLParagraphElement;
     const totalJobsTodayElement = document.querySelector('#totalJobsToday') as HTMLParagraphElement;
     const totalJobsMonthHeading = document.querySelector('#totalMonthHeading') as HTMLHeadingElement;
 
-    /* Getting data from localStorage and assigning it to variables */
-    totalJobsMonthHeading.textContent = `Antal sökta jobb i ${localStorage.getItem('currentMonth').at(0).toUpperCase() + localStorage.getItem('currentMonth').slice(1)}`;
-    totalJobsElement.textContent = localStorage.getItem('totalJobs');
-    totalJobsMonthElement.textContent = localStorage.getItem('totalJobsMonth');
-    totalJobsTodayElement.textContent = localStorage.getItem('totalJobsDay');
+    /* Computing the stats straight from IndexedDB */
+    const currentDate = getCurrentDate();
+    const [year, month] = currentDate.split('-');
+    const currentMonth = getCurrentMonth();
+    totalJobsMonthHeading.textContent = `Antal sökta jobb i ${currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)}`;
+    totalJobsElement.textContent = String(await getTotalJobs());
+    totalJobsMonthElement.textContent = String(await getTotalJobsMonth(year, month));
+    totalJobsTodayElement.textContent = String(await getTotalJobsToday(currentDate));
 
 
     const jobEntries = await getJobsFromDatabase(35);

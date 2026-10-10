@@ -2,8 +2,6 @@ import { JobData, addJobToDatabase } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    chrome.runtime.sendMessage('offscreen');
-    chrome.runtime.sendMessage('refreshValues');
     /* Button elements are selected when the DOM is loaded. */
     const formInputs = document.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
     const resetButton = document.querySelector('#form-reset-button') as HTMLButtonElement;
@@ -49,7 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(jobApplication);
             addJobToDatabase(jobApplication);
             clearFormInputs();
-            chrome.runtime.sendMessage('refreshValues');
         } else {
             formErrorModal.showModal();
         }
@@ -78,6 +75,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /* The optins button opens the options page. */
     dashbordButton.addEventListener('click', () => {
-        chrome.runtime.openOptionsPage();
+        browser.runtime.openOptionsPage();
     });
 });
