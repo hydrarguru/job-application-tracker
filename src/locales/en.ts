@@ -53,7 +53,7 @@ export const en: Record<keyof typeof sv, string> = {
     'dashboard.yes': 'Yes',
     'dashboard.no': 'No',
 
-    'charts.yearTitle': 'Total jobs this year',
+    'charts.yearTitle': 'Total jobs in {year}',
     'charts.jobsPerMonth': 'Jobs per month',
     'charts.jobsTitle': 'Number of jobs',
     'charts.jobsThisMonth': 'Total jobs this month ({month})',

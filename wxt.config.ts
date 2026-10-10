@@ -9,7 +9,7 @@ export default defineConfig({
     vite: () => ({
         plugins: [tailwindcss()],
     }),
-    manifest: {
+    manifest: ({ browser }) => ({
         // Name and description come from public/_locales; the UI text lives in src/locales.
         name: '__MSG_extName__',
         description: '__MSG_extDescription__',
@@ -24,6 +24,15 @@ export default defineConfig({
             page: 'dashboard.html',
             open_in_tab: true,
         },
-        permissions: ['storage', 'activeTab', 'offscreen'],
-    },
+        permissions: ['storage', 'activeTab'],
+        ...(browser === 'firefox' && {
+            browser_specific_settings: {
+                gecko: {
+                    id: 'job-application-tracker@hydrarguru',
+                    strict_min_version: '121.0',
+                    data_collection_permissions: { required: ['none'] },
+                },
+            },
+        }),
+    }),
 });

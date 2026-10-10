@@ -55,7 +55,7 @@ export const sv = {
     'dashboard.yes': 'Ja',
     'dashboard.no': 'Nej',
 
-    'charts.yearTitle': 'Totalt antal jobb under året',
+    'charts.yearTitle': 'Totalt antal jobb under {year}',
     'charts.jobsPerMonth': 'Antal jobb per månad',
     'charts.jobsTitle': 'Antal jobb',
     'charts.jobsThisMonth': 'Totalt antal jobb denna månad ({month})',
