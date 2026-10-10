@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Typecheck, build and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run compile
+
+      - name: Build for Chrome
+        run: npm run build
+
+      - name: Build for Firefox
+        run: npm run build:firefox
+
+      - name: Lint Firefox build
+        run: npm run lint:firefox
+
+      - name: Zip extensions
+        if: github.event_name != 'pull_request'
+        run: |
+          npm run zip
+          npm run zip:firefox
+
+      - name: Upload extension packages
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-${{ github.sha }}
+          path: dist/*.zip
+          if-no-files-found: error

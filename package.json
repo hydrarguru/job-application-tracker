@@ -1,6 +1,6 @@
 {
   "name": "application-tracker",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "author": "hydrarguru",
   "main": "",
@@ -13,6 +13,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "lint:firefox": "npx --yes web-ext@8 lint --source-dir dist/firefox-mv2",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
