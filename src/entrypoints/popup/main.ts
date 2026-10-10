@@ -1,5 +1,5 @@
-import { JobData, addJobToDatabase } from './db';
-import { getCurrentDate } from './utils';
+import { JobData, addJobToDatabase } from '@/utils/db';
+import { getCurrentDate } from '@/utils/utils';
 
 document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.sendMessage('offscreen');

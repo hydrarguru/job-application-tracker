@@ -1,5 +1,5 @@
-import { createDatabase } from './db';
-import { getCurrentTime } from './utils';
+import { createDatabase } from '@/utils/db';
+import { getCurrentTime } from '@/utils/utils';
 
 async function createOffscreen() {
     if (await chrome.offscreen.hasDocument()) return;
@@ -12,7 +12,9 @@ async function createOffscreen() {
     console.info(`[${getCurrentTime()}] Created offscreen document.`)
 }
 
-(async () => {
-    await createDatabase();
-    await createOffscreen();
-})();
+export default defineBackground(() => {
+    (async () => {
+        await createDatabase();
+        await createOffscreen();
+    })();
+});

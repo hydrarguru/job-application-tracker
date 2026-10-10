@@ -1,4 +1,4 @@
-import { JobData, addJobToDatabase } from "./db";
+import { JobData, addJobToDatabase } from "@/utils/db";
 
 async function generateMonthlyData(numberAmount: number, month:string, companyName:string, jobRole:string, jobArea:string) {
     if(numberAmount < 10)
