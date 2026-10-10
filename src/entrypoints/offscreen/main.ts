@@ -1,13 +1,12 @@
 import { getJobsFromDatabase, getTotalJobsToday, getTotalJobsMonth } from "@/utils/db";
-import { getCurrentMonth } from "@/utils/utils";
+import { getCurrentDate, getCurrentMonth } from "@/utils/utils";
 
 async function setLocalStorageValues() {
-    const date = new Date();
-    const currentDay = date.getDay().toString();
-    const currentMonth = date.getMonth().toString();
+    const currentDate = getCurrentDate();
+    const [currentYear, currentMonth] = currentDate.split('-');
     localStorage.setItem('totalJobs', (await getJobsFromDatabase()).length.toString());
-    localStorage.setItem('totalJobsDay', ((await getTotalJobsToday(currentMonth, currentDay)).toString()));
-    localStorage.setItem('totalJobsMonth', (await getTotalJobsMonth(currentMonth)).toString());
+    localStorage.setItem('totalJobsDay', ((await getTotalJobsToday(currentDate)).toString()));
+    localStorage.setItem('totalJobsMonth', (await getTotalJobsMonth(currentYear, currentMonth)).toString());
     localStorage.setItem('currentMonth', getCurrentMonth());
 }
 
