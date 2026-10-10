@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Toaster } from '@/components/ui/sonner';
+import { LanguageSelect, useI18n } from '@/components/language';
+import type { MessageKey } from '@/lib/i18n';
 import { addJobToDatabase, type JobData } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
@@ -19,18 +21,19 @@ const emptyForm = (): FormValues => ({
     appliedDate: getCurrentDate(),
 });
 
-const fields: { name: keyof FormValues; label: string; placeholder?: string; type?: string }[] = [
-    { name: 'companyName', label: 'Företag', placeholder: 'T.ex. Google, Microsoft' },
-    { name: 'jobRole', label: 'Sökt tjänst', placeholder: 'T.ex. Frontendutvecklare' },
-    { name: 'jobArea', label: 'Område', placeholder: 'T.ex. Stockholm, Solna, Umeå' },
-    { name: 'applicationLink', label: 'Ansökningslänk', placeholder: 'Länk till ansökan' },
-    { name: 'appliedDate', label: 'Ansökningsdatum', type: 'date' },
+const fields: { name: keyof FormValues; label: MessageKey; placeholder?: MessageKey; type?: string }[] = [
+    { name: 'companyName', label: 'field.companyName', placeholder: 'popup.companyNamePlaceholder' },
+    { name: 'jobRole', label: 'field.jobRole', placeholder: 'popup.jobRolePlaceholder' },
+    { name: 'jobArea', label: 'field.jobArea', placeholder: 'popup.jobAreaPlaceholder' },
+    { name: 'applicationLink', label: 'field.applicationLink', placeholder: 'popup.applicationLinkPlaceholder' },
+    { name: 'appliedDate', label: 'field.appliedDate', type: 'date' },
 ];
 
 /* Three buttons share one row in the 350px popup, so they get less padding. */
 const actionButton = 'gap-1.5 px-2 has-[>svg]:px-2';
 
 export default function App() {
+    const { t } = useI18n();
     const [values, setValues] = useState<FormValues>(emptyForm);
     const [showErrors, setShowErrors] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
@@ -42,19 +45,19 @@ export default function App() {
         const firstMissing = fields.find((field) => values[field.name].trim() === '');
         if (firstMissing) {
             setShowErrors(true);
-            toast.error('Fyll i alla fält innan du lägger till ansökan.');
+            toast.error(t('popup.fillAllFields'));
             /* Move focus to the first empty field so keyboard and screen reader users land on it. */
             formRef.current?.querySelector<HTMLInputElement>(`#${firstMissing.name}`)?.focus();
             return;
         }
         try {
             await addJobToDatabase({ jobId: crypto.randomUUID(), ...values });
-            toast.success('Ansökan har lagts till!');
+            toast.success(t('popup.added'));
             setValues(emptyForm());
             setShowErrors(false);
         } catch (error) {
             console.error(error);
-            toast.error('Kunde inte spara ansökan.');
+            toast.error(t('popup.saveFailed'));
         }
     }
 
@@ -65,8 +68,9 @@ export default function App() {
 
     return (
         <div className="w-[350px]">
-            <header className="bg-primary px-4 py-4">
-                <h1 className="text-xl font-semibold text-primary-foreground">Job Application Tracker</h1>
+            <header className="flex items-center justify-between gap-2 bg-primary px-4 py-4 text-primary-foreground">
+                <h1 className="text-base font-semibold">{t('appName')}</h1>
+                <LanguageSelect />
             </header>
             <main>
                 <form
@@ -75,18 +79,18 @@ export default function App() {
                     onSubmit={handleSubmit}
                     noValidate
                     autoComplete="off"
-                    aria-label="Lägg till jobbansökan"
+                    aria-label={t('popup.form')}
                 >
                     {fields.map((field) => {
                         const errorId = `${field.name}-error`;
                         return (
                             <div key={field.name} className="flex flex-col gap-1.5">
-                                <Label htmlFor={field.name}>{field.label}</Label>
+                                <Label htmlFor={field.name}>{t(field.label)}</Label>
                                 <Input
                                     id={field.name}
                                     name={field.name}
                                     type={field.type ?? 'text'}
-                                    placeholder={field.placeholder}
+                                    placeholder={field.placeholder && t(field.placeholder)}
                                     value={values[field.name]}
                                     required
                                     aria-invalid={missing(field.name) || undefined}
@@ -95,7 +99,7 @@ export default function App() {
                                 />
                                 {missing(field.name) && (
                                     <p id={errorId} className="text-destructive text-xs font-medium">
-                                        {field.label} måste fyllas i.
+                                        {t('popup.fieldRequired', { field: t(field.label) })}
                                     </p>
                                 )}
                             </div>
@@ -103,10 +107,10 @@ export default function App() {
                     })}
                     <div className="mt-1 grid grid-cols-3 gap-2">
                         <Button type="submit" className={actionButton}>
-                            <DatabaseZap /> Lägg till
+                            <DatabaseZap /> {t('popup.add')}
                         </Button>
                         <Button type="button" variant="outline" className={actionButton} onClick={handleReset}>
-                            <RotateCcw /> Återställ
+                            <RotateCcw /> {t('popup.reset')}
                         </Button>
                         <Button
                             type="button"
@@ -114,12 +118,12 @@ export default function App() {
                             className={actionButton}
                             onClick={() => browser.runtime.openOptionsPage()}
                         >
-                            <LayoutDashboard /> Dashboard
+                            <LayoutDashboard /> {t('popup.dashboard')}
                         </Button>
                     </div>
                 </form>
             </main>
-            <Toaster position="top-center" />
+            <Toaster position="top-center" containerAriaLabel={t('notifications')} />
         </div>
     );
 }

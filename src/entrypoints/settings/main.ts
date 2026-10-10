@@ -1,4 +1,5 @@
 import { JobData, addJobToDatabase } from "@/utils/db";
+import { monthName, setupPageLanguage } from "@/lib/i18n";
 
 async function generateMonthlyData(numberAmount: number, month:string, companyName:string, jobRole:string, jobArea:string) {
     if(numberAmount < 10)
@@ -51,18 +52,23 @@ async function generateMonthlyData(numberAmount: number, month:string, companyNa
 
 document.addEventListener('DOMContentLoaded', async () => {
     let generateNumberAmount = 1;
-    const inputNumberRangeLabel = document.querySelector('[name=generateNumberRange]') as HTMLLabelElement;
+    const inputNumberRangeValue = document.querySelector('#generateNumberValue') as HTMLElement;
     const inputNumberRangeElement = document.querySelector('#generateNumber') as HTMLInputElement;
     inputNumberRangeElement.valueAsNumber = 1;
-    inputNumberRangeLabel.innerHTML = `Antal jobbansökningar att generera: <strong>${generateNumberAmount}</strong>`;
+    inputNumberRangeValue.textContent = String(generateNumberAmount);
 
     inputNumberRangeElement.addEventListener('input', () => {
         generateNumberAmount = inputNumberRangeElement.valueAsNumber;
-        inputNumberRangeLabel.innerHTML = `Antal jobbansökningar att generera: <strong>${generateNumberAmount}</strong>`;
+        inputNumberRangeValue.textContent = String(generateNumberAmount);
     });
 
     const generateMonthlyForm = document.querySelector('#generateMonthlyForm') as HTMLFormElement;
-    const selectedMonth = document.querySelector('select') as HTMLSelectElement;
+    const selectedMonth = document.querySelector('select[name=month]') as HTMLSelectElement;
+    await setupPageLanguage((language) => {
+        Array.from(selectedMonth.options).forEach((option, month) => {
+            option.textContent = monthName(language, month);
+        });
+    });
     const companyName = document.querySelector('#companyName') as HTMLInputElement;
     const jobRole = document.querySelector('#jobRole') as HTMLInputElement;
     const jobArea = document.querySelector('#jobArea') as HTMLInputElement;

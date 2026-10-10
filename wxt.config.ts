@@ -10,8 +10,10 @@ export default defineConfig({
         plugins: [tailwindcss()],
     }),
     manifest: ({ browser }) => ({
-        name: 'Job Application Tracker',
-        description: 'An extension that helps you track your job applications.',
+        // Name and description come from public/_locales; the UI text lives in src/locales.
+        name: '__MSG_extName__',
+        description: '__MSG_extDescription__',
+        default_locale: 'sv',
         icons: {
             16: 'img/icon16.png',
             32: 'img/icon32.png',
