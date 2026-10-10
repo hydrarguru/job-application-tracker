@@ -29,36 +29,18 @@ document.addEventListener('DOMContentLoaded', async () => {});
     'rgba(54, 162, 235, 1)',
     'rgba(153, 102, 255, 1)',
   ];
-  const monthsData = {
-    january: Number(await getTotalJobsMonth('01')),
-    february: Number(await getTotalJobsMonth('02')),
-    march: Number(await getTotalJobsMonth('03')),
-    april: Number(await getTotalJobsMonth('04')),
-    may: Number(await getTotalJobsMonth('05')),
-    june: Number(await getTotalJobsMonth('06')),
-    july: Number(await getTotalJobsMonth('07')),
-    august: Number(await getTotalJobsMonth('08')),
-    september: Number(await getTotalJobsMonth('09')),
-    october: Number(await getTotalJobsMonth('10')),
-    november: Number(await getTotalJobsMonth('11')),
-    december: Number(await getTotalJobsMonth('12'))
-  };
-
-  //Total Jobs Year Chart(month: 1 -> 12)
-  const totalJobsData = [
-    { month: 'Januari', count: monthsData.january },
-    { month: 'Februari', count: monthsData.february },
-    { month: 'Mars', count: monthsData.march },
-    { month: 'April', count: monthsData.april },
-    { month: 'Maj', count: monthsData.may },
-    { month: 'Juni', count: monthsData.june },
-    { month: 'Juli', count: monthsData.july },
-    { month: 'Augusti', count: monthsData.august },
-    { month: 'September', count: monthsData.september },
-    { month: 'Oktober', count: monthsData.october },
-    { month: 'November', count: monthsData.november },
-    { month: 'December', count: monthsData.december }
+  const monthNames = [
+    'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
+    'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'
   ];
+  const now = new Date();
+  const currentYear = now.getFullYear();
+
+  //Total Jobs Year Chart(month: 1 -> 12) for the current year
+  const totalJobsData = await Promise.all(monthNames.map(async (month, index) => ({
+    month,
+    count: await getTotalJobsMonth(String(currentYear), String(index + 1).padStart(2, '0'))
+  })));
   new Chart(
     document.getElementById('totalJobsCanvas') as HTMLCanvasElement,
     {
@@ -73,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {});
               size: 20
             },
             display: true,
-            text: 'Totalt antal jobb under året'
+            text: `Totalt antal jobb under ${currentYear}`
           }
         }
       },
@@ -93,12 +75,14 @@ document.addEventListener('DOMContentLoaded', async () => {});
     }
   );
 
-  //Total Jobs Monthly Data Chart
-  const totalJobsMonthData = [
-    { month: 'Oktober', count: monthsData.october },
-    { month: 'November', count: monthsData.november },
-    { month: 'December', count: monthsData.december },
-  ];
+  //Total Jobs Monthly Data Chart: last three months, including the current one (spans year boundaries)
+  const totalJobsMonthData = await Promise.all([2, 1, 0].map(async (monthsAgo) => {
+    const date = new Date(currentYear, now.getMonth() - monthsAgo, 1);
+    return {
+      month: monthNames[date.getMonth()],
+      count: await getTotalJobsMonth(String(date.getFullYear()), String(date.getMonth() + 1).padStart(2, '0'))
+    };
+  }));
   new Chart(
     document.getElementById('totalJobsMonthCanvas') as HTMLCanvasElement,
     {
@@ -142,11 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {});
             ],
             borderWidth: 1,
             label: `Totalt antal jobb denna månad (${new Date().toLocaleString('sv-SE', { month: 'long' })})`,
-            data: [
-              monthsData.october,
-              monthsData.november,
-              monthsData.december
-            ]
+            data: totalJobsMonthData.map(row => row.count)
           },
         ]
       }
