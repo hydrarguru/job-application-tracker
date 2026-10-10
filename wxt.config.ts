@@ -9,7 +9,7 @@ export default defineConfig({
     vite: () => ({
         plugins: [tailwindcss()],
     }),
-    manifest: {
+    manifest: ({ browser }) => ({
         name: 'Job Application Tracker',
         description: 'An extension that helps you track your job applications.',
         icons: {
@@ -22,6 +22,15 @@ export default defineConfig({
             page: 'dashboard.html',
             open_in_tab: true,
         },
-        permissions: ['storage', 'activeTab', 'offscreen'],
-    },
+        permissions: ['storage', 'activeTab'],
+        ...(browser === 'firefox' && {
+            browser_specific_settings: {
+                gecko: {
+                    id: 'job-application-tracker@hydrarguru',
+                    strict_min_version: '121.0',
+                    data_collection_permissions: { required: ['none'] },
+                },
+            },
+        }),
+    }),
 });

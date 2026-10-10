@@ -118,6 +118,16 @@ export async function getJobsFromDatabase(numberOfJobs?: number) {
     }
 }
 
+/**
+ * Returns the total number of jobs in the database.
+ */
+export async function getTotalJobs(): Promise<number> {
+    const db = await openDB(DATABASE_NAME, 1);
+    const value = await db.count(DATABASE_TABLE);
+    db.close();
+    return value;
+}
+
 
 /**
  * Retrieves a job from the database by its ID.

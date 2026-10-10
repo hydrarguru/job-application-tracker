@@ -30,11 +30,6 @@ const fields: { name: keyof FormValues; label: string; placeholder?: string; typ
 /* Three buttons share one row in the 350px popup, so they get less padding. */
 const actionButton = 'gap-1.5 px-2 has-[>svg]:px-2';
 
-/* Asks the offscreen document to recount the stored statistics. No listener is not an error. */
-function refreshStatistics() {
-    browser.runtime.sendMessage('refreshValues').catch(() => {});
-}
-
 export default function App() {
     const [values, setValues] = useState<FormValues>(emptyForm);
     const [showErrors, setShowErrors] = useState(false);
@@ -57,7 +52,6 @@ export default function App() {
             toast.success('Ansökan har lagts till!');
             setValues(emptyForm());
             setShowErrors(false);
-            refreshStatistics();
         } catch (error) {
             console.error(error);
             toast.error('Kunde inte spara ansökan.');
