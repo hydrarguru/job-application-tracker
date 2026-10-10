@@ -1,13 +1,8 @@
 {
+	"extends": "./.wxt/tsconfig.json",
 	"compilerOptions": {
 		"strict": false,
-		"module": "commonjs",
-		"target": "es6",
-		"esModuleInterop": true,
-		"sourceMap": true,
-		"rootDir": "src",
-		"outDir": "dist/js",
-		"noEmitOnError": true,
-		"typeRoots": [ "node_modules/@types" ]
+		"noUncheckedIndexedAccess": false,
+		"verbatimModuleSyntax": false
 	}
 }

@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto'
-import { getTotalJobsMonth, indexKeyValueQuery } from './db';
-import { removeDuplicatesAndCount } from './utils';
+import { getTotalJobsMonth, indexKeyValueQuery } from '@/utils/db';
+import { removeDuplicatesAndCount } from '@/utils/utils';
 
 document.addEventListener('DOMContentLoaded', async () => {});
 

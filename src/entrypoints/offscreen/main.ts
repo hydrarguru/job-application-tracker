@@ -1,5 +1,5 @@
-import { getJobsFromDatabase, getTotalJobsToday, getTotalJobsMonth } from "./db";
-import { getCurrentMonth } from "./utils";
+import { getJobsFromDatabase, getTotalJobsToday, getTotalJobsMonth } from "@/utils/db";
+import { getCurrentMonth } from "@/utils/utils";
 
 async function setLocalStorageValues() {
     const date = new Date();

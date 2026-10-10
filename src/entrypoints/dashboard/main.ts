@@ -1,5 +1,5 @@
-import { deleteJobFromDatabase, getJobFromDatabase, getJobsFromDatabase, updateJobInDatabase } from "./db";
-import { JobData } from "./db";
+import { deleteJobFromDatabase, getJobFromDatabase, getJobsFromDatabase, updateJobInDatabase } from "@/utils/db";
+import { JobData } from "@/utils/db";
 
 const deleteDialog = document.querySelector('#deleteDialog') as HTMLDialogElement;
 const modifyDialog = document.querySelector('#modifyDialog') as HTMLDialogElement;
