@@ -1,8 +1,16 @@
 name: Release
 
+# A push to main whose package.json version has no release yet builds the extension and
+# publishes GitHub Release v<version>, which also creates the tag. Bumping the version in a PR
+# and merging it is all a release needs. Run it by hand from the Actions tab to retry.
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -14,34 +22,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check for an existing release
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="v$(node -p "require('./package.json').version")"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "Release ${tag} already exists; nothing to publish."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-node@v4
+        if: steps.version.outputs.exists == 'false'
         with:
           node-version: 22
           cache: npm
 
-      - name: Check tag matches package.json version
-        run: |
-          version="$(node -p "require('./package.json').version")"
-          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
-            echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${version}"
-            exit 1
-          fi
-
       - name: Install dependencies
+        if: steps.version.outputs.exists == 'false'
         run: npm ci
 
       - name: Typecheck
+        if: steps.version.outputs.exists == 'false'
         run: npm run compile
 
       - name: Zip extensions
+        if: steps.version.outputs.exists == 'false'
         run: |
           npm run zip
           npm run zip:firefox
 
       - name: Lint Firefox build
+        if: steps.version.outputs.exists == 'false'
         run: npm run lint:firefox
 
-      - name: Create GitHub release
+      - name: Create GitHub release and tag
+        if: steps.version.outputs.exists == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --generate-notes
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh release create "$TAG" dist/*.zip --target "$GITHUB_SHA" --title "$TAG" --generate-notes
