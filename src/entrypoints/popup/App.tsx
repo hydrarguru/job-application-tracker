@@ -125,7 +125,7 @@ export default function App() {
 
     return (
         <div className="flex w-[420px] flex-col bg-page">
-            <header className="flex items-center gap-3 bg-ink px-6 py-4 text-white">
+            <header className="flex items-center justify-between gap-3 bg-ink px-6 py-4 text-white">
                 <div className="flex items-center gap-2.5">
                     <LogoMark />
                     <div className="flex flex-col gap-px">
@@ -133,6 +133,15 @@ export default function App() {
                         <span className="text-[11px] tracking-[0.02em] text-on-ink">{t('appName')}</span>
                     </div>
                 </div>
+                <button
+                    type="button"
+                    aria-label={t('nav.preferences')}
+                    title={t('nav.preferences')}
+                    onClick={() => openPage('/preferences.html')}
+                    className="flex size-10 cursor-pointer items-center justify-center rounded-[10px] border border-white/14 bg-white/8 text-white hover:bg-white/16 focus-visible:outline-white"
+                >
+                    <SlidersHorizontal aria-hidden="true" className="size-[18px]" strokeWidth={1.8} />
+                </button>
             </header>
             <main>
                 <form
@@ -167,14 +176,9 @@ export default function App() {
                                 <RotateCcw /> {t('popup.reset')}
                             </Button>
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
-                            <Button type="button" variant="outline" onClick={() => openPage('/dashboard.html')}>
-                                <LayoutDashboard /> {t('popup.dashboard')}
-                            </Button>
-                            <Button type="button" variant="outline" onClick={() => openPage('/preferences.html')}>
-                                <SlidersHorizontal /> {t('nav.preferences')}
-                            </Button>
-                        </div>
+                        <Button type="button" variant="outline" onClick={() => openPage('/dashboard.html')}>
+                            <LayoutDashboard /> {t('popup.dashboard')}
+                        </Button>
                     </div>
                 </form>
             </main>
