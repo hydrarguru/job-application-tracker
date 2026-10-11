@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal } from 'lucide-react';
+import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -45,6 +45,26 @@ const textFields = [companyField, roleField, areaField, dateField, linkField];
 async function openPage(path: '/dashboard.html' | '/preferences.html') {
     await browser.tabs.create({ url: browser.runtime.getURL(path) });
     window.close();
+}
+
+/*
+ * Icon button for the navy header. Its label is hidden until hover or keyboard focus, when the
+ * button widens and the text slides in to the right of the icon. The label stays in the DOM, so
+ * it is the button's accessible name; with reduced motion it appears without the animation.
+ */
+function HeaderLink({ icon: Icon, label, onClick }: { icon: LucideIcon; label: string; onClick: () => void }) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className="group flex h-10 cursor-pointer items-center rounded-[10px] border border-white/14 bg-white/8 px-[10px] text-sm font-medium text-white hover:bg-white/16 focus-visible:outline-white"
+        >
+            <Icon aria-hidden="true" className="size-[18px] shrink-0" strokeWidth={1.8} />
+            <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,margin] duration-200 ease-out group-hover:ml-2 group-hover:max-w-40 group-hover:opacity-100 group-focus-visible:ml-2 group-focus-visible:max-w-40 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                {label}
+            </span>
+        </button>
+    );
 }
 
 export default function App() {
@@ -133,15 +153,10 @@ export default function App() {
                         <span className="text-[11px] tracking-[0.02em] text-on-ink">{t('appName')}</span>
                     </div>
                 </div>
-                <button
-                    type="button"
-                    aria-label={t('nav.preferences')}
-                    title={t('nav.preferences')}
-                    onClick={() => openPage('/preferences.html')}
-                    className="flex size-10 cursor-pointer items-center justify-center rounded-[10px] border border-white/14 bg-white/8 text-white hover:bg-white/16 focus-visible:outline-white"
-                >
-                    <SlidersHorizontal aria-hidden="true" className="size-[18px]" strokeWidth={1.8} />
-                </button>
+                <div className="flex items-center gap-2">
+                    <HeaderLink icon={LayoutDashboard} label={t('popup.dashboard')} onClick={() => openPage('/dashboard.html')} />
+                    <HeaderLink icon={SlidersHorizontal} label={t('nav.preferences')} onClick={() => openPage('/preferences.html')} />
+                </div>
             </header>
             <main>
                 <form
@@ -176,9 +191,6 @@ export default function App() {
                                 <RotateCcw /> {t('popup.reset')}
                             </Button>
                         </div>
-                        <Button type="button" variant="outline" onClick={() => openPage('/dashboard.html')}>
-                            <LayoutDashboard /> {t('popup.dashboard')}
-                        </Button>
                     </div>
                 </form>
             </main>
