@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Languages } from 'lucide-react';
+import { ChevronDown, Globe } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import {
@@ -46,17 +46,22 @@ export function useI18n() {
     return context;
 }
 
-/* Language picker. The icon is the visible label; the select's accessible name is "Språk"/"Language". */
+/* Compact language picker for the popup's navy header. The select's accessible name is "Språk"/"Language". */
 export function LanguageSelect({ className }: { className?: string }) {
     const { preference, t } = useI18n();
     return (
-        <label className={cn('flex items-center gap-1.5', className)}>
-            <Languages aria-hidden="true" className="size-4 shrink-0" />
+        <label
+            className={cn(
+                'relative flex h-8 items-center gap-1.5 rounded-full border border-white/14 bg-white/8 pr-2 pl-2.5 text-xs text-white has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-white',
+                className,
+            )}
+        >
+            <Globe aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={1.8} />
             <span className="sr-only">{t('language.label')}</span>
             <select
                 value={preference}
                 onChange={(e) => languagePreference.setValue(e.target.value as LanguagePreference)}
-                className="h-8 rounded-md border border-white bg-white px-1.5 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="cursor-pointer appearance-none bg-transparent pr-4 text-xs text-white focus-visible:outline-none [&>option]:bg-white [&>option]:text-ink"
             >
                 <option value="auto">{t('language.auto')}</option>
                 {languages.map(({ value, name }) => (
@@ -65,6 +70,7 @@ export function LanguageSelect({ className }: { className?: string }) {
                     </option>
                 ))}
             </select>
+            <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-2 size-3" strokeWidth={2} />
         </label>
     );
 }

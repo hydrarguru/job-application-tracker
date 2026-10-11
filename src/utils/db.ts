@@ -1,19 +1,29 @@
-import { openDB, DBSchema } from 'idb';
+import { openDB, type DBSchema } from 'idb';
 import { getCurrentTime } from './utils';
 export const DATABASE_NAME = 'JAT-DB';
 export const DATABASE_TABLE = 'jobsTable';
 
+export type EmploymentType = 'full' | 'part';
+export const employmentTypes: EmploymentType[] = ['full', 'part'];
+
+export type JobData = {
+    jobId?: string;
+    companyName: string;
+    jobRole: string;
+    /* Missing on applications saved before employment type existed. */
+    employmentType?: EmploymentType;
+    jobArea: string;
+    applicationLink: string;
+    appliedDate: string;
+};
+
+/* A stored application: `id` is the auto-incremented key IndexedDB assigns. */
+export type StoredJob = JobData & { id: number };
+
 interface JobDB extends DBSchema {
     jobsTable: {
         key: number;
-        value: {
-            jobId: string;
-            companyName: string;
-            jobRole: string;
-            jobArea: string;
-            applicationLink: string;
-            appliedDate: string;
-        };
+        value: StoredJob;
         indexes: {
             jobId: string;
             companyName: string;
@@ -25,22 +35,8 @@ interface JobDB extends DBSchema {
     };
 }
 
-export type JobData = {
-    jobId?: string;
-    companyName: string;
-    jobRole: string;
-    jobArea: string;
-    applicationLink: string;
-    appliedDate: string;
-};
-
-/**
- * Creates a new database with the specified name and schema.
- * @returns A promise that resolves when the database is successfully created.
- */
-export async function createDatabase() {
-    console.log(`[${getCurrentTime()}] (db.ts) opening connection to ${DATABASE_NAME}`);
-    openDB<JobDB>(DATABASE_NAME, 1, {
+function open() {
+    return openDB<JobDB>(DATABASE_NAME, 1, {
         upgrade(db) {
             const store = db.createObjectStore(DATABASE_TABLE, {
                 keyPath: 'id',
@@ -58,123 +54,89 @@ export async function createDatabase() {
 }
 
 /**
+ * Creates the database and its indexes if they don't exist yet.
+ */
+export async function createDatabase() {
+    console.log(`[${getCurrentTime()}] (db.ts) opening connection to ${DATABASE_NAME}`);
+    const db = await open();
+    db.close();
+}
+
+/**
+ * Adds jobs to the database in one transaction. Each job gets a new jobId if it has none.
+ */
+export async function addJobsToDatabase(jobs: JobData[]) {
+    const db = await open();
+    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+    for (const job of jobs) {
+        /* `id` is left out so IndexedDB assigns the next key. */
+        transaction.store.add({ ...job, jobId: job.jobId ?? crypto.randomUUID() } as StoredJob);
+    }
+    await transaction.done;
+    db.close();
+}
+
+/**
  * Adds a job to the database.
- * @param job The job data to be added to the database.
- * @returns A Promise that resolves with the result of the operation.
  */
 export async function addJobToDatabase(job: JobData) {
-    const db = await openDB(DATABASE_NAME, 1);
-    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
-    const store = transaction.objectStore(DATABASE_TABLE);
-    store.add(job);
-    console.log(`[${getCurrentTime()}] (addJobToDatabase) Job added to database`);
-}
-
-
-
-
-
-export async function updateJobInDatabase(job: JobData) {
-    const db = await openDB(DATABASE_NAME, 1);
-    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
-    const store = transaction.objectStore(DATABASE_TABLE);    
-    store.put(job);
-    console.log(`[${getCurrentTime()}] (updateJobInDatabase) Job updated in database`);
+    await addJobsToDatabase([job]);
 }
 
 /**
- * Deletes a job from the database.
- * @param id - The ID of the job to be deleted.
- * @returns A Promise that resolves when the job is successfully deleted.
+ * Saves changes to a stored job.
  */
-export async function deleteJobFromDatabase(id: string) {
-    const db = await openDB(DATABASE_NAME, 1);
-    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
-    const store = transaction.objectStore(DATABASE_TABLE);
-    store.delete(id);
-    console.log(`[${getCurrentTime()}] (deleteJobFromDatabase) Job deleted from database`);
+export async function updateJobInDatabase(job: StoredJob) {
+    const db = await open();
+    await db.put(DATABASE_TABLE, job);
+    db.close();
 }
 
+/**
+ * Deletes a job by its key.
+ */
+export async function deleteJobFromDatabase(id: number) {
+    const db = await open();
+    await db.delete(DATABASE_TABLE, id);
+    db.close();
+}
 
 /**
- * Retrieves all jobs from the database.
- * @returns {Promise<Array>} A promise that resolves with an array of job objects.
+ * Deletes every job.
  */
-export async function getJobsFromDatabase(numberOfJobs?: number) {
-    const db = await openDB(DATABASE_NAME, 1);
-    const transaction = db.transaction(DATABASE_TABLE, 'readonly');
-    const store = transaction.objectStore(DATABASE_TABLE);
-    if(numberOfJobs !== undefined) {
-        const data = await store.getAll(null, numberOfJobs);
-        db.close();
-        console.log(`[${getCurrentTime()}] (db.ts) Jobs retrieved from database`);
-        return data;
-    }
-    else {
-        const data = await store.getAll();
-        db.close();
-        console.log(`[${getCurrentTime()}] (db.ts) Jobs retrieved from database`);
-        return data;
-    }
+export async function clearDatabase() {
+    const db = await open();
+    await db.clear(DATABASE_TABLE);
+    db.close();
+}
+
+/**
+ * Retrieves every job, oldest first.
+ */
+export async function getJobsFromDatabase(): Promise<StoredJob[]> {
+    const db = await open();
+    const jobs = await db.getAll(DATABASE_TABLE);
+    db.close();
+    return jobs;
 }
 
 /**
  * Returns the total number of jobs in the database.
  */
 export async function getTotalJobs(): Promise<number> {
-    const db = await openDB(DATABASE_NAME, 1);
+    const db = await open();
     const value = await db.count(DATABASE_TABLE);
     db.close();
     return value;
 }
 
-
 /**
- * Retrieves a job from the database by its ID.
- * @param id - The ID of the job to retrieve.
- * @returns A promise that resolves with the job object if found, or undefined if not found.
+ * Returns the number of jobs whose applied date starts with `prefix`,
+ * e.g. "2026-10" for a month or "2026-10-11" for a day.
  */
-export async function getJobFromDatabase(id) {
-    const db = await openDB(DATABASE_NAME, 1);
-    const transaction = db.transaction(DATABASE_TABLE, 'readonly');
-    const store = transaction.objectStore(DATABASE_TABLE);
-    console.log(`[${getCurrentTime()}] (db.ts) Job ${id} retrieved from database`);
-    return store.get(id);
-   //return db.getFromIndex(DATABASE_TABLE, 'jobId', id)
-}
-
-/**
- * Retrieves an array of values from the specified index of the database table.
- * @param index - The index to retrieve values from.
- * @returns A promise that resolves to an array of strings.
- */
-export async function indexKeyValueQuery(index: string): Promise<string[]> {
-    const db = await openDB(DATABASE_NAME, 1);
-    const value = db.getAllFromIndex(DATABASE_TABLE, index);
-    const queryResult: string[] = (await value).map((job) => job[index]);
-    return queryResult;
-}
-
-/**
- * Gets the total number of jobs applied in a given month.
- * @param year - The year of the month. Format: 'YYYY'.
- * @param month - The month to get the total number of jobs applied. Format: 'MM'.
- * @returns A promise that resolves to the total number of jobs applied in the given month.
- */
-export async function getTotalJobsMonth(year: string, month: string): Promise<number> {
-    const db = await openDB(DATABASE_NAME, 1);
-    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(`${year}-${month}-01`, `${year}-${month}-31`));
-    return value.length;
-}
-
-
-/**
- * Returns the total number of jobs applied on a specific day.
- * @param date - The day in string format YYYY-MM-DD (e.g. "2026-01-31").
- * @returns A promise that resolves to the total number of jobs applied on the specified day.
- */
-export async function getTotalJobsToday(date: string): Promise<number> {
-    const db = await openDB(DATABASE_NAME, 1);
-    const value = await db.getAllFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.only(date));
-    return value.length;
+export async function countJobsWithDatePrefix(prefix: string): Promise<number> {
+    const db = await open();
+    const value = await db.countFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(prefix, `${prefix}￿`));
+    db.close();
+    return value;
 }

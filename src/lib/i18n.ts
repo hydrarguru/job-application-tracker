@@ -49,59 +49,14 @@ export function monthName(language: Language, month: number) {
     return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-/**
- * Translates a plain HTML page: sets <html lang> and fills every element marked with
- * data-i18n (text), data-i18n-aria-label or data-i18n-placeholder.
- */
-export function localizeDocument(language: Language, t: Translate) {
-    document.documentElement.lang = language;
-    document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
-        element.textContent = t(element.dataset.i18n as MessageKey);
-    });
-    document.querySelectorAll<HTMLElement>('[data-i18n-aria-label]').forEach((element) => {
-        element.setAttribute('aria-label', t(element.dataset.i18nAriaLabel as MessageKey));
-    });
-    document.querySelectorAll<HTMLElement>('[data-i18n-placeholder]').forEach((element) => {
-        element.setAttribute('placeholder', t(element.dataset.i18nPlaceholder as MessageKey));
-    });
-}
-
-/* Fills a <select> with the language choices and saves the choice when it changes. */
-export function fillLanguageSelect(select: HTMLSelectElement, preference: LanguagePreference, t: Translate) {
-    select.replaceChildren(
-        new Option(t('language.auto'), 'auto'),
-        ...languages.map(({ value, name }) => {
-            const option = new Option(name, value);
-            option.lang = value;
-            return option;
-        }),
+/* Month name as written inside a sentence: "oktober" in Swedish, "October" in English. */
+export function monthInSentence(language: Language, month: number) {
+    return new Date(2000, month, 1).toLocaleString(localeOf(language), { month: 'long' }).replace(/^./, (first) =>
+        language === 'en' ? first.toUpperCase() : first,
     );
-    select.value = preference;
-    select.addEventListener('change', () => {
-        languagePreference.setValue(select.value as LanguagePreference);
-    });
 }
 
-/**
- * Sets up a plain HTML page: translates it, wires up its #language-select if it has one and
- * calls `render` now and again whenever the language changes (here or on another page).
- */
-export async function setupPageLanguage(render: (language: Language, t: Translate) => void | Promise<void> = () => {}) {
-    const apply = async (preference: LanguagePreference) => {
-        const language = resolveLanguage(preference);
-        const t = createTranslator(language);
-        localizeDocument(language, t);
-        const select = document.querySelector<HTMLSelectElement>('#language-select');
-        if (select) {
-            select.value = preference;
-            select.options[0].text = t('language.auto');
-        }
-        await render(language, t);
-    };
-
-    const preference = await languagePreference.getValue();
-    const select = document.querySelector<HTMLSelectElement>('#language-select');
-    if (select) fillLanguageSelect(select, preference, createTranslator(resolveLanguage(preference)));
-    languagePreference.watch((newPreference) => apply(newPreference));
-    await apply(preference);
+/* Three-letter month name for chart axes, e.g. "Okt" or "Oct". */
+export function shortMonthName(language: Language, month: number) {
+    return monthName(language, month).slice(0, 3);
 }

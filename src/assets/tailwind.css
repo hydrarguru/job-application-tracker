@@ -1,61 +1,106 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+@import "@fontsource/instrument-serif";
 
 /*
- * shadcn/ui theme (neutral base). Primary keeps the extension's original green.
- * Tuned for WCAG 2.2 AA: --input borders reach 3:1 against the background
- * (1.4.11) and --destructive text reaches 4.5:1 (1.4.3).
+ * J.A.T theme, built on the five-colour palette: lapis #33658a, sky #86bbd8, olive #758e4f,
+ * saffron #f6ae2d and orange #f26419. Sky, saffron and orange are too light for text or for
+ * white text on top, so text and buttons use the darker variants below (WCAG 2.2 AA, 4.5:1).
+ * The shadcn variables are kept so the ui/ components work unchanged.
  */
 :root {
-  --radius: 0.5rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #294936;
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.505 0.213 27.518);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.6 0 0);
-  --ring: #294936;
-}
+  --radius: 0.625rem;
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: #3f7a55;
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: #3f7a55;
+  --lapis: #33658a;
+  --lapis-deep: #264d6a;
+  --sky: #86bbd8;
+  --olive: #758e4f;
+  --olive-text: #56693a;
+  --saffron: #f6ae2d;
+  --orange: #f26419;
+  --danger: #b8460c;
+  --danger-text: #a13d0a;
+
+  --ink: #13202b;
+  --page: #f4f6f8;
+  --surface: #ffffff;
+  --fill: #f9fafb;
+  --line: #e3e8ed;
+  --line-soft: #eef1f4;
+  --text-2: #3b4a56;
+  --text-3: #5b6b78;
+  --on-ink: #a9c3d3;
+
+  --tint-lapis: #eef3f7;
+  --tint-lapis-2: #f3f8fb;
+  --tint-lapis-3: #e3eef5;
+  --tint-saffron: #fdf1da;
+  --tint-olive: #ecf0e4;
+  --tint-orange: #fdeee6;
+  --tint-orange-2: #fde6da;
+  --danger-border: #f6c9b0;
+
+  --background: var(--page);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--lapis);
+  --primary-foreground: #ffffff;
+  --secondary: var(--tint-lapis);
+  --secondary-foreground: var(--lapis-deep);
+  --muted: var(--fill);
+  --muted-foreground: var(--text-3);
+  --accent: var(--tint-lapis);
+  --accent-foreground: var(--lapis-deep);
+  --destructive: var(--danger);
+  --border: var(--line);
+  /* #7f8e9a is 3.3:1 on white and 3:1 on the page grey, the minimum for input borders (1.4.11). */
+  --input: #7f8e9a;
+  --ring: var(--lapis);
 }
 
 @theme inline {
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 2px);
+  --radius-2xl: 20px;
+
+  --color-lapis: var(--lapis);
+  --color-lapis-deep: var(--lapis-deep);
+  --color-sky: var(--sky);
+  --color-olive: var(--olive);
+  --color-olive-text: var(--olive-text);
+  --color-saffron: var(--saffron);
+  --color-orange: var(--orange);
+  --color-danger: var(--danger);
+  --color-danger-text: var(--danger-text);
+  --color-ink: var(--ink);
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-fill: var(--fill);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-on-ink: var(--on-ink);
+  --color-tint-lapis: var(--tint-lapis);
+  --color-tint-lapis-2: var(--tint-lapis-2);
+  --color-tint-lapis-3: var(--tint-lapis-3);
+  --color-tint-saffron: var(--tint-saffron);
+  --color-tint-olive: var(--tint-olive);
+  --color-tint-orange: var(--tint-orange);
+  --color-tint-orange-2: var(--tint-orange-2);
+  --color-danger-border: var(--danger-border);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -78,9 +123,16 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  /* One visible focus style everywhere (2.4.7): a lapis ring with a gap. */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+  a {
+    @apply text-lapis hover:text-lapis-deep;
   }
 }
