@@ -118,8 +118,8 @@ export default function App() {
     }
 
     return (
-        <div className="flex w-[360px] flex-col bg-page">
-            <header className="flex items-center justify-between gap-3 bg-ink px-[18px] py-4 text-white">
+        <div className="flex w-[420px] flex-col bg-page">
+            <header className="flex items-center justify-between gap-3 bg-ink px-6 py-4 text-white">
                 <div className="flex items-center gap-2.5">
                     <LogoMark />
                     <div className="flex flex-col gap-px">
@@ -132,7 +132,7 @@ export default function App() {
             <main>
                 <form
                     ref={formRef}
-                    className="flex flex-col gap-3.5 px-[18px] pt-5 pb-[18px]"
+                    className="flex flex-col gap-4 px-6 pt-6 pb-6"
                     onSubmit={handleSubmit}
                     noValidate
                     autoComplete="off"
@@ -169,7 +169,7 @@ export default function App() {
                 </form>
             </main>
             {counts && (
-                <footer className="flex items-center justify-between border-t border-line bg-surface px-[18px] py-3 text-xs text-text-3">
+                <footer className="flex items-center justify-between border-t border-line bg-surface px-6 py-3 text-xs text-text-3">
                     <span className="flex items-center gap-2">
                         <span aria-hidden="true" className="size-2 rounded-full bg-olive" />
                         {t('popup.sentToday', { count: counts.today })}
