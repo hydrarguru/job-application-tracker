@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { LayoutDashboard, Plus, RotateCcw } from 'lucide-react';
+import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Toaster } from '@/components/ui/sonner';
 import { EmploymentTypeField } from '@/components/employment-type-field';
-import { LanguageSelect, useI18n } from '@/components/language';
+import { useI18n } from '@/components/language';
 import { LogoMark } from '@/components/logo';
 import type { MessageKey } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
@@ -40,6 +40,12 @@ const linkField: Field = {
 };
 /* In the order they appear, so the first empty one gets focus. */
 const textFields = [companyField, roleField, areaField, dateField, linkField];
+
+/* Opens an extension page in a new tab and closes the popup. */
+async function openPage(path: '/dashboard.html' | '/preferences.html') {
+    await browser.tabs.create({ url: browser.runtime.getURL(path) });
+    window.close();
+}
 
 export default function App() {
     const { t } = useI18n();
@@ -119,7 +125,7 @@ export default function App() {
 
     return (
         <div className="flex w-[420px] flex-col bg-page">
-            <header className="flex items-center justify-between gap-3 bg-ink px-6 py-4 text-white">
+            <header className="flex items-center gap-3 bg-ink px-6 py-4 text-white">
                 <div className="flex items-center gap-2.5">
                     <LogoMark />
                     <div className="flex flex-col gap-px">
@@ -127,7 +133,6 @@ export default function App() {
                         <span className="text-[11px] tracking-[0.02em] text-on-ink">{t('appName')}</span>
                     </div>
                 </div>
-                <LanguageSelect />
             </header>
             <main>
                 <form
@@ -154,15 +159,20 @@ export default function App() {
                     </div>
                     {renderField(linkField)}
                     <div className="mt-1 flex flex-col gap-2">
-                        <Button type="submit" size="lg">
-                            <Plus strokeWidth={2} /> {t('popup.add')}
-                        </Button>
-                        <div className="grid grid-cols-2 gap-2">
-                            <Button type="button" variant="outline" onClick={handleReset}>
+                        <div className="grid grid-cols-[2fr_1fr] gap-2">
+                            <Button type="submit" size="lg">
+                                <Plus strokeWidth={2} /> {t('popup.add')}
+                            </Button>
+                            <Button type="button" variant="outline" size="lg" onClick={handleReset}>
                                 <RotateCcw /> {t('popup.reset')}
                             </Button>
-                            <Button type="button" variant="outline" onClick={() => browser.runtime.openOptionsPage()}>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Button type="button" variant="outline" onClick={() => openPage('/dashboard.html')}>
                                 <LayoutDashboard /> {t('popup.dashboard')}
+                            </Button>
+                            <Button type="button" variant="outline" onClick={() => openPage('/preferences.html')}>
+                                <SlidersHorizontal /> {t('nav.preferences')}
                             </Button>
                         </div>
                     </div>
