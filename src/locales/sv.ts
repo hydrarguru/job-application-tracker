@@ -44,6 +44,9 @@ export const sv = {
     'popup.sentToday_one': '{count} skickad idag',
     'popup.thisMonth': '{count} denna månad',
 
+    'datePicker.previousMonth': 'Föregående månad',
+    'datePicker.nextMonth': 'Nästa månad',
+
     'column.companyName': 'Företag',
     'column.jobRole': 'Tjänst',
     'column.employmentType': 'Typ',
