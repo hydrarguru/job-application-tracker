@@ -33,10 +33,24 @@ Pages live in `src/entrypoints/`, shared code in `src/utils/` and static files (
 
 # Screenshots
 ### Popup
-![Popup](screenshots/screenshot1.png)
+<img src="screenshots/popup.png" alt="Popup with the form for adding a new application" width="420">
 
-### Dashboard / Overview
-![Dashboard / Overview](screenshots/screenshot2.png)
+### Overview
+![Overview with totals and the list of applications](screenshots/dashboard.png)
 
 ### Statistics
-![Statistics](screenshots/screenshot3.png)
+![Statistics with top companies, roles and locations, and a bar chart of jobs per month](screenshots/statistics.png)
+
+![Statistics with jobs per month shown as a table](screenshots/statistics-table.png)
+
+### Preferences
+![Preferences with language, import and clear data settings](screenshots/preferences.png)
+
+### Dialogs
+![Edit entry dialog](screenshots/dialog-edit.png)
+
+![Delete confirmation dialog](screenshots/dialog-delete.png)
+
+![Clear all data dialog](screenshots/dialog-clear.png)
+
+Screenshots of earlier versions are kept in [screenshots/archive](screenshots/archive).
