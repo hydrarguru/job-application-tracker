@@ -42,6 +42,9 @@ export const en: Record<keyof typeof sv, string> = {
     'popup.sentToday_one': '{count} sent today',
     'popup.thisMonth': '{count} this month',
 
+    'datePicker.previousMonth': 'Previous month',
+    'datePicker.nextMonth': 'Next month',
+
     'column.companyName': 'Company',
     'column.jobRole': 'Position',
     'column.employmentType': 'Type',

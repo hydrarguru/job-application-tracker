@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Toaster } from '@/components/ui/sonner';
+import { DatePicker } from '@/components/date-picker';
 import { EmploymentTypeField } from '@/components/employment-type-field';
 import { useI18n } from '@/components/language';
 import { LogoMark } from '@/components/logo';
 import type { MessageKey } from '@/lib/i18n';
-import { cn } from '@/lib/utils';
 import { addJobToDatabase, countJobsWithDatePrefix, type JobData } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
@@ -31,7 +31,7 @@ type Field = { name: TextField; label: MessageKey; placeholder?: MessageKey; typ
 const companyField: Field = { name: 'companyName', label: 'field.companyName', placeholder: 'popup.companyNamePlaceholder' };
 const roleField: Field = { name: 'jobRole', label: 'field.jobRole', placeholder: 'popup.jobRolePlaceholder' };
 const areaField: Field = { name: 'jobArea', label: 'field.jobArea', placeholder: 'popup.jobAreaPlaceholder' };
-const dateField: Field = { name: 'appliedDate', label: 'field.appliedDate', type: 'date' };
+const dateField: Field = { name: 'appliedDate', label: 'field.appliedDate' };
 const linkField: Field = {
     name: 'applicationLink',
     label: 'field.applicationLink',
@@ -116,6 +116,23 @@ export default function App() {
         setShowErrors(false);
     }
 
+    function renderDateField() {
+        const labelId = `${dateField.name}-label`;
+        return (
+            <div className="flex min-w-0 flex-col gap-1.5">
+                <Label id={labelId} htmlFor={dateField.name}>
+                    {t(dateField.label)}
+                </Label>
+                <DatePicker
+                    id={dateField.name}
+                    labelId={labelId}
+                    value={values.appliedDate}
+                    onChange={(appliedDate) => setValues({ ...values, appliedDate })}
+                />
+            </div>
+        );
+    }
+
     function renderField(field: Field) {
         const errorId = `${field.name}-error`;
         const invalid = missing(field.name);
@@ -131,7 +148,6 @@ export default function App() {
                     required
                     aria-invalid={invalid || undefined}
                     aria-describedby={invalid ? errorId : undefined}
-                    className={cn(field.type === 'date' && 'font-mono text-[13px]')}
                     onChange={(e) => setValues({ ...values, [field.name]: e.target.value })}
                 />
                 {invalid && (
@@ -179,7 +195,7 @@ export default function App() {
                     />
                     <div className="grid grid-cols-2 gap-2.5">
                         {renderField(areaField)}
-                        {renderField(dateField)}
+                        {renderDateField()}
                     </div>
                     {renderField(linkField)}
                     <div className="mt-1 flex flex-col gap-2">
