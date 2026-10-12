@@ -111,6 +111,44 @@ export default function App() {
             }
         >
             <div className="flex flex-wrap gap-4">
+                {groups.map((group) => {
+                    const top = group.items.slice(0, 5);
+                    const most = top[0]?.count ?? 1;
+                    return (
+                        <Card key={group.title} aria-label={group.title} className="flex flex-[1_1_300px] flex-col gap-[18px]">
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="flex flex-col gap-1">
+                                    <h2 className="text-sm font-medium text-text-2">{group.title}</h2>
+                                    <p className="font-serif text-5xl leading-none">{group.items.length}</p>
+                                </div>
+                                <span aria-hidden="true" className={cn('mt-1.5 size-2.5 rounded-full', group.color)} />
+                            </div>
+                            {top.length > 0 ? (
+                                <ol aria-label={t('charts.topFive')} className="m-0 flex list-none flex-col gap-3 p-0">
+                                    {top.map((item) => (
+                                        <li key={item.name} className="flex flex-col gap-1.5">
+                                            <div className="flex justify-between gap-3 text-[13px]">
+                                                <span className="truncate">{item.name}</span>
+                                                <span className="font-mono text-text-3">{item.count}</span>
+                                            </div>
+                                            <div aria-hidden="true" className="h-1.5 overflow-hidden rounded-full bg-line-soft">
+                                                <div
+                                                    className={cn('h-1.5 rounded-full', group.color)}
+                                                    style={{ width: `${Math.round((item.count / most) * 100)}%` }}
+                                                />
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ol>
+                            ) : (
+                                <p className="text-[13px] text-text-3">{t('charts.nothingYet')}</p>
+                            )}
+                        </Card>
+                    );
+                })}
+            </div>
+
+            <div className="flex flex-wrap gap-4">
                 <Card ref={perMonthRef} aria-labelledby="per-month" className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                         <div className="flex flex-col gap-1">
@@ -230,44 +268,6 @@ export default function App() {
                         </div>
                     </dl>
                 </section>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-                {groups.map((group) => {
-                    const top = group.items.slice(0, 5);
-                    const most = top[0]?.count ?? 1;
-                    return (
-                        <Card key={group.title} aria-label={group.title} className="flex flex-[1_1_300px] flex-col gap-[18px]">
-                            <div className="flex items-start justify-between gap-3">
-                                <div className="flex flex-col gap-1">
-                                    <h2 className="text-sm font-medium text-text-2">{group.title}</h2>
-                                    <p className="font-serif text-5xl leading-none">{group.items.length}</p>
-                                </div>
-                                <span aria-hidden="true" className={cn('mt-1.5 size-2.5 rounded-full', group.color)} />
-                            </div>
-                            {top.length > 0 ? (
-                                <ol aria-label={t('charts.topFive')} className="m-0 flex list-none flex-col gap-3 p-0">
-                                    {top.map((item) => (
-                                        <li key={item.name} className="flex flex-col gap-1.5">
-                                            <div className="flex justify-between gap-3 text-[13px]">
-                                                <span className="truncate">{item.name}</span>
-                                                <span className="font-mono text-text-3">{item.count}</span>
-                                            </div>
-                                            <div aria-hidden="true" className="h-1.5 overflow-hidden rounded-full bg-line-soft">
-                                                <div
-                                                    className={cn('h-1.5 rounded-full', group.color)}
-                                                    style={{ width: `${Math.round((item.count / most) * 100)}%` }}
-                                                />
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ol>
-                            ) : (
-                                <p className="text-[13px] text-text-3">{t('charts.nothingYet')}</p>
-                            )}
-                        </Card>
-                    );
-                })}
             </div>
         </AppShell>
     );
