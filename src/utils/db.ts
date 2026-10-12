@@ -129,14 +129,3 @@ export async function getTotalJobs(): Promise<number> {
     db.close();
     return value;
 }
-
-/**
- * Returns the number of jobs whose applied date starts with `prefix`,
- * e.g. "2026-10" for a month or "2026-10-11" for a day.
- */
-export async function countJobsWithDatePrefix(prefix: string): Promise<number> {
-    const db = await open();
-    const value = await db.countFromIndex(DATABASE_TABLE, 'appliedDate', IDBKeyRange.bound(prefix, `${prefix}￿`));
-    db.close();
-    return value;
-}

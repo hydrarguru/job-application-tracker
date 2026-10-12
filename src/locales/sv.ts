@@ -40,9 +40,9 @@ export const sv = {
     'popup.add': 'Lägg till ansökan',
     'popup.reset': 'Återställ',
     'popup.dashboard': 'Översikt',
-    'popup.sentToday': '{count} skickade idag',
-    'popup.sentToday_one': '{count} skickad idag',
-    'popup.thisMonth': '{count} denna månad',
+
+    'datePicker.previousMonth': 'Föregående månad',
+    'datePicker.nextMonth': 'Nästa månad',
 
     'column.companyName': 'Företag',
     'column.jobRole': 'Tjänst',
@@ -91,7 +91,9 @@ export const sv = {
     'charts.thisMonth': 'Denna månad',
     'charts.summary': 'Stapeldiagram över sökta jobb per månad {year}, totalt {total}.',
     'charts.summaryBusiest': 'Stapeldiagram över sökta jobb per månad {year}, totalt {total}. Flest i {month}: {count}.',
-    'charts.showTable': 'Visa som tabell',
+    'charts.view': 'Visning',
+    'charts.chartView': 'Stapeldiagram',
+    'charts.tableView': 'Tabell',
     'charts.month': 'Månad',
     'charts.applications': 'Ansökningar',
     'charts.jobsThisMonth': 'Sökta jobb denna månad ({month})',

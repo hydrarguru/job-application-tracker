@@ -38,9 +38,9 @@ export const en: Record<keyof typeof sv, string> = {
     'popup.add': 'Add application',
     'popup.reset': 'Reset',
     'popup.dashboard': 'Dashboard',
-    'popup.sentToday': '{count} sent today',
-    'popup.sentToday_one': '{count} sent today',
-    'popup.thisMonth': '{count} this month',
+
+    'datePicker.previousMonth': 'Previous month',
+    'datePicker.nextMonth': 'Next month',
 
     'column.companyName': 'Company',
     'column.jobRole': 'Position',
@@ -89,7 +89,9 @@ export const en: Record<keyof typeof sv, string> = {
     'charts.thisMonth': 'This month',
     'charts.summary': 'Bar chart of jobs per month in {year}, {total} in total.',
     'charts.summaryBusiest': 'Bar chart of jobs per month in {year}, {total} in total. Most in {month}: {count}.',
-    'charts.showTable': 'Show as a table',
+    'charts.view': 'View',
+    'charts.chartView': 'Bar chart',
+    'charts.tableView': 'Table',
     'charts.month': 'Month',
     'charts.applications': 'Applications',
     'charts.jobsThisMonth': 'Total jobs this month ({month})',

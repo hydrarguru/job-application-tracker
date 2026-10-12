@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Toaster } from '@/components/ui/sonner';
+import { DatePicker } from '@/components/date-picker';
 import { EmploymentTypeField } from '@/components/employment-type-field';
 import { useI18n } from '@/components/language';
 import { LogoMark } from '@/components/logo';
 import type { MessageKey } from '@/lib/i18n';
-import { cn } from '@/lib/utils';
-import { addJobToDatabase, countJobsWithDatePrefix, type JobData } from '@/utils/db';
+import { addJobToDatabase, type JobData } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
 type FormValues = Required<Omit<JobData, 'jobId'>>;
@@ -31,7 +31,7 @@ type Field = { name: TextField; label: MessageKey; placeholder?: MessageKey; typ
 const companyField: Field = { name: 'companyName', label: 'field.companyName', placeholder: 'popup.companyNamePlaceholder' };
 const roleField: Field = { name: 'jobRole', label: 'field.jobRole', placeholder: 'popup.jobRolePlaceholder' };
 const areaField: Field = { name: 'jobArea', label: 'field.jobArea', placeholder: 'popup.jobAreaPlaceholder' };
-const dateField: Field = { name: 'appliedDate', label: 'field.appliedDate', type: 'date' };
+const dateField: Field = { name: 'appliedDate', label: 'field.appliedDate' };
 const linkField: Field = {
     name: 'applicationLink',
     label: 'field.applicationLink',
@@ -71,21 +71,7 @@ export default function App() {
     const { t } = useI18n();
     const [values, setValues] = useState<FormValues>(emptyForm);
     const [showErrors, setShowErrors] = useState(false);
-    const [counts, setCounts] = useState<{ today: number; month: number } | null>(null);
     const formRef = useRef<HTMLFormElement>(null);
-
-    async function loadCounts() {
-        const today = getCurrentDate();
-        const [day, month] = await Promise.all([
-            countJobsWithDatePrefix(today),
-            countJobsWithDatePrefix(today.slice(0, 7)),
-        ]);
-        setCounts({ today: day, month });
-    }
-
-    useEffect(() => {
-        loadCounts();
-    }, []);
 
     const missing = (name: TextField) => showErrors && values[name].trim() === '';
 
@@ -104,7 +90,6 @@ export default function App() {
             toast.success(t('popup.added'));
             setValues(emptyForm());
             setShowErrors(false);
-            loadCounts();
         } catch (error) {
             console.error(error);
             toast.error(t('popup.saveFailed'));
@@ -114,6 +99,23 @@ export default function App() {
     function handleReset() {
         setValues(emptyForm());
         setShowErrors(false);
+    }
+
+    function renderDateField() {
+        const labelId = `${dateField.name}-label`;
+        return (
+            <div className="flex min-w-0 flex-col gap-1.5">
+                <Label id={labelId} htmlFor={dateField.name}>
+                    {t(dateField.label)}
+                </Label>
+                <DatePicker
+                    id={dateField.name}
+                    labelId={labelId}
+                    value={values.appliedDate}
+                    onChange={(appliedDate) => setValues({ ...values, appliedDate })}
+                />
+            </div>
+        );
     }
 
     function renderField(field: Field) {
@@ -131,7 +133,6 @@ export default function App() {
                     required
                     aria-invalid={invalid || undefined}
                     aria-describedby={invalid ? errorId : undefined}
-                    className={cn(field.type === 'date' && 'font-mono text-[13px]')}
                     onChange={(e) => setValues({ ...values, [field.name]: e.target.value })}
                 />
                 {invalid && (
@@ -179,7 +180,7 @@ export default function App() {
                     />
                     <div className="grid grid-cols-2 gap-2.5">
                         {renderField(areaField)}
-                        {renderField(dateField)}
+                        {renderDateField()}
                     </div>
                     {renderField(linkField)}
                     <div className="mt-1 flex flex-col gap-2">
@@ -194,15 +195,6 @@ export default function App() {
                     </div>
                 </form>
             </main>
-            {counts && (
-                <footer className="flex items-center justify-between border-t border-line bg-surface px-6 py-3 text-xs text-text-3">
-                    <span className="flex items-center gap-2">
-                        <span aria-hidden="true" className="size-2 rounded-full bg-olive" />
-                        {t('popup.sentToday', { count: counts.today })}
-                    </span>
-                    <span>{t('popup.thisMonth', { count: counts.month })}</span>
-                </footer>
-            )}
             <Toaster position="top-center" containerAriaLabel={t('notifications')} />
         </div>
     );
