@@ -38,9 +38,6 @@ export const en: Record<keyof typeof sv, string> = {
     'popup.add': 'Add application',
     'popup.reset': 'Reset',
     'popup.dashboard': 'Dashboard',
-    'popup.sentToday': '{count} sent today',
-    'popup.sentToday_one': '{count} sent today',
-    'popup.thisMonth': '{count} this month',
 
     'datePicker.previousMonth': 'Previous month',
     'datePicker.nextMonth': 'Next month',

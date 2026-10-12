@@ -40,9 +40,6 @@ export const sv = {
     'popup.add': 'Lägg till ansökan',
     'popup.reset': 'Återställ',
     'popup.dashboard': 'Översikt',
-    'popup.sentToday': '{count} skickade idag',
-    'popup.sentToday_one': '{count} skickad idag',
-    'popup.thisMonth': '{count} denna månad',
 
     'datePicker.previousMonth': 'Föregående månad',
     'datePicker.nextMonth': 'Nästa månad',

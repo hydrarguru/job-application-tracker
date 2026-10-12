@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -11,7 +11,7 @@ import { EmploymentTypeField } from '@/components/employment-type-field';
 import { useI18n } from '@/components/language';
 import { LogoMark } from '@/components/logo';
 import type { MessageKey } from '@/lib/i18n';
-import { addJobToDatabase, countJobsWithDatePrefix, type JobData } from '@/utils/db';
+import { addJobToDatabase, type JobData } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
 type FormValues = Required<Omit<JobData, 'jobId'>>;
@@ -71,21 +71,7 @@ export default function App() {
     const { t } = useI18n();
     const [values, setValues] = useState<FormValues>(emptyForm);
     const [showErrors, setShowErrors] = useState(false);
-    const [counts, setCounts] = useState<{ today: number; month: number } | null>(null);
     const formRef = useRef<HTMLFormElement>(null);
-
-    async function loadCounts() {
-        const today = getCurrentDate();
-        const [day, month] = await Promise.all([
-            countJobsWithDatePrefix(today),
-            countJobsWithDatePrefix(today.slice(0, 7)),
-        ]);
-        setCounts({ today: day, month });
-    }
-
-    useEffect(() => {
-        loadCounts();
-    }, []);
 
     const missing = (name: TextField) => showErrors && values[name].trim() === '';
 
@@ -104,7 +90,6 @@ export default function App() {
             toast.success(t('popup.added'));
             setValues(emptyForm());
             setShowErrors(false);
-            loadCounts();
         } catch (error) {
             console.error(error);
             toast.error(t('popup.saveFailed'));
@@ -210,15 +195,6 @@ export default function App() {
                     </div>
                 </form>
             </main>
-            {counts && (
-                <footer className="flex items-center justify-between border-t border-line bg-surface px-6 py-3 text-xs text-text-3">
-                    <span className="flex items-center gap-2">
-                        <span aria-hidden="true" className="size-2 rounded-full bg-olive" />
-                        {t('popup.sentToday', { count: counts.today })}
-                    </span>
-                    <span>{t('popup.thisMonth', { count: counts.month })}</span>
-                </footer>
-            )}
             <Toaster position="top-center" containerAriaLabel={t('notifications')} />
         </div>
     );

@@ -135,4 +135,16 @@
   a {
     @apply text-lapis hover:text-lapis-deep;
   }
+  /*
+   * The popup is sized to fit its content, so its scroll bars are only clutter. They are hidden
+   * rather than turned off, so wheel, touch and keyboard scrolling still reach anything that
+   * overflows, such as field errors on a short screen.
+   */
+  html.hide-scrollbars {
+    scrollbar-width: none;
+    overflow-x: hidden;
+  }
+  html.hide-scrollbars::-webkit-scrollbar {
+    display: none;
+  }
 }
