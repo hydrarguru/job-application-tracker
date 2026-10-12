@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { AppShell, Card } from '@/components/app-shell';
 import { useI18n } from '@/components/language';
@@ -20,6 +20,36 @@ export default function App() {
 
     useEffect(() => {
         getJobsFromDatabase().then(setJobs);
+    }, []);
+
+    /*
+     * The two cards share a row and stretch to the taller one, so opening the table would
+     * stretch "This month" too. While the table is open, the side card keeps the height the
+     * row has with the table closed instead. When the cards wrap, it keeps its own height.
+     */
+    const perMonthRef = useRef<HTMLElement>(null);
+    const thisMonthRef = useRef<HTMLElement>(null);
+    const tableRef = useRef<HTMLDetailsElement>(null);
+    const [thisMonthHeight, setThisMonthHeight] = useState<number>();
+
+    useLayoutEffect(() => {
+        const card = perMonthRef.current;
+        const side = thisMonthRef.current;
+        const details = tableRef.current;
+        if (!card || !side || !details) return;
+        const update = () => {
+            const sameRow = side.offsetTop === card.offsetTop;
+            const tableHeight = details.offsetHeight - (details.querySelector('summary')?.offsetHeight ?? 0);
+            setThisMonthHeight(details.open && sameRow ? card.offsetHeight - tableHeight : undefined);
+        };
+        update();
+        const observer = new ResizeObserver(update);
+        observer.observe(card);
+        details.addEventListener('toggle', update);
+        return () => {
+            observer.disconnect();
+            details.removeEventListener('toggle', update);
+        };
     }, []);
 
     const years = useMemo(() => yearsWithJobs(jobs, currentYear), [jobs, currentYear]);
@@ -81,7 +111,7 @@ export default function App() {
             }
         >
             <div className="flex flex-wrap gap-4">
-                <Card aria-labelledby="per-month" className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
+                <Card ref={perMonthRef} aria-labelledby="per-month" className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                         <div className="flex flex-col gap-1">
                             <h2 id="per-month" className="font-serif text-[28px] font-normal">
@@ -134,7 +164,7 @@ export default function App() {
                                 ))}
                             </div>
                         </div>
-                        <details className="mt-2 text-sm">
+                        <details ref={tableRef} className="mt-2 text-sm">
                             <summary className="w-fit cursor-pointer rounded-md text-[13px] font-medium text-lapis">
                                 {t('charts.showTable')}
                             </summary>
@@ -162,8 +192,13 @@ export default function App() {
                 </Card>
 
                 <section
+                    ref={thisMonthRef}
                     aria-labelledby="this-month"
-                    className="flex flex-[1_1_260px] flex-col gap-4 rounded-2xl bg-ink p-6 text-white"
+                    className={cn(
+                        'flex flex-[1_1_260px] flex-col gap-4 rounded-2xl bg-ink p-6 text-white',
+                        thisMonthHeight !== undefined && 'self-start',
+                    )}
+                    style={{ minHeight: thisMonthHeight }}
                 >
                     <h2 id="this-month" className="text-sm font-medium text-on-ink">
                         {t('charts.jobsThisMonth', { month: monthInSentence(language, currentMonth) })}
