@@ -15,6 +15,8 @@ export type JobData = {
     jobArea: string;
     applicationLink: string;
     appliedDate: string;
+    /* When the application was reported to Arbetsförmedlingen (ISO timestamp). Missing until then. */
+    reportedAt?: string;
 };
 
 /* A stored application: `id` is the auto-incremented key IndexedDB assigns. */
@@ -90,6 +92,23 @@ export async function updateJobInDatabase(job: StoredJob) {
     const db = await open();
     await db.put(DATABASE_TABLE, job);
     db.close();
+}
+
+/**
+ * Marks a job as reported now, or clears the mark. Returns the updated job, or undefined if it's gone.
+ */
+export async function setJobReported(id: number, reported: boolean): Promise<StoredJob | undefined> {
+    const db = await open();
+    const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+    const job = await transaction.store.get(id);
+    if (job) {
+        if (reported) job.reportedAt = new Date().toISOString();
+        else delete job.reportedAt;
+        await transaction.store.put(job);
+    }
+    await transaction.done;
+    db.close();
+    return job;
 }
 
 /**

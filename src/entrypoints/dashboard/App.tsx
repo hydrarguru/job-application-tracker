@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BriefcaseBusiness, ExternalLink, Pencil, Search, Trash2 } from 'lucide-react';
+import { BriefcaseBusiness, Check, ExternalLink, Pencil, Search, Trash2 } from 'lucide-react';
 
 import { AppShell, Card } from '@/components/app-shell';
 import { useI18n } from '@/components/language';
 import { Button } from '@/components/ui/button';
 import { localeOf, monthInSentence } from '@/lib/i18n';
-import { getJobsFromDatabase, type StoredJob } from '@/utils/db';
+import { getJobsFromDatabase, setJobReported, type StoredJob } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 import { DeleteDialog, EditDialog } from './dialogs';
 
@@ -22,6 +22,13 @@ function badgeTint(name: string) {
     let hash = 0;
     for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) | 0;
     return badgeTints[Math.abs(hash) % badgeTints.length];
+}
+
+/* "2026-10-14 11:33" in local time, in every language, to match the applied date column. */
+function formatReportedAt(iso: string) {
+    const date = new Date(iso);
+    const pad = (value: number) => String(value).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 /* Only http(s) links are rendered as links, so an imported value can't run script. */
@@ -49,6 +56,11 @@ export default function App() {
     useEffect(() => {
         load();
     }, []);
+
+    async function toggleReported(job: StoredJob) {
+        await setJobReported(job.id, !job.reportedAt);
+        await load();
+    }
 
     const now = new Date();
     const today = getCurrentDate();
@@ -81,7 +93,7 @@ export default function App() {
     const currentPage = Math.min(page, pages - 1);
     const rows = filtered.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
 
-    const headCell = 'px-4 py-2.5 text-left text-xs font-medium tracking-[0.04em] text-text-3 uppercase';
+    const headCell = 'px-4 py-2.5 text-left text-xs font-medium tracking-[0.04em] whitespace-nowrap text-text-3 uppercase';
 
     return (
         <AppShell current="overview" eyebrow={prettyDate} title={t('nav.overview')}>
@@ -152,7 +164,7 @@ export default function App() {
                     </label>
                 </div>
                 <div className="overflow-x-auto">
-                    <table className="w-full min-w-[920px] border-collapse text-sm">
+                    <table className="w-full min-w-[1040px] border-collapse text-sm">
                         <thead>
                             <tr className="bg-fill">
                                 <th scope="col" className={`${headCell} pl-6`}>{t('column.companyName')}</th>
@@ -161,6 +173,7 @@ export default function App() {
                                 <th scope="col" className={headCell}>{t('column.jobArea')}</th>
                                 <th scope="col" className={headCell}>{t('column.appliedDate')}</th>
                                 <th scope="col" className={headCell}>{t('column.applicationLink')}</th>
+                                <th scope="col" className={headCell}>{t('column.reported')}</th>
                                 <th scope="col" className={`${headCell} pr-6 text-right`}>{t('column.actions')}</th>
                             </tr>
                         </thead>
@@ -213,6 +226,29 @@ export default function App() {
                                             ) : (
                                                 <span className="text-[13px] text-text-3">{job.applicationLink}</span>
                                             )}
+                                        </td>
+                                        <td className="px-4 py-2 whitespace-nowrap">
+                                            {/* A toggle, so a report the extension missed can be marked by hand. */}
+                                            <button
+                                                type="button"
+                                                aria-pressed={Boolean(job.reportedAt)}
+                                                aria-label={t('dashboard.reportedToggle', { entry: `${job.companyName}, ${job.jobRole}` })}
+                                                onClick={() => toggleReported(job)}
+                                                className={
+                                                    job.reportedAt
+                                                        ? 'inline-flex cursor-pointer items-center gap-1 rounded-full bg-tint-olive px-2.5 py-1 text-xs font-medium text-olive-text hover:bg-[#dfe6d3]'
+                                                        : 'inline-flex cursor-pointer items-center rounded-full border border-dashed border-input px-2.5 py-1 text-xs text-text-3 hover:border-lapis hover:text-lapis-deep'
+                                                }
+                                            >
+                                                {job.reportedAt ? (
+                                                    <>
+                                                        <Check aria-hidden="true" className="size-3" strokeWidth={2.5} />
+                                                        {formatReportedAt(job.reportedAt)}
+                                                    </>
+                                                ) : (
+                                                    t('dashboard.notReported')
+                                                )}
+                                            </button>
                                         </td>
                                         <td className="py-1 pr-6 pl-4">
                                             <div className="flex justify-end gap-1.5">

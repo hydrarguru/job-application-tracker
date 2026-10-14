@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Firefox: Run extension (hot reload)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev:firefox"
+        },
+        {
+            "name": "Chrome: Run extension (hot reload)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev"
+        }
+    ]
+}

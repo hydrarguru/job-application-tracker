@@ -13,8 +13,17 @@ type I18n = { language: Language; preference: LanguagePreference; t: Translate }
 
 const I18nContext = createContext<I18n | null>(null);
 
-/* Loads the stored language, follows changes made on other pages and sets <html lang>. */
-export function LanguageProvider({ children }: { children: ReactNode }) {
+/*
+ * Loads the stored language, follows changes made on other pages and sets <html lang>.
+ * Content scripts pass `setDocumentLanguage={false}`: the <html> there belongs to the website.
+ */
+export function LanguageProvider({
+    children,
+    setDocumentLanguage = true,
+}: {
+    children: ReactNode;
+    setDocumentLanguage?: boolean;
+}) {
     const [preference, setPreference] = useState<LanguagePreference | null>(null);
 
     useEffect(() => {
@@ -29,8 +38,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }, [preference]);
 
     useEffect(() => {
-        if (value) document.documentElement.lang = value.language;
-    }, [value]);
+        if (value && setDocumentLanguage) document.documentElement.lang = value.language;
+    }, [value, setDocumentLanguage]);
 
     /* Render nothing until the language is known so the UI never flashes the wrong language. */
     if (!value) return null;

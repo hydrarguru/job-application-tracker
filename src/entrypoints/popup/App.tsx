@@ -14,7 +14,7 @@ import type { MessageKey } from '@/lib/i18n';
 import { addJobToDatabase, type JobData } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
-type FormValues = Required<Omit<JobData, 'jobId'>>;
+type FormValues = Required<Omit<JobData, 'jobId' | 'reportedAt'>>;
 type TextField = Exclude<keyof FormValues, 'employmentType'>;
 
 const emptyForm = (): FormValues => ({

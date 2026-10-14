@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Launch in Firefox",
+            "type": "npm",
+            "script": "dev:firefox",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated" },
+            "group": { "kind": "build", "isDefault": true }
+        },
+        {
+            "label": "Launch in Chrome",
+            "type": "npm",
+            "script": "dev",
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated" }
+        }
+    ]
+}
