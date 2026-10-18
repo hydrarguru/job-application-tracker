@@ -1,5 +1,9 @@
 # J.A.T (Job Application Tracker)
 
+[![A 48-second tour of J.A.T: adding an application in the popup, editing it and marking it as reported on Overview, viewing Statistics as a chart and a table, and switching the language to Swedish in Preferences.](screenshots/tour.gif)](screenshots/tour.mp4)
+
+_[Watch the tour as an MP4 video](screenshots/tour.mp4)._
+
 J.A.T is a browser extension for Chrome (and other Chromium-based browsers, such as Edge and Brave) and Firefox that helps you keep track of the jobs that you apply for.
 
 J.A.T also integrates with Arbetsförmedlingen's website: it fills in the **Sökta jobb** form of your activity report (**Aktivitetsrapportering**) with the applications you have saved. See [Reporting to Arbetsförmedlingen](#reporting-to-arbetsförmedlingen).
