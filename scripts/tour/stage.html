@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stage</title>
+<link rel="stylesheet" href="/assets/__CSS__">
+<style>
+  :root { --ink:#13202b; --lapis:#33658a; --sky:#86bbd8; --olive:#758e4f; --saffron:#f6ae2d; --page:#f4f6f8; }
+  html, body { margin:0; width:1280px; height:720px; overflow:hidden; }
+  body { background: linear-gradient(160deg, #eef3f7 0%, #dfe9f1 100%); font-family:"Geist Variable", system-ui, sans-serif; color:var(--ink); }
+  #window { position:absolute; left:40px; top:22px; width:1200px; height:592px; border-radius:14px; background:#fff;
+    box-shadow:0 1px 2px rgba(19,32,43,.08), 0 18px 48px rgba(19,32,43,.16); overflow:hidden; }
+  .bar { height:44px; display:flex; align-items:center; gap:14px; padding:0 16px; background:#e8edf1; border-bottom:1px solid #d5dde4; }
+  .dots { display:flex; gap:7px; } .dots i { width:12px; height:12px; border-radius:50%; background:#c4ced6; display:block; }
+  .url { flex:1; height:28px; border-radius:8px; background:#fff; display:flex; align-items:center; padding:0 12px; font-size:13px; color:#4a5a67; font-family:"Geist Mono Variable", monospace; }
+  .ext { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:background .3s; }
+  .ext.on { background:#cfdbe4; }
+  .ext img { width:20px; height:20px; }
+  .content { position:absolute; top:45px; left:0; right:0; bottom:0; overflow:hidden; }
+  .scene { position:absolute; inset:0; opacity:0; transition:opacity .45s ease; }
+  .scene.show { opacity:1; }
+
+  /* Mock job board (fictional) */
+  #site { background:#fafbfc; }
+  .site-nav { height:56px; display:flex; align-items:center; padding:0 48px; border-bottom:1px solid #e3e8ec; font-weight:600; font-size:17px; gap:28px; }
+  .site-nav span { font-weight:400; color:#5b6b78; font-size:14px; }
+  .post { padding:44px 48px; max-width:600px; }
+  .post .co { font-size:14px; color:#5b6b78; margin-bottom:8px; }
+  .post h2 { font-family:"Instrument Serif", serif; font-weight:400; font-size:46px; margin:0 0 14px; line-height:1; }
+  .post .meta { display:flex; gap:10px; margin-bottom:24px; }
+  .post .meta b { font-weight:500; font-size:13px; background:#e7f1f7; color:#264d6a; padding:5px 10px; border-radius:999px; }
+  .post p { font-size:15px; line-height:1.6; color:#3d4b57; margin:0 0 12px; }
+  .post .applied { display:inline-flex; align-items:center; gap:8px; margin-top:12px; padding:10px 16px; border-radius:10px; background:#eef2e7; color:#4a5c30; font-weight:500; font-size:14px; }
+  #popup-wrap { position:absolute; top:6px; right:14px; width:420px; transform-origin:top right; transform:scale(.8) translateY(-12px); opacity:0;
+    transition:opacity .35s ease, transform .35s ease; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(19,32,43,.28); background:#fff; }
+  #popup-wrap.open { opacity:1; transform:scale(.8); }
+  #popup { width:420px; border:0; display:block; }
+
+  #app-frame { position:absolute; left:0; top:0; width:1500px; height:684px; border:0; transform:scale(.8); transform-origin:0 0; background:var(--page); }
+
+  /* Caption */
+  #caption { position:absolute; left:0; right:0; top:628px; display:flex; justify-content:center; }
+  #caption .pill { display:flex; align-items:center; gap:14px; background:var(--ink); color:#fff; border-radius:999px; padding:12px 26px 12px 12px;
+    font-size:22px; font-weight:500; letter-spacing:-.005em; transition:opacity .3s ease; min-height:40px; }
+  #caption .pill.hide { opacity:0; }
+  #caption .num { width:40px; height:40px; border-radius:50%; background:var(--saffron); color:var(--ink); display:flex; align-items:center; justify-content:center;
+    font-family:"Instrument Serif", serif; font-size:26px; }
+
+  /* Title cards */
+  .card { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+    background:var(--ink); color:#fff; opacity:0; transition:opacity .6s ease; pointer-events:none; z-index:20; }
+  .card.show { opacity:1; }
+  .card img { width:84px; height:84px; border-radius:20px; }
+  .card h1 { font-family:"Instrument Serif", serif; font-weight:400; font-size:76px; margin:0; line-height:1; }
+  .card p { margin:0; font-size:24px; color:#c9d9e5; }
+  .card .chips { display:flex; gap:10px; margin-top:10px; }
+  .card .chips span { font-size:15px; padding:6px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.28); color:#e4edf3; }
+  .card .rule { width:64px; height:4px; border-radius:2px; background:var(--saffron); }
+
+  /* Cursor */
+  #cursor { position:absolute; left:640px; top:400px; width:26px; height:26px; z-index:30; pointer-events:none;
+    transition:left .7s cubic-bezier(.45,.05,.25,1), top .7s cubic-bezier(.45,.05,.25,1), opacity .3s; }
+  #cursor svg { position:absolute; left:-3px; top:-2px; filter:drop-shadow(0 2px 3px rgba(0,0,0,.3)); }
+  #cursor .ring { position:absolute; left:-18px; top:-18px; width:36px; height:36px; border-radius:50%; border:3px solid var(--lapis); opacity:0; transform:scale(.4); }
+  #cursor .ring.go { animation:ring .5s ease-out; }
+  @keyframes ring { 0% { opacity:.8; transform:scale(.4);} 100% { opacity:0; transform:scale(1.3);} }
+  @media (prefers-reduced-motion: reduce) { #cursor .ring.go { animation:none; } }
+</style>
+</head>
+<body>
+  <div id="window">
+    <div class="bar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="url" id="url">jobs.example.com/nordlys/frontend-developer</div>
+      <div class="ext" id="ext"><img src="/img/icon48.png" alt=""></div>
+    </div>
+    <div class="content">
+      <div class="scene show" id="site">
+        <div class="site-nav">Jobboard <span>Jobs</span><span>Companies</span><span>Saved</span></div>
+        <div class="post">
+          <div class="co">Nordlys AB · Göteborg</div>
+          <h2>Frontend developer</h2>
+          <div class="meta"><b>Full time</b><b>Hybrid</b><b>React · TypeScript</b></div>
+          <p>Join a small team building tools for renewable energy. You will shape the web app our customers use every day.</p>
+          <p>We value accessible interfaces, clear code and kind feedback.</p>
+          <div class="applied">✓ Application sent</div>
+        </div>
+        <div id="popup-wrap"><iframe id="popup" src="/popup.html" title="Popup"></iframe></div>
+      </div>
+      <div class="scene" id="app">
+        <iframe id="app-frame" title="App"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div id="caption"><div class="pill hide" id="pill"><span class="num" id="num">1</span><span id="cap"></span></div></div>
+
+  <div class="card show" id="intro">
+    <img src="/img/icon128.png" alt="">
+    <h1>Job Application Tracker</h1>
+    <div class="rule"></div>
+    <p>A quick tour of how it works</p>
+  </div>
+  <div class="card" id="outro">
+    <img src="/img/icon128.png" alt="">
+    <h1>Job Application Tracker</h1>
+    <div class="rule"></div>
+    <p>Track every application. Report with ease.</p>
+    <div class="chips"><span>Chrome</span><span>Firefox</span><span>English · Svenska</span></div>
+  </div>
+
+  <div id="cursor"><svg width="26" height="30" viewBox="0 0 26 30"><path d="M3 2 L3 24 L9 18.5 L13 27.5 L17 25.8 L13 17 L21 17 Z" fill="#13202b" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg><div class="ring" id="ring"></div></div>
+
+<script src="/stage.js"></script>
+</body>
+</html>
