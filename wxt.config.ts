@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'wxt';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -8,6 +9,14 @@ export default defineConfig({
     modules: ['@wxt-dev/module-react'],
     vite: () => ({
         plugins: [tailwindcss()],
+        /* jsPDF loads these only for its HTML and SVG features. Stubbing them keeps unused code that Firefox's linter flags (eval, innerHTML) out of the build. */
+        resolve: {
+            alias: {
+                canvg: fileURLToPath(new URL('./src/lib/stubs/empty.ts', import.meta.url)),
+                dompurify: fileURLToPath(new URL('./src/lib/stubs/empty.ts', import.meta.url)),
+                html2canvas: fileURLToPath(new URL('./src/lib/stubs/empty.ts', import.meta.url)),
+            },
+        },
     }),
     manifest: ({ browser }) => ({
         // Name and description come from public/_locales; the UI text lives in src/locales.

@@ -1,6 +1,6 @@
 {
   "name": "application-tracker",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "",
   "author": "hydrarguru",
   "main": "",
@@ -13,6 +13,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "sample-data": "node scripts/generate-sample-data.mjs",
     "lint:firefox": "npx --yes web-ext@8 lint --source-dir dist/firefox-mv2",
     "postinstall": "wxt prepare"
   },
@@ -39,11 +40,14 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "idb": "^8.0.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
     "lucide-react": "^1.55.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sonner": "^2.0.8",
-    "tailwind-merge": "^3.7.0"
+    "tailwind-merge": "^3.7.0",
+    "write-excel-file": "^4.1.1"
   },
   "repository": {
     "type": "git",

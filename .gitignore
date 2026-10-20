@@ -42,3 +42,6 @@ yarn.lock
 # WXT
 .wxt
 .output
+
+# Generated sample data (pnpm sample-data)
+samples/

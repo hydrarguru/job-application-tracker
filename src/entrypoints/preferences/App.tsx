@@ -1,5 +1,5 @@
 import { useEffect, useState, type DragEvent, type ReactNode } from 'react';
-import { DatabaseZap, FileUp, Trash2, Upload } from 'lucide-react';
+import { DatabaseZap, Download, FileSpreadsheet, FileText, FileUp, Trash2, Upload, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { AppShell } from '@/components/app-shell';
@@ -7,7 +7,8 @@ import { useI18n } from '@/components/language';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { duplicateKey, importColumns, parseApplications } from '@/lib/import';
-import { languagePreference, languages, type LanguagePreference } from '@/lib/i18n';
+import { buildCsv, buildPdf, buildXlsx, downloadBlob, type ExportFormat } from '@/lib/export';
+import { languagePreference, languages, localeOf, type LanguagePreference } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { addJobsToDatabase, clearDatabase, getJobsFromDatabase, getTotalJobs } from '@/utils/db';
 
@@ -199,6 +200,78 @@ function ImportSection({ onImported }: { onImported: () => void }) {
     );
 }
 
+function ExportSection({ count }: { count: number }) {
+    const { t, language } = useI18n();
+    const [busy, setBusy] = useState<ExportFormat | null>(null);
+    const formats: { format: ExportFormat; icon: LucideIcon }[] = [
+        { format: 'csv', icon: FileText },
+        { format: 'xlsx', icon: FileSpreadsheet },
+        { format: 'pdf', icon: FileText },
+    ];
+    const names = { csv: t('preferences.exportCsv'), xlsx: t('preferences.exportXlsx'), pdf: t('preferences.exportPdf') };
+    const hints = { csv: t('preferences.exportCsvHint'), xlsx: t('preferences.exportXlsxHint'), pdf: t('preferences.exportPdfHint') };
+
+    async function handleExport(format: ExportFormat) {
+        setBusy(format);
+        try {
+            const jobs = await getJobsFromDatabase();
+            if (jobs.length === 0) {
+                toast.error(t('preferences.exportEmpty'));
+                return;
+            }
+            const today = new Date().toISOString().slice(0, 10);
+            const date = new Date().toLocaleDateString(localeOf(language), { year: 'numeric', month: 'long', day: 'numeric' });
+            const blob =
+                format === 'csv'
+                    ? buildCsv(jobs)
+                    : format === 'xlsx'
+                      ? await buildXlsx(jobs)
+                      : await buildPdf(jobs, {
+                            title: t('preferences.pdfTitle'),
+                            subtitle: t('preferences.pdfSubtitle', { count: jobs.length, date }),
+                            columns: {
+                                companyName: t('column.companyName'),
+                                jobRole: t('column.jobRole'),
+                                employmentType: t('column.employmentType'),
+                                jobArea: t('column.jobArea'),
+                                applicationLink: t('column.applicationLink'),
+                                appliedDate: t('column.appliedDate'),
+                            },
+                            employment: { full: t('employment.full'), part: t('employment.part') },
+                            page: t('preferences.pdfPage'),
+                        });
+            downloadBlob(blob, `job-applications-${today}.${format}`);
+            toast.success(t('preferences.exported', { count: jobs.length }));
+        } catch (error) {
+            console.error(error);
+            toast.error(t('preferences.exportFailed'));
+        } finally {
+            setBusy(null);
+        }
+    }
+
+    return (
+        <Section id="pref-export" title={t('preferences.exportTitle')} hint={t('preferences.exportHint')}>
+            <div className="flex flex-col gap-2.5">
+                {formats.map(({ format, icon: Icon }) => (
+                    <div key={format} className="flex items-center gap-3 rounded-xl border border-[#d5dde4] bg-surface px-4 py-3">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#dceaf2] bg-tint-lapis-2 text-lapis">
+                            <Icon aria-hidden="true" className="size-5" strokeWidth={1.8} />
+                        </span>
+                        <span className="flex grow flex-col">
+                            <span className="text-sm font-medium">{names[format]}</span>
+                            <span className="text-xs text-text-3">{hints[format]}</span>
+                        </span>
+                        <Button variant="outline" disabled={count === 0 || busy !== null} onClick={() => handleExport(format)} className="px-4">
+                            <Download strokeWidth={2} /> {names[format]}
+                        </Button>
+                    </div>
+                ))}
+            </div>
+        </Section>
+    );
+}
+
 function ClearSection({ count, onCleared }: { count: number; onCleared: () => void }) {
     const { t } = useI18n();
     const [open, setOpen] = useState(false);
@@ -296,6 +369,7 @@ export default function App() {
         <AppShell current="preferences" eyebrow={t('preferences.eyebrow')} title={t('preferences.title')} narrow>
             <LanguageSection />
             <ImportSection onImported={loadCount} />
+            <ExportSection count={count} />
             <ClearSection count={count} onCleared={loadCount} />
         </AppShell>
     );
