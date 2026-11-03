@@ -10,10 +10,12 @@ export type PdfLabels = {
     columns: Record<(typeof importColumns)[number], string>;
     employment: { full: string; part: string };
     page: string;
+    /* Shown in place of each application link; the cell links to the URL. */
+    linkText: string;
 };
 
 function sorted(jobs: StoredJob[]) {
-    return [...jobs].sort((a, b) => b.appliedDate.localeCompare(a.appliedDate));
+    return [...jobs].sort((a, b) => a.appliedDate.localeCompare(b.appliedDate));
 }
 
 /* Same columns and values the importer reads, so an exported file can be imported again. */
@@ -60,24 +62,29 @@ export async function buildPdf(jobs: StoredJob[], labels: PdfLabels): Promise<Bl
     doc.text(labels.subtitle, 40, 54);
 
     const columns = importColumns.map((column) => labels.columns[column]);
-    const body = sorted(jobs).map((job) => [
+    const rows = sorted(jobs);
+    const body = rows.map((job) => [
         job.companyName,
         job.jobRole,
         job.employmentType ? labels.employment[job.employmentType] : '',
         job.jobArea,
-        job.applicationLink,
+        job.applicationLink ? labels.linkText : '',
         job.appliedDate,
     ]);
 
     autoTable(doc, {
         head: [columns],
         body,
-        startY: 90,
+        startY: 84,
         margin: { left: 40, right: 40, bottom: 40 },
-        styles: { font: 'helvetica', fontSize: 9, textColor: ink, cellPadding: 6, overflow: 'linebreak' },
+        styles: { font: 'helvetica', fontSize: 9, textColor: ink, cellPadding: { horizontal: 5, vertical: 3 }, overflow: 'linebreak' },
         headStyles: { fillColor: lapis, textColor: 255, fontStyle: 'bold' },
         alternateRowStyles: { fillColor: tint },
-        columnStyles: { 4: { textColor: lapis, cellWidth: 190 }, 5: { cellWidth: 62 } },
+        columnStyles: { 4: { textColor: lapis }, 5: { cellWidth: 62 } },
+        didDrawCell: ({ section, column, row, cell }) => {
+            const url = rows[row.index]?.applicationLink;
+            if (section === 'body' && column.index === 4 && url) doc.link(cell.x, cell.y, cell.width, cell.height, { url });
+        },
         didDrawPage: ({ pageNumber }) => {
             doc.setFontSize(8);
             doc.setTextColor(91, 107, 120);

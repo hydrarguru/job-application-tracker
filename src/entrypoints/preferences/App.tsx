@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 import { AppShell } from '@/components/app-shell';
 import { useI18n } from '@/components/language';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { duplicateKey, importColumns, parseApplications } from '@/lib/import';
 import { buildCsv, buildPdf, buildXlsx, downloadBlob, type ExportFormat } from '@/lib/export';
@@ -203,6 +205,7 @@ function ImportSection({ onImported }: { onImported: () => void }) {
 function ExportSection({ count }: { count: number }) {
     const { t, language } = useI18n();
     const [busy, setBusy] = useState<ExportFormat | null>(null);
+    const [linkText, setLinkText] = useState('');
     const formats: { format: ExportFormat; icon: LucideIcon }[] = [
         { format: 'csv', icon: FileText },
         { format: 'xlsx', icon: FileSpreadsheet },
@@ -239,6 +242,7 @@ function ExportSection({ count }: { count: number }) {
                             },
                             employment: { full: t('employment.full'), part: t('employment.part') },
                             page: t('preferences.pdfPage'),
+                            linkText: linkText.trim() || t('preferences.pdfLinkDefault'),
                         });
             downloadBlob(blob, `job-applications-${today}.${format}`);
             toast.success(t('preferences.exported', { count: jobs.length }));
@@ -254,7 +258,7 @@ function ExportSection({ count }: { count: number }) {
         <Section id="pref-export" title={t('preferences.exportTitle')} hint={t('preferences.exportHint')}>
             <div className="flex flex-col gap-2.5">
                 {formats.map(({ format, icon: Icon }) => (
-                    <div key={format} className="flex items-center gap-3 rounded-xl border border-[#d5dde4] bg-surface px-4 py-3">
+                    <div key={format} className="flex flex-wrap items-center gap-3 rounded-xl border border-[#d5dde4] bg-surface px-4 py-3">
                         <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#dceaf2] bg-tint-lapis-2 text-lapis">
                             <Icon aria-hidden="true" className="size-5" strokeWidth={1.8} />
                         </span>
@@ -265,6 +269,17 @@ function ExportSection({ count }: { count: number }) {
                         <Button variant="outline" disabled={count === 0 || busy !== null} onClick={() => handleExport(format)} className="px-4">
                             <Download strokeWidth={2} /> {names[format]}
                         </Button>
+                        {format === 'pdf' && (
+                            <div className="flex basis-full flex-col gap-1.5">
+                                <Label htmlFor="pdf-link-text">{t('preferences.pdfLinkText')}</Label>
+                                <Input
+                                    id="pdf-link-text"
+                                    value={linkText}
+                                    placeholder={t('preferences.pdfLinkDefault')}
+                                    onChange={(event) => setLinkText(event.target.value)}
+                                />
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

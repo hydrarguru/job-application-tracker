@@ -141,6 +141,8 @@ export const en: Record<keyof typeof sv, string> = {
     'preferences.pdfTitle': 'Job applications',
     'preferences.pdfSubtitle': '{count} applications · exported {date}',
     'preferences.pdfSubtitle_one': '{count} application · exported {date}',
+    'preferences.pdfLinkText': 'Link text in the PDF',
+    'preferences.pdfLinkDefault': 'Link',
     'preferences.pdfPage': 'Page',
     'preferences.clearTitle': 'Clear all data',
     'preferences.clearHint': 'Remove every saved application from this browser.',

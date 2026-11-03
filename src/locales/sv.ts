@@ -143,6 +143,8 @@ export const sv = {
     'preferences.pdfTitle': 'Jobbansökningar',
     'preferences.pdfSubtitle': '{count} ansökningar · exporterad {date}',
     'preferences.pdfSubtitle_one': '{count} ansökan · exporterad {date}',
+    'preferences.pdfLinkText': 'Länktext i PDF:en',
+    'preferences.pdfLinkDefault': 'Länk',
     'preferences.pdfPage': 'Sida',
     'preferences.clearTitle': 'Rensa all data',
     'preferences.clearHint': 'Ta bort alla sparade ansökningar från den här webbläsaren.',
