@@ -46,9 +46,9 @@ When you open the **Sökta jobb** form on Mina sidor (_Aktivitetsrapportera → 
 
 J.A.T is built with [WXT](https://wxt.dev/).
 
-- `npm run dev` starts a browser with the extension loaded and reloads it when files change (`npm run dev:firefox` for Firefox).
-- `npm run build` builds for Chrome into `dist/chrome-mv3`, `npm run build:firefox` builds for Firefox into `dist/firefox-mv2`.
-- `npm run zip` / `npm run zip:firefox` package the extension for the web stores.
+- `npm run dev` starts a browser with the extension loaded and reloads it when files change (`npm run dev:chrome` / `npm run dev:firefox` to pick the browser).
+- `npm run build` (or `npm run build:chrome`) builds for Chrome into `dist/chrome-mv3`, `npm run build:firefox` builds for Firefox into `dist/firefox-mv2`.
+- `npm run zip` / `npm run zip:chrome` / `npm run zip:firefox` package the extension for the web stores.
 - `npm run compile` type-checks the code.
 
 # Libraries used
