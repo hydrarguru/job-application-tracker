@@ -33,3 +33,35 @@
     display: none;
   }
 }
+
+/*
+ * Countdown bar for a toast: shrinks from right to left over --toast-duration. Sonner pauses its
+ * timer while the toasts are hovered, so the bar pauses then too.
+ */
+.toast-progress {
+  position: absolute;
+  inset-inline: 10px;
+  bottom: 4px;
+  height: 3px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.3;
+  transform-origin: left;
+  animation: toast-progress var(--toast-duration) linear forwards;
+}
+[data-sonner-toaster]:hover .toast-progress {
+  animation-play-state: paused;
+}
+/*
+ * Fades the toast out in place instead of sliding it up; sonner unmounts it 200ms after removal
+ * starts. The class is repeated to outrank sonner's removal rules, which chain four attributes.
+ */
+[data-sonner-toaster] [data-sonner-toast][data-removed='true'].toast-fade-out.toast-fade-out.toast-fade-out {
+  --y: translateY(0);
+  transition: opacity 200ms ease-out;
+}
+@keyframes toast-progress {
+  to {
+    transform: scaleX(0);
+  }
+}

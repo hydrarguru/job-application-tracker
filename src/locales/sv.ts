@@ -4,7 +4,6 @@
  * of the key without it and is picked when `{count}` is 1.
  */
 export const sv = {
-    appName: 'Job Application Tracker',
     appShortName: 'J.A.T',
     'language.label': 'Språk',
     'language.auto': 'Auto',
