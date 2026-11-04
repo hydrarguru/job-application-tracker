@@ -2,7 +2,6 @@ import type { sv } from './sv';
 
 /* English UI text. Typed against sv.ts so a missing or misspelled key fails the type check. */
 export const en: Record<keyof typeof sv, string> = {
-    appName: 'Job Application Tracker',
     appShortName: 'J.A.T',
     'language.label': 'Language',
     'language.auto': 'Auto',

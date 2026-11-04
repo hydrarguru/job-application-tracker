@@ -18,6 +18,9 @@ import { getCurrentDate } from '@/utils/utils';
 type FormValues = Required<Omit<JobData, 'jobId' | 'reportedAt'>>;
 type TextField = Exclude<keyof FormValues, 'employmentType'>;
 
+const version = browser.runtime.getManifest().version;
+const addedToastMs = 1500;
+
 const emptyForm = (): FormValues => ({
     companyName: '',
     jobRole: '',
@@ -89,7 +92,17 @@ export default function App() {
         try {
             /* Also here: pressing Enter in the link field submits without a blur. */
             await addJobToDatabase({ ...values, applicationLink: cleanUrl(values.applicationLink) });
-            toast.success(t('popup.added'));
+            toast.success(t('popup.added'), {
+                duration: addedToastMs,
+                className: 'toast-fade-out',
+                description: (
+                    <span
+                        aria-hidden="true"
+                        className="toast-progress"
+                        style={{ '--toast-duration': `${addedToastMs}ms` } as React.CSSProperties}
+                    />
+                ),
+            });
             setValues(emptyForm());
             setShowErrors(false);
         } catch (error) {
@@ -158,7 +171,7 @@ export default function App() {
                     <LogoMark />
                     <div className="flex flex-col gap-px">
                         <span className="font-serif text-xl leading-none">{t('appShortName')}</span>
-                        <span className="text-[11px] tracking-[0.02em] text-on-ink">{t('appName')}</span>
+                        <span className="font-mono text-[11px] tracking-[0.02em] text-on-ink">v{version}</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
