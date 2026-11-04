@@ -4,6 +4,9 @@ import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { cn } from '@/lib/utils';
 
 const Popover = PopoverPrimitive.Root;
+
+/* Where popovers render; document.body unless set. Content scripts set it to an element inside their shadow root so the styles apply. */
+const PopoverContainer = React.createContext<HTMLElement | null>(null);
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
 /*
@@ -17,7 +20,7 @@ function PopoverContent({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   return (
-    <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Portal container={React.useContext(PopoverContainer)}>
       <PopoverPrimitive.Content
         align={align}
         sideOffset={sideOffset}
@@ -32,4 +35,4 @@ function PopoverContent({
   );
 }
 
-export { Popover, PopoverTrigger, PopoverContent };
+export { Popover, PopoverContainer, PopoverTrigger, PopoverContent };
