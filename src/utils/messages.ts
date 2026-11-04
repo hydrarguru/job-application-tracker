@@ -1,16 +1,21 @@
 import { browser } from '#imports';
-import { getJobsFromDatabase, setJobReported, type StoredJob } from './db';
+import { addJobToDatabase, getJobsFromDatabase, setJobReported, type JobData, type StoredJob } from './db';
 
 /*
  * Messages from content scripts to the background script. Content scripts run under the
  * website's origin and can't open the extension's IndexedDB, so the background script reads
  * and writes it for them.
  */
-export type Message = { type: 'getJobs' } | { type: 'setReported'; id: number; reported: boolean };
+export type Message =
+    | { type: 'getJobs' }
+    | { type: 'setReported'; id: number; reported: boolean }
+    | { type: 'addJob'; job: JobData };
 
 type Responses = {
     getJobs: StoredJob[];
     setReported: StoredJob | undefined;
+    /* `duplicate` when an application with the same link is already saved. */
+    addJob: 'added' | 'duplicate';
 };
 
 type Reply<T> = { ok: true; value: T } | { ok: false; error: string };
@@ -29,7 +34,16 @@ function respond(message: Message): Promise<Responses[Message['type']]> {
             return getJobsFromDatabase();
         case 'setReported':
             return setJobReported(message.id, message.reported);
+        case 'addJob':
+            return addJobOnce(message.job);
     }
+}
+
+async function addJobOnce(job: JobData): Promise<'added' | 'duplicate'> {
+    const jobs = await getJobsFromDatabase();
+    if (jobs.some((saved) => saved.applicationLink === job.applicationLink)) return 'duplicate';
+    await addJobToDatabase(job);
+    return 'added';
 }
 
 /* Answers content script messages. Called by the background script at startup. */

@@ -1,0 +1,43 @@
+@import "../reporting.content/style.css";
+/* The enter/exit animations the date picker's calendar uses, as in the extension pages. */
+@import "tw-animate-css";
+
+/* The quick-add button's border: a gradient ring whose colors spin around the button. */
+@property --spin-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spin-border {
+  to {
+    --spin-angle: 360deg;
+  }
+}
+
+.spin-border {
+  padding: 3px;
+  border-radius: 14px;
+  background: conic-gradient(from var(--spin-angle), var(--primary), var(--accent), #f5b700, var(--primary));
+  animation: spin-border 3s linear infinite;
+}
+
+/* The edit card eases in above the button. */
+@keyframes quick-add-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+
+.quick-add-card {
+  transform-origin: bottom right;
+  animation: quick-add-in 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-border,
+  .quick-add-card {
+    animation: none;
+  }
+}
