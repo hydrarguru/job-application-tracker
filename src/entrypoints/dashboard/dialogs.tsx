@@ -9,6 +9,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } fr
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { MessageKey } from '@/lib/i18n';
+import { cleanUrl } from '@/lib/url';
 import { cn } from '@/lib/utils';
 import { deleteJobFromDatabase, updateJobInDatabase, type StoredJob } from '@/utils/db';
 
@@ -43,7 +44,8 @@ export function EditDialog({ job, onClose, onSaved }: { job: StoredJob | null; o
             return;
         }
         try {
-            await updateJobInDatabase(values);
+            /* Also here: pressing Enter in the link field submits without a blur. */
+            await updateJobInDatabase({ ...values, applicationLink: cleanUrl(values.applicationLink) });
             toast.success(t('dashboard.saved'));
             onSaved();
             onClose();
@@ -69,6 +71,11 @@ export function EditDialog({ job, onClose, onSaved }: { job: StoredJob | null; o
                     aria-describedby={invalid ? `${id}-error` : undefined}
                     className={cn('h-[42px]', field.type === 'date' && 'font-mono text-[13px]')}
                     onChange={(e) => setValues({ ...values, [field.name]: e.target.value })}
+                    onBlur={
+                        field === linkField
+                            ? () => setValues((v) => v && { ...v, applicationLink: cleanUrl(v.applicationLink) })
+                            : undefined
+                    }
                 />
                 {invalid && (
                     <p id={`${id}-error`} className="text-xs font-medium text-danger-text">
