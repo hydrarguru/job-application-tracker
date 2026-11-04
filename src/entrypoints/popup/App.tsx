@@ -11,6 +11,7 @@ import { EmploymentTypeField } from '@/components/employment-type-field';
 import { useI18n } from '@/components/language';
 import { LogoMark } from '@/components/logo';
 import type { MessageKey } from '@/lib/i18n';
+import { cleanUrl } from '@/lib/url';
 import { addJobToDatabase, type JobData } from '@/utils/db';
 import { getCurrentDate } from '@/utils/utils';
 
@@ -86,7 +87,8 @@ export default function App() {
             return;
         }
         try {
-            await addJobToDatabase(values);
+            /* Also here: pressing Enter in the link field submits without a blur. */
+            await addJobToDatabase({ ...values, applicationLink: cleanUrl(values.applicationLink) });
             toast.success(t('popup.added'));
             setValues(emptyForm());
             setShowErrors(false);
@@ -134,6 +136,11 @@ export default function App() {
                     aria-invalid={invalid || undefined}
                     aria-describedby={invalid ? errorId : undefined}
                     onChange={(e) => setValues({ ...values, [field.name]: e.target.value })}
+                    onBlur={
+                        field === linkField
+                            ? () => setValues((v) => ({ ...v, applicationLink: cleanUrl(v.applicationLink) }))
+                            : undefined
+                    }
                 />
                 {invalid && (
                     <p id={errorId} className="text-xs font-medium text-danger-text">
