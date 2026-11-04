@@ -29,10 +29,16 @@ jobs:
         run: |
           tag="v$(node -p "require('./package.json').version")"
           echo "tag=${tag}" >> "$GITHUB_OUTPUT"
-          if gh release view "$tag" > /dev/null 2>&1; then
+          draft="$(gh release view "$tag" --json isDraft -q .isDraft 2>/dev/null || echo missing)"
+          if [ "$draft" = "false" ]; then
             echo "Release ${tag} already exists; nothing to publish."
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
+            # A draft has no tag and blocks creating the release, so drop it and publish a real one.
+            if [ "$draft" = "true" ]; then
+              echo "Deleting draft release ${tag}."
+              gh release delete "$tag" --yes
+            fi
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
