@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BriefcaseBusiness, Check, ExternalLink, Pencil, Search, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, BriefcaseBusiness, Check, ChevronsUpDown, ExternalLink, Pencil, Search, Trash2 } from 'lucide-react';
 
 import { AppShell, Card } from '@/components/app-shell';
 import { useI18n } from '@/components/language';
@@ -10,6 +10,8 @@ import { getCurrentDate } from '@/utils/utils';
 import { DeleteDialog, EditDialog } from './dialogs';
 
 const PAGE_SIZE = 10;
+
+type SortKey = 'companyName' | 'jobRole' | 'employmentType' | 'jobArea' | 'appliedDate' | 'reportedAt';
 
 /* Initial badge colours, picked from the company name so a company keeps its colour. */
 const badgeTints = [
@@ -46,6 +48,7 @@ export default function App() {
     const [jobs, setJobs] = useState<StoredJob[] | null>(null);
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(0);
+    const [sort, setSort] = useState<{ key: SortKey; desc: boolean }>({ key: 'appliedDate', desc: true });
     const [editing, setEditing] = useState<StoredJob | null>(null);
     const [deleting, setDeleting] = useState<StoredJob | null>(null);
 
@@ -77,17 +80,53 @@ export default function App() {
         };
     }, [jobs, today]);
 
-    /* Newest first; applications saved on the same day keep the order they were added in. */
+    /* Sorted by the chosen column; ties fall back to newest first, then the order they were added in. */
     const filtered = useMemo(() => {
         const needle = query.trim().toLowerCase();
+        const collator = new Intl.Collator(localeOf(language), { numeric: true, sensitivity: 'base' });
+        const value = (job: StoredJob) =>
+            sort.key === 'employmentType'
+                ? job.employmentType
+                    ? t(`employment.${job.employmentType}`)
+                    : ''
+                : (job[sort.key] ?? '');
         return (jobs ?? [])
             .filter(
                 (job) =>
                     !needle ||
                     [job.companyName, job.jobRole, job.jobArea].some((value) => value.toLowerCase().includes(needle)),
             )
-            .sort((a, b) => b.appliedDate.localeCompare(a.appliedDate) || b.id - a.id);
-    }, [jobs, query]);
+            .sort(
+                (a, b) =>
+                    (sort.desc ? -1 : 1) * collator.compare(value(a), value(b)) ||
+                    b.appliedDate.localeCompare(a.appliedDate) ||
+                    b.id - a.id,
+            );
+    }, [jobs, query, sort, language, t]);
+
+    function sortHeader(key: SortKey, extra = '') {
+        const active = sort.key === key;
+        const Icon = !active ? ChevronsUpDown : sort.desc ? ArrowDown : ArrowUp;
+        return (
+            <th
+                scope="col"
+                aria-sort={active ? (sort.desc ? 'descending' : 'ascending') : undefined}
+                className={`${headCell} ${extra}`}
+            >
+                <button
+                    type="button"
+                    onClick={() => {
+                        setSort({ key, desc: active ? !sort.desc : false });
+                        setPage(0);
+                    }}
+                    className="inline-flex cursor-pointer items-center gap-1 uppercase hover:text-ink"
+                >
+                    {t(key === 'reportedAt' ? 'column.reported' : `column.${key}`)}
+                    <Icon aria-hidden="true" className={`size-3.5 ${active ? '' : 'opacity-50'}`} strokeWidth={2} />
+                </button>
+            </th>
+        );
+    }
 
     const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
     const currentPage = Math.min(page, pages - 1);
@@ -167,13 +206,13 @@ export default function App() {
                     <table className="w-full min-w-[1040px] border-collapse text-sm">
                         <thead>
                             <tr className="bg-fill">
-                                <th scope="col" className={`${headCell} pl-6`}>{t('column.companyName')}</th>
-                                <th scope="col" className={headCell}>{t('column.jobRole')}</th>
-                                <th scope="col" className={headCell}>{t('column.employmentType')}</th>
-                                <th scope="col" className={headCell}>{t('column.jobArea')}</th>
-                                <th scope="col" className={headCell}>{t('column.appliedDate')}</th>
+                                {sortHeader('companyName', 'pl-6')}
+                                {sortHeader('jobRole')}
+                                {sortHeader('employmentType')}
+                                {sortHeader('jobArea')}
+                                {sortHeader('appliedDate')}
                                 <th scope="col" className={headCell}>{t('column.applicationLink')}</th>
-                                <th scope="col" className={headCell}>{t('column.reported')}</th>
+                                {sortHeader('reportedAt')}
                                 <th scope="col" className={`${headCell} pr-6 text-right`}>{t('column.actions')}</th>
                             </tr>
                         </thead>
