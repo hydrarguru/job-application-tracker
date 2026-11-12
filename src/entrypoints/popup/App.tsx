@@ -1,6 +1,7 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import { storage } from '#imports';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,6 +30,9 @@ const emptyForm = (): FormValues => ({
     applicationLink: '',
     appliedDate: getCurrentDate(),
 });
+
+/* Keeps unsaved input when the popup closes, e.g. when the user clicks the page to copy a value. */
+const formDraft = storage.defineItem<FormValues>('session:popupDraft');
 
 type Field = { name: TextField; label: MessageKey; placeholder?: MessageKey; type?: string };
 
@@ -77,6 +81,21 @@ export default function App() {
     const [showErrors, setShowErrors] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
 
+    useEffect(() => {
+        formDraft.getValue().then((draft) => draft && setValues(draft));
+    }, []);
+
+    function updateValues(next: FormValues) {
+        setValues(next);
+        formDraft.setValue(next);
+    }
+
+    function clearForm() {
+        setValues(emptyForm());
+        setShowErrors(false);
+        formDraft.removeValue();
+    }
+
     const missing = (name: TextField) => showErrors && values[name].trim() === '';
 
     async function handleSubmit(event: FormEvent) {
@@ -103,17 +122,11 @@ export default function App() {
                     />
                 ),
             });
-            setValues(emptyForm());
-            setShowErrors(false);
+            clearForm();
         } catch (error) {
             console.error(error);
             toast.error(t('popup.saveFailed'));
         }
-    }
-
-    function handleReset() {
-        setValues(emptyForm());
-        setShowErrors(false);
     }
 
     function renderDateField() {
@@ -127,7 +140,7 @@ export default function App() {
                     id={dateField.name}
                     labelId={labelId}
                     value={values.appliedDate}
-                    onChange={(appliedDate) => setValues({ ...values, appliedDate })}
+                    onChange={(appliedDate) => updateValues({ ...values, appliedDate })}
                 />
             </div>
         );
@@ -148,10 +161,10 @@ export default function App() {
                     required
                     aria-invalid={invalid || undefined}
                     aria-describedby={invalid ? errorId : undefined}
-                    onChange={(e) => setValues({ ...values, [field.name]: e.target.value })}
+                    onChange={(e) => updateValues({ ...values, [field.name]: e.target.value })}
                     onBlur={
                         field === linkField
-                            ? () => setValues((v) => ({ ...v, applicationLink: cleanUrl(v.applicationLink) }))
+                            ? () => updateValues({ ...values, applicationLink: cleanUrl(values.applicationLink) })
                             : undefined
                     }
                 />
@@ -196,7 +209,7 @@ export default function App() {
                     <EmploymentTypeField
                         name="employmentType"
                         value={values.employmentType}
-                        onChange={(employmentType) => setValues({ ...values, employmentType })}
+                        onChange={(employmentType) => updateValues({ ...values, employmentType })}
                     />
                     <div className="grid grid-cols-2 gap-2.5">
                         {renderField(areaField)}
@@ -208,7 +221,7 @@ export default function App() {
                             <Button type="submit" size="lg">
                                 <Plus strokeWidth={2} /> {t('popup.add')}
                             </Button>
-                            <Button type="button" variant="outline" size="lg" onClick={handleReset}>
+                            <Button type="button" variant="outline" size="lg" onClick={clearForm}>
                                 <RotateCcw /> {t('popup.reset')}
                             </Button>
                         </div>
