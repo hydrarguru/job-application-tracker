@@ -100,14 +100,18 @@ export async function fillForm(form: HTMLFormElement, draft: Draft): Promise<Fil
     const waiting = (['jobRole', 'jobArea'] as const).find((key) => fields[key] === 'choose');
     if (waiting) {
         const input = form.querySelector<HTMLInputElement>(waiting === 'jobRole' ? selectors.jobRole : selectors.jobArea);
-        if (input) typeInto(input, searches[waiting]!);
+        if (input) {
+            typeInto(input, searches[waiting]!);
+            input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
     }
     return { fields, picked };
 }
 
 /* Sets a value the way typing would, so both the Digi component and Angular see the change. */
 function typeInto(input: HTMLInputElement, value: string) {
-    input.focus();
+    /* preventScroll: otherwise the page jumps to every field while the form is filled. */
+    input.focus({ preventScroll: true });
     /* The prototype's setter, because frameworks may replace the element's own `value` property. */
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, value);
     input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));

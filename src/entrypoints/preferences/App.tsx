@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import { duplicateKey, importColumns, parseApplications } from '@/lib/import';
+import { importColumns, parseApplications } from '@/lib/import';
 import { buildCsv, buildPdf, buildXlsx, downloadBlob, type ExportFormat } from '@/lib/export';
 import { languagePreference, languages, localeOf, type LanguagePreference } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
@@ -84,7 +84,6 @@ function LanguageSection() {
 function ImportSection({ onImported }: { onImported: () => void }) {
     const { t } = useI18n();
     const [file, setFile] = useState<File | null>(null);
-    const [skipDuplicates, setSkipDuplicates] = useState(true);
     const [dragging, setDragging] = useState(false);
     const [busy, setBusy] = useState(false);
     const [status, setStatus] = useState('');
@@ -101,29 +100,18 @@ function ImportSection({ onImported }: { onImported: () => void }) {
         setBusy(true);
         try {
             const { jobs, invalid } = parseApplications(file.name, await file.text());
-            let toAdd = jobs;
-            if (skipDuplicates) {
-                const seen = new Set((await getJobsFromDatabase()).map(duplicateKey));
-                toAdd = jobs.filter((job) => {
-                    const key = duplicateKey(job);
-                    if (seen.has(key)) return false;
-                    seen.add(key);
-                    return true;
-                });
-            }
-            const skipped = invalid + jobs.length - toAdd.length;
-            if (toAdd.length === 0) {
-                const message = [t('preferences.importEmpty'), skipped > 0 && t('preferences.importSkipped', { count: skipped })]
+            if (jobs.length === 0) {
+                const message = [t('preferences.importEmpty'), invalid > 0 && t('preferences.importSkipped', { count: invalid })]
                     .filter(Boolean)
                     .join(' ');
                 setStatus(message);
                 toast.error(message);
                 return;
             }
-            await addJobsToDatabase(toAdd);
+            await addJobsToDatabase(jobs);
             const message = [
-                t('preferences.imported', { count: toAdd.length }),
-                skipped > 0 && t('preferences.importSkipped', { count: skipped }),
+                t('preferences.imported', { count: jobs.length }),
+                invalid > 0 && t('preferences.importSkipped', { count: invalid }),
             ]
                 .filter(Boolean)
                 .join(' ');
@@ -181,15 +169,6 @@ function ImportSection({ onImported }: { onImported: () => void }) {
                     ))}
                 </div>
             </div>
-            <label className="flex w-fit cursor-pointer items-center gap-2.5 text-sm">
-                <input
-                    type="checkbox"
-                    checked={skipDuplicates}
-                    onChange={(e) => setSkipDuplicates(e.target.checked)}
-                    className="m-0 size-[18px] accent-lapis"
-                />
-                {t('preferences.skipDuplicates')}
-            </label>
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <p role="status" className="text-[13px] text-text-2">
                     {status}

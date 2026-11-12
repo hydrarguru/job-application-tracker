@@ -90,8 +90,3 @@ export function parseApplications(fileName: string, text: string): { jobs: JobDa
     }
     return { jobs, invalid };
 }
-
-/* Same company, position and date, ignoring case and surrounding spaces. */
-export function duplicateKey(job: JobData) {
-    return [job.companyName, job.jobRole, job.appliedDate].map((value) => value.trim().toLowerCase()).join('\u0000');
-}

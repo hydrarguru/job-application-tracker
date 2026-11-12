@@ -241,6 +241,7 @@ function Preview({
             watchForSave(form, async () => {
                 await sendMessage({ type: 'setReported', id: job.id, reported: true });
                 onChanged();
+                onBack();
             });
         } finally {
             setFilling(false);
