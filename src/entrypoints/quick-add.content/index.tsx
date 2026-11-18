@@ -221,21 +221,41 @@ function QuickAdd({ id }: { id: string }) {
 									variant="outline"
 									size="icon"
 									onClick={copyLink}
-									aria-label={t(copied ? 'quickAdd.copied' : 'quickAdd.copyLink')}
-									title={t(copied ? 'quickAdd.copied' : 'quickAdd.copyLink')}
+									aria-label={t(
+										copied
+											? 'quickAdd.copied'
+											: 'quickAdd.copyLink'
+									)}
+									title={t(
+										copied
+											? 'quickAdd.copied'
+											: 'quickAdd.copyLink'
+									)}
 									className="shrink-0">
 									{copied ? (
-										<Check aria-hidden="true" strokeWidth={1.8} />
+										<Check
+											aria-hidden="true"
+											strokeWidth={1.8}
+										/>
 									) : (
-										<Copy aria-hidden="true" strokeWidth={1.8} />
+										<Copy
+											aria-hidden="true"
+											strokeWidth={1.8}
+										/>
 									)}
 								</Button>
 							</div>
 						</div>
 						<div className="mt-1 grid grid-cols-[2fr_1fr] gap-2">
-							<Button type="submit" size="lg" disabled={state === 'saving'}>
+							<Button
+								type="submit"
+								size="lg"
+								disabled={state === 'saving'}>
 								{state === 'saving' ? (
-									<LoaderCircle aria-hidden="true" className="animate-spin" />
+									<LoaderCircle
+										aria-hidden="true"
+										className="animate-spin"
+									/>
 								) : (
 									<Plus aria-hidden="true" strokeWidth={2} />
 								)}

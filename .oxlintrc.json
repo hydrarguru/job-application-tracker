@@ -1,0 +1,17 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["typescript", "unicorn", "oxc", "react", "import"],
+	"categories": {
+		"correctness": "error"
+	},
+	"rules": {
+		"react/purity": "off",
+		"react/preserve-manual-memoization": "off",
+		"react/set-state-in-effect": "off"
+	},
+	"env": {
+		"builtin": true,
+		"browser": true,
+		"webextensions": true
+	}
+}
