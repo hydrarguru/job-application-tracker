@@ -110,7 +110,7 @@ export function EditDialog({
 					aria-invalid={invalid || undefined}
 					aria-describedby={invalid ? `${id}-error` : undefined}
 					className={cn(
-						'h-[42px]',
+						'h-10.5',
 						field.type === 'date' && 'font-mono text-[13px]'
 					)}
 					onChange={(e) =>
@@ -147,7 +147,7 @@ export function EditDialog({
 			<DialogContent
 				closeLabel={t('dashboard.close')}
 				aria-describedby={undefined}
-				className="max-w-[512px]">
+				className="max-w-lg">
 				{values && (
 					<>
 						<DialogTitle className="pr-14">
@@ -173,11 +173,11 @@ export function EditDialog({
 									<Button
 										type="button"
 										variant="outline"
-										className="px-[18px]">
+										className="px-4.5">
 										{t('dashboard.close')}
 									</Button>
 								</DialogClose>
-								<Button type="submit" className="px-[22px]">
+								<Button type="submit" className="px-5.5">
 									<Check strokeWidth={2} />{' '}
 									{t('dashboard.save')}
 								</Button>
@@ -220,12 +220,12 @@ export function DeleteDialog({
 		<Dialog open={job !== null} onOpenChange={(open) => !open && onClose()}>
 			<DialogContent
 				role="alertdialog"
-				className="max-w-[400px] gap-4 rounded-2xl p-[22px]">
+				className="max-w-100 gap-4 rounded-2xl p-5.5">
 				<div className="flex items-start gap-3.5">
 					<span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-tint-orange-2 text-danger">
 						<Trash2
 							aria-hidden="true"
-							className="size-[18px]"
+							className="size-4.5"
 							strokeWidth={1.8}
 						/>
 					</span>
@@ -243,16 +243,13 @@ export function DeleteDialog({
 				</div>
 				<div className="flex flex-wrap justify-end gap-2">
 					<DialogClose asChild>
-						<Button
-							variant="outline"
-							className="px-[18px]"
-							autoFocus>
+						<Button variant="outline" className="px-4.5" autoFocus>
 							{t('dashboard.keep')}
 						</Button>
 					</DialogClose>
 					<Button
 						variant="destructive"
-						className="px-[18px]"
+						className="px-4.5"
 						onClick={handleDelete}>
 						{t('dashboard.confirmDelete')}
 					</Button>

@@ -80,7 +80,7 @@ function Section({
 }
 
 const radioCard =
-	'flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border px-4 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring';
+	'flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border px-4 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring';
 
 function LanguageSection() {
 	const { t, preference } = useI18n();
@@ -127,7 +127,7 @@ function LanguageSection() {
 							value={option.value}
 							checked={preference === option.value}
 							onChange={() => choose(option.value)}
-							className="m-0 size-[18px] accent-lapis focus-visible:outline-none"
+							className="m-0 size-4.5 accent-lapis focus-visible:outline-none"
 						/>
 						<span className="flex grow flex-col" lang={option.lang}>
 							<span className="text-sm font-medium">
@@ -221,7 +221,7 @@ function ImportSection({ onImported }: { onImported: () => void }) {
 				onDragLeave={() => setDragging(false)}
 				onDrop={handleDrop}
 				className={cn(
-					'flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-[1.5px] border-dashed border-sky px-6 py-7 text-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring',
+					'flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-[1.5px] border-dashed border-sky px-6 py-7 text-center has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring',
 					dragging ? 'bg-tint-lapis-3' : 'bg-tint-lapis-2'
 				)}>
 				<span className="flex size-11 items-center justify-center rounded-xl border border-[#dceaf2] bg-surface text-lapis">
@@ -260,7 +260,7 @@ function ImportSection({ onImported }: { onImported: () => void }) {
 					{importColumns.map((column) => (
 						<code
 							key={column}
-							className="rounded-md border border-line bg-surface px-2 py-[3px] font-mono text-xs text-text-2">
+							className="rounded-md border border-line bg-surface px-2 py-0.75 font-mono text-xs text-text-2">
 							{column}
 						</code>
 					))}
@@ -450,7 +450,7 @@ function ClearSection({
 					<span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-tint-orange-2 text-danger">
 						<DatabaseZap
 							aria-hidden="true"
-							className="size-[18px]"
+							className="size-4.5"
 							strokeWidth={1.8}
 						/>
 					</span>
@@ -463,7 +463,7 @@ function ClearSection({
 				</div>
 				<Button
 					variant="soft-destructive"
-					className="border border-danger-border bg-surface px-[18px]"
+					className="border border-danger-border bg-surface px-4.5"
 					disabled={count === 0}
 					onClick={() => {
 						setUnderstood(false);
@@ -475,12 +475,12 @@ function ClearSection({
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent
 					role="alertdialog"
-					className="max-w-[420px] gap-4 rounded-2xl p-[22px]">
+					className="max-w-105 gap-4 rounded-2xl p-5.5">
 					<div className="flex items-start gap-3.5">
 						<span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-tint-orange-2 text-danger">
 							<DatabaseZap
 								aria-hidden="true"
-								className="size-[18px]"
+								className="size-4.5"
 								strokeWidth={1.8}
 							/>
 						</span>
@@ -502,19 +502,19 @@ function ClearSection({
 							type="checkbox"
 							checked={understood}
 							onChange={(e) => setUnderstood(e.target.checked)}
-							className="m-0 size-[18px] accent-danger"
+							className="m-0 size-4.5 accent-danger"
 						/>
 						{t('preferences.clearConfirm')}
 					</label>
 					<div className="flex flex-wrap justify-end gap-2">
 						<DialogClose asChild>
-							<Button variant="outline" className="px-[18px]">
+							<Button variant="outline" className="px-4.5">
 								{t('preferences.cancel')}
 							</Button>
 						</DialogClose>
 						<Button
 							variant="destructive"
-							className="px-[18px]"
+							className="px-4.5"
 							disabled={!understood}
 							onClick={handleClear}>
 							{t('preferences.clearButton')}

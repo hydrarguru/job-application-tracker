@@ -566,7 +566,7 @@ function Choice<T extends string>({
 					<label
 						key={option.value}
 						className={cn(
-							'flex h-8 cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring',
+							'flex h-8 cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring',
 							value === option.value
 								? 'border-[1.5px] border-lapis bg-tint-lapis-2'
 								: 'border-input bg-surface'

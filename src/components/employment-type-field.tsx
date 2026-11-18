@@ -23,7 +23,7 @@ export function EmploymentTypeField({
 					<label
 						key={type}
 						className={cn(
-							'flex h-11 cursor-pointer items-center gap-2.5 rounded-[10px] border px-3 text-sm font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring',
+							'flex h-11 cursor-pointer items-center gap-2.5 rounded-[10px] border px-3 text-sm font-medium has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring',
 							value === type
 								? 'border-[1.5px] border-lapis bg-tint-lapis-2'
 								: 'border-input bg-surface'

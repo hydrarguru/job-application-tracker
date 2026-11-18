@@ -65,9 +65,9 @@ export function AppShell({
 			<header className="bg-ink text-white">
 				<nav
 					aria-label={t('nav.label')}
-					className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-7 gap-y-3 px-4 py-3.5 sm:px-8">
+					className="mx-auto flex max-w-300 flex-wrap items-center gap-x-7 gap-y-3 px-4 py-3.5 sm:px-8">
 					<span className="flex items-center gap-2.5">
-						<LogoMark className="size-[34px] rounded-[10px]" />
+						<LogoMark className="size-8.5 rounded-[10px]" />
 						<span className="font-serif text-[22px]">
 							{t('appShortName')}
 						</span>
@@ -101,7 +101,7 @@ export function AppShell({
 			<main
 				className={cn(
 					'mx-auto flex flex-col gap-7 px-4 pt-11 pb-16 sm:px-8',
-					narrow ? 'max-w-[880px] gap-6' : 'max-w-[1200px]'
+					narrow ? 'max-w-220 gap-6' : 'max-w-300'
 				)}>
 				<div className="flex flex-wrap items-end justify-between gap-3">
 					<div className="flex flex-col gap-1.5">
