@@ -1,8 +1,8 @@
 {
-    "extName": {
-        "message": "Job Application Tracker"
-    },
-    "extDescription": {
-        "message": "Ett tillägg som hjälper dig att hålla koll på dina jobbansökningar."
-    }
+	"extName": {
+		"message": "Job Application Tracker"
+	},
+	"extDescription": {
+		"message": "Ett tillägg som hjälper dig att hålla koll på dina jobbansökningar."
+	}
 }

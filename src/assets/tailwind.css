@@ -1,37 +1,37 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
-@import "@fontsource/instrument-serif";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource/instrument-serif';
 
-@import "./theme.css";
+@import './theme.css';
 
 @layer base {
-  * {
-    @apply border-border outline-ring;
-  }
-  body {
-    @apply bg-background font-sans text-foreground antialiased;
-  }
-  /* One visible focus style everywhere (2.4.7): a lapis ring with a gap. */
-  :focus-visible {
-    @apply outline-2 outline-offset-2 outline-ring;
-  }
-  a {
-    @apply text-lapis hover:text-lapis-deep;
-  }
-  /*
+	* {
+		@apply border-border outline-ring;
+	}
+	body {
+		@apply bg-background font-sans text-foreground antialiased;
+	}
+	/* One visible focus style everywhere (2.4.7): a lapis ring with a gap. */
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-ring;
+	}
+	a {
+		@apply text-lapis hover:text-lapis-deep;
+	}
+	/*
    * The popup is sized to fit its content, so its scroll bars are only clutter. They are hidden
    * rather than turned off, so wheel, touch and keyboard scrolling still reach anything that
    * overflows, such as field errors on a short screen.
    */
-  html.hide-scrollbars {
-    scrollbar-width: none;
-    overflow-x: hidden;
-  }
-  html.hide-scrollbars::-webkit-scrollbar {
-    display: none;
-  }
+	html.hide-scrollbars {
+		scrollbar-width: none;
+		overflow-x: hidden;
+	}
+	html.hide-scrollbars::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 /*
@@ -39,29 +39,30 @@
  * timer while the toasts are hovered, so the bar pauses then too.
  */
 .toast-progress {
-  position: absolute;
-  inset-inline: 10px;
-  bottom: 4px;
-  height: 3px;
-  border-radius: 9999px;
-  background: currentColor;
-  opacity: 0.3;
-  transform-origin: left;
-  animation: toast-progress var(--toast-duration) linear forwards;
+	position: absolute;
+	inset-inline: 10px;
+	bottom: 4px;
+	height: 3px;
+	border-radius: 9999px;
+	background: currentColor;
+	opacity: 0.3;
+	transform-origin: left;
+	animation: toast-progress var(--toast-duration) linear forwards;
 }
 [data-sonner-toaster]:hover .toast-progress {
-  animation-play-state: paused;
+	animation-play-state: paused;
 }
 /*
  * Fades the toast out in place instead of sliding it up; sonner unmounts it 200ms after removal
  * starts. The class is repeated to outrank sonner's removal rules, which chain four attributes.
  */
-[data-sonner-toaster] [data-sonner-toast][data-removed='true'].toast-fade-out.toast-fade-out.toast-fade-out {
-  --y: translateY(0);
-  transition: opacity 200ms ease-out;
+[data-sonner-toaster]
+	[data-sonner-toast][data-removed='true'].toast-fade-out.toast-fade-out.toast-fade-out {
+	--y: translateY(0);
+	transition: opacity 200ms ease-out;
 }
 @keyframes toast-progress {
-  to {
-    transform: scaleX(0);
-  }
+	to {
+		transform: scaleX(0);
+	}
 }

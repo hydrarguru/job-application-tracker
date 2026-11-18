@@ -4,32 +4,32 @@
  * panel. WXT turns `:root` into `:host` and moves @property rules to the page for us.
  * The web fonts are left out so the panel doesn't add @font-face rules to the website.
  */
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "../../assets/theme.css";
+@import '../../assets/theme.css';
 
 /*
  * Tailwind sizes are in rem, which follows the website's root font size. Pixel values keep the
  * panel the same size whatever the website sets.
  */
 @theme {
-  --spacing: 4px;
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 16px;
-  --text-lg: 18px;
-  --text-xl: 20px;
+	--spacing: 4px;
+	--text-xs: 12px;
+	--text-sm: 14px;
+	--text-base: 16px;
+	--text-lg: 18px;
+	--text-xl: 20px;
 }
 
 :root {
-  --radius: 10px;
+	--radius: 10px;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring;
-  }
-  :focus-visible {
-    @apply outline-2 outline-offset-2 outline-ring;
-  }
+	* {
+		@apply border-border outline-ring;
+	}
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-ring;
+	}
 }
