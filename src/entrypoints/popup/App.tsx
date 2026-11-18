@@ -96,10 +96,10 @@ function HeaderLink({
 		<button
 			type="button"
 			onClick={onClick}
-			className="group flex h-10 cursor-pointer items-center rounded-[10px] border border-white/14 bg-white/8 px-[10px] text-sm font-medium text-white hover:bg-white/16 focus-visible:outline-white">
+			className="group flex h-10 cursor-pointer items-center rounded-[10px] border border-white/14 bg-white/8 px-2.5 text-sm font-medium text-white hover:bg-white/16 focus-visible:outline-white">
 			<Icon
 				aria-hidden="true"
-				className="size-[18px] shrink-0"
+				className="size-4.5 shrink-0"
 				strokeWidth={1.8}
 			/>
 			<span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,margin] duration-200 ease-out group-hover:ml-2 group-hover:max-w-40 group-hover:opacity-100 group-focus-visible:ml-2 group-focus-visible:max-w-40 group-focus-visible:opacity-100 motion-reduce:transition-none">
@@ -239,7 +239,7 @@ export default function App() {
 	}
 
 	return (
-		<div className="flex w-[420px] flex-col bg-page">
+		<div className="flex w-105 flex-col bg-page">
 			<header className="flex items-center justify-between gap-3 bg-ink px-6 py-4 text-white">
 				<div className="flex items-center gap-2.5">
 					<LogoMark />

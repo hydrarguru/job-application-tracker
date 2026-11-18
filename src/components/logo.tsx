@@ -16,7 +16,7 @@ export function LogoMark({ className }: { className?: string }) {
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				aria-hidden="true"
-				className="size-[18px]">
+				className="size-4.5">
 				<path d="M12 3v13" />
 				<path d="M12 4l6 10h-6" />
 				<path d="M10 7l-4 7h4" />

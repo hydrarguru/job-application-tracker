@@ -162,7 +162,7 @@ export default function App() {
 						<Card
 							key={group.title}
 							aria-label={group.title}
-							className="flex flex-[1_1_300px] flex-col gap-[18px]">
+							className="flex flex-[1_1_300px] flex-col gap-4.5">
 							<div className="flex items-start justify-between gap-3">
 								<div className="flex flex-col gap-1">
 									<h2 className="text-sm font-medium text-text-2">

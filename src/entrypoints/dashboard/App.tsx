@@ -199,7 +199,7 @@ export default function App() {
 			<section
 				aria-label={t('dashboard.totals')}
 				className="flex flex-wrap gap-4">
-				<div className="flex min-h-[168px] flex-[1_1_240px] flex-col gap-[18px] rounded-2xl bg-lapis p-6 text-white">
+				<div className="flex min-h-42 flex-[1_1_240px] flex-col gap-4.5 rounded-2xl bg-lapis p-6 text-white">
 					<div className="flex items-center justify-between">
 						<h2 className="text-sm font-medium text-[#dceaf2]">
 							{t('dashboard.totalJobs')}
@@ -217,7 +217,7 @@ export default function App() {
 						{t('dashboard.allTime')}
 					</span>
 				</div>
-				<Card className="flex min-h-[168px] flex-[1_1_240px] flex-col gap-[18px]">
+				<Card className="flex min-h-42 flex-[1_1_240px] flex-col gap-4.5">
 					<div className="flex items-center justify-between">
 						<h2 className="text-sm font-medium text-text-2">
 							{t('dashboard.jobsInMonth', {
@@ -254,7 +254,7 @@ export default function App() {
 						</span>
 					</div>
 				</Card>
-				<Card className="flex min-h-[168px] flex-[1_1_240px] flex-col gap-[18px]">
+				<Card className="flex min-h-42 flex-[1_1_240px] flex-col gap-4.5">
 					<div className="flex items-center justify-between">
 						<h2 className="text-sm font-medium text-text-2">
 							{t('dashboard.jobsToday')}
@@ -292,7 +292,7 @@ export default function App() {
 							</span>
 						)}
 					</div>
-					<label className="flex h-10 flex-[0_1_300px] items-center gap-2 rounded-[10px] border border-input bg-fill px-3 text-text-3 has-[:focus-visible]:border-lapis has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring">
+					<label className="flex h-10 flex-[0_1_300px] items-center gap-2 rounded-[10px] border border-input bg-fill px-3 text-text-3 has-focus-visible:border-lapis has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring">
 						<Search
 							aria-hidden="true"
 							className="size-4 shrink-0"
@@ -312,7 +312,7 @@ export default function App() {
 					</label>
 				</div>
 				<div className="overflow-x-auto">
-					<table className="w-full min-w-[1040px] border-collapse text-sm">
+					<table className="w-full min-w-260 border-collapse text-sm">
 						<thead>
 							<tr className="bg-fill">
 								{sortHeader('companyName', 'pl-6')}
@@ -396,7 +396,7 @@ export default function App() {
 													</span>
 													<ExternalLink
 														aria-hidden="true"
-														className="size-[13px]"
+														className="size-3.25"
 														strokeWidth={2}
 													/>
 												</a>

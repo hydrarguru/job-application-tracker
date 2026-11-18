@@ -165,7 +165,7 @@ function QuickAdd({ id }: { id: string }) {
 		<PopoverContainer.Provider value={container}>
 			<div
 				ref={setContainer}
-				className="fixed right-6 bottom-6 z-[2147483647] flex flex-col items-end gap-3 font-sans text-ink">
+				className="fixed right-6 bottom-6 z-2147483647 flex flex-col items-end gap-3 font-sans text-ink">
 				{open && draft && (
 					<form
 						onSubmit={save}
