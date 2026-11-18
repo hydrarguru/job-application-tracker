@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type SubmitEvent } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -33,7 +33,7 @@ export function EditDialog({ job, onClose, onSaved }: { job: StoredJob | null; o
         setShowErrors(false);
     }, [job]);
 
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         if (!values) return;
         const form = event.currentTarget;
