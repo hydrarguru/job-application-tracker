@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent } from 'react';
+import React, { useState, type SubmitEvent } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Check, Copy, LoaderCircle, Plus, X } from 'lucide-react';
 
@@ -112,7 +112,7 @@ function QuickAdd({ id }: { id: string }) {
 		}
 	}
 
-	async function save(event: FormEvent<HTMLFormElement>) {
+	async function save(event: SubmitEvent<HTMLFormElement>) {
 		event.preventDefault();
 		const form = event.currentTarget;
 		const firstMissing = textFields.find((field) => !draft![field].trim());
