@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -54,11 +54,13 @@ export function EditDialog({
 	const { t } = useI18n();
 	const [values, setValues] = useState<StoredJob | null>(job);
 	const [showErrors, setShowErrors] = useState(false);
+	const [editedJob, setEditedJob] = useState(job);
 
-	useEffect(() => {
+	if (job !== editedJob) {
+		setEditedJob(job);
 		setValues(job);
 		setShowErrors(false);
-	}, [job]);
+	}
 
 	async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -200,9 +202,7 @@ export function DeleteDialog({
 	const { t } = useI18n();
 	/* Kept while the dialog animates closed, so its text doesn't vanish mid-fade. */
 	const [shown, setShown] = useState(job);
-	useEffect(() => {
-		if (job) setShown(job);
-	}, [job]);
+	if (job && job !== shown) setShown(job);
 
 	async function handleDelete() {
 		if (!job) return;

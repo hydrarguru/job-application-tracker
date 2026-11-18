@@ -78,6 +78,7 @@ export function cleanUrl(input: string): string {
 	} catch {
 		return input;
 	}
+	// oxlint-disable-next-line unicorn/no-useless-spread -- deleting while iterating the live params skips entries
 	for (const key of [...url.searchParams.keys()]) {
 		const lower = key.toLowerCase();
 		if (lower.startsWith('utm_') || TRACKING_PARAMS.has(lower))

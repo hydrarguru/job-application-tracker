@@ -240,7 +240,8 @@ async function scrollApp(locator, ms = 900, offset = 24) {
 					const p = Math.min(1, (now - start) / dur);
 					const e = p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
 					scrollTo(0, from + (to - from) * e);
-					p < 1 ? setTimeout(step, 16) : done();
+					if (p < 1) setTimeout(step, 16);
+					else done();
 				};
 				step();
 			}),

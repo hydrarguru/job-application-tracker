@@ -1,4 +1,11 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
+import {
+	useEffect,
+	useEffectEvent,
+	useId,
+	useRef,
+	useState,
+	type KeyboardEvent,
+} from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import {
@@ -98,10 +105,12 @@ export function DatePicker({
 			?.querySelector<HTMLButtonElement>(`[data-date="${focusedKey}"]`)
 			?.focus();
 
-	/* Keep keyboard focus on the active day as it moves. */
-	useEffect(() => {
+	const focusMovedDay = useEffectEvent(() => {
 		if (open) focusActiveDay();
-	}, [focusedKey]);
+	});
+
+	/* Keep keyboard focus on the active day as it moves. */
+	useEffect(() => focusMovedDay(), [focusedKey]);
 
 	function handleOpenChange(next: boolean) {
 		if (next) setFocused(parse(value));
