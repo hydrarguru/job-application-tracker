@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type SubmitEvent } from 'react';
 import { LayoutDashboard, Plus, RotateCcw, SlidersHorizontal, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { storage } from '#imports';
@@ -98,7 +98,7 @@ export default function App() {
 
     const missing = (name: TextField) => showErrors && values[name].trim() === '';
 
-    async function handleSubmit(event: FormEvent) {
+    async function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         const firstMissing = textFields.find((field) => values[field.name].trim() === '');
         if (firstMissing) {
