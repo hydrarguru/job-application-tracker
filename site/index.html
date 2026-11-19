@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>J.A.T – Job Application Tracker</title>
+		<meta
+			name="description"
+			content="A browser extension for Chrome and Firefox that keeps track of the jobs you apply for, stored locally on your machine." />
+		<link rel="icon" href="favicon.ico" />
+		<style>
+			:root {
+				--bg: #fafafa;
+				--fg: #18181b;
+				--muted: #52525b;
+				--accent: #2563eb;
+				--card: #ffffff;
+				--border: #e4e4e7;
+			}
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--bg: #09090b;
+					--fg: #fafafa;
+					--muted: #a1a1aa;
+					--accent: #60a5fa;
+					--card: #18181b;
+					--border: #27272a;
+				}
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--fg);
+				font:
+					16px/1.6 system-ui,
+					sans-serif;
+			}
+			main {
+				max-width: 52rem;
+				margin: 0 auto;
+				padding: 4rem 1rem;
+			}
+			header {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+			}
+			h1 {
+				margin: 0;
+				font-size: 2rem;
+			}
+			.lead {
+				color: var(--muted);
+				font-size: 1.125rem;
+			}
+			.button {
+				display: inline-block;
+				padding: 0.6rem 1.2rem;
+				border-radius: 0.5rem;
+				background: var(--accent);
+				color: #fff;
+				text-decoration: none;
+				font-weight: 600;
+			}
+			ul {
+				padding-left: 1.2rem;
+			}
+			img.screenshot {
+				width: 100%;
+				height: auto;
+				border: 1px solid var(--border);
+				border-radius: 0.75rem;
+				background: var(--card);
+			}
+			footer {
+				margin-top: 3rem;
+				color: var(--muted);
+				font-size: 0.875rem;
+			}
+			a {
+				color: var(--accent);
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<header>
+				<img src="icon.png" alt="" width="64" height="64" />
+				<h1>J.A.T – Job Application Tracker</h1>
+			</header>
+			<p class="lead">
+				A browser extension for Chrome, Edge, Brave and Firefox that
+				keeps track of the jobs you apply for.
+			</p>
+			<ul>
+				<li>
+					Your applications stay on your machine. Nothing is sent to a
+					server.
+				</li>
+				<li>Statistics per month as a chart and a table.</li>
+				<li>
+					Fills in the <em>Sökta jobb</em> form of your activity
+					report on Arbetsförmedlingen.
+				</li>
+				<li>Available in English and Swedish.</li>
+			</ul>
+			<p>
+				<a
+					class="button"
+					href="https://github.com/hydrarguru/job-application-tracker"
+					>View on GitHub</a
+				>
+			</p>
+			<img
+				class="screenshot"
+				src="dashboard.png"
+				alt="The J.A.T overview listing saved job applications" />
+			<footer>
+				<a href="https://github.com/hydrarguru/job-application-tracker"
+					>Source on GitHub</a
+				>
+			</footer>
+		</main>
+	</body>
+</html>
