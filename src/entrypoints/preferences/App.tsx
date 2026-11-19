@@ -1,14 +1,5 @@
 import { useEffect, useState, type DragEvent, type ReactNode } from 'react';
-import {
-	DatabaseZap,
-	Download,
-	FileSpreadsheet,
-	FileText,
-	FileUp,
-	Trash2,
-	Upload,
-	type LucideIcon,
-} from 'lucide-react';
+import { DatabaseZap, Download, FileUp, Trash2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { AppShell } from '@/components/app-shell';
@@ -283,13 +274,9 @@ function ImportSection({ onImported }: { onImported: () => void }) {
 
 function ExportSection({ count }: { count: number }) {
 	const { t, language } = useI18n();
-	const [busy, setBusy] = useState<ExportFormat | null>(null);
+	const [busy, setBusy] = useState(false);
+	const [format, setFormat] = useState<ExportFormat>('csv');
 	const [linkText, setLinkText] = useState('');
-	const formats: { format: ExportFormat; icon: LucideIcon }[] = [
-		{ format: 'csv', icon: FileText },
-		{ format: 'xlsx', icon: FileSpreadsheet },
-		{ format: 'pdf', icon: FileText },
-	];
 	const names = {
 		csv: t('preferences.exportCsv'),
 		xlsx: t('preferences.exportXlsx'),
@@ -301,8 +288,8 @@ function ExportSection({ count }: { count: number }) {
 		pdf: t('preferences.exportPdfHint'),
 	};
 
-	async function handleExport(format: ExportFormat) {
-		setBusy(format);
+	async function handleExport() {
+		setBusy(true);
 		try {
 			const jobs = await getJobsFromDatabase();
 			if (jobs.length === 0) {
@@ -315,11 +302,12 @@ function ExportSection({ count }: { count: number }) {
 				month: 'long',
 				day: 'numeric',
 			});
+			const link = linkText.trim() || t('preferences.pdfLinkDefault');
 			const blob =
 				format === 'csv'
 					? buildCsv(jobs)
 					: format === 'xlsx'
-						? await buildXlsx(jobs)
+						? await buildXlsx(jobs, link)
 						: await buildPdf(jobs, {
 								title: t('preferences.pdfTitle'),
 								subtitle: t('preferences.pdfSubtitle', {
@@ -341,9 +329,7 @@ function ExportSection({ count }: { count: number }) {
 									part: t('employment.part'),
 								},
 								page: t('preferences.pdfPage'),
-								linkText:
-									linkText.trim() ||
-									t('preferences.pdfLinkDefault'),
+								linkText: link,
 							});
 			downloadBlob(blob, `job-applications-${today}.${format}`);
 			toast.success(t('preferences.exported', { count: jobs.length }));
@@ -351,7 +337,7 @@ function ExportSection({ count }: { count: number }) {
 			console.error(error);
 			toast.error(t('preferences.exportFailed'));
 		} finally {
-			setBusy(null);
+			setBusy(false);
 		}
 	}
 
@@ -360,53 +346,50 @@ function ExportSection({ count }: { count: number }) {
 			id="pref-export"
 			title={t('preferences.exportTitle')}
 			hint={t('preferences.exportHint')}>
-			<div className="flex flex-col gap-2.5">
-				{formats.map(({ format, icon: Icon }) => (
-					<div
-						key={format}
-						className="flex flex-wrap items-center gap-3 rounded-xl border border-[#d5dde4] bg-surface px-4 py-3">
-						<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#dceaf2] bg-tint-lapis-2 text-lapis">
-							<Icon
-								aria-hidden="true"
-								className="size-5"
-								strokeWidth={1.8}
-							/>
-						</span>
-						<span className="flex grow flex-col">
-							<span className="text-sm font-medium">
-								{names[format]}
-							</span>
-							<span className="text-xs text-text-3">
-								{hints[format]}
-							</span>
-						</span>
-						<Button
-							variant="outline"
-							disabled={count === 0 || busy !== null}
-							onClick={() => handleExport(format)}
-							className="px-4">
-							<Download strokeWidth={2} /> {names[format]}
-						</Button>
-						{format === 'pdf' && (
-							<div className="flex basis-full flex-col gap-1.5">
-								<Label htmlFor="pdf-link-text">
-									{t('preferences.pdfLinkText')}
-								</Label>
-								<Input
-									id="pdf-link-text"
-									value={linkText}
-									placeholder={t(
-										'preferences.pdfLinkDefault'
-									)}
-									onChange={(event) =>
-										setLinkText(event.target.value)
-									}
-								/>
-							</div>
-						)}
-					</div>
-				))}
+			<div className="flex flex-col gap-1.5">
+				<Label htmlFor="export-format">
+					{t('preferences.exportFormat')}
+				</Label>
+				<div className="flex flex-wrap gap-3">
+					<select
+						id="export-format"
+						value={format}
+						onChange={(event) =>
+							setFormat(event.target.value as ExportFormat)
+						}
+						aria-describedby="export-format-hint"
+						className="h-10 min-w-0 flex-1 rounded-[10px] border border-input bg-surface px-3 text-sm text-ink focus-visible:border-lapis focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+						{(Object.keys(names) as ExportFormat[]).map((value) => (
+							<option key={value} value={value}>
+								{names[value]}
+							</option>
+						))}
+					</select>
+					<Button
+						variant="outline"
+						disabled={count === 0 || busy}
+						onClick={handleExport}
+						className="px-4">
+						<Download strokeWidth={2} /> {t('preferences.export')}
+					</Button>
+				</div>
+				<span id="export-format-hint" className="text-xs text-text-3">
+					{hints[format]}
+				</span>
 			</div>
+			{format !== 'csv' && (
+				<div className="flex flex-col gap-1.5">
+					<Label htmlFor="pdf-link-text">
+						{t('preferences.pdfLinkText')}
+					</Label>
+					<Input
+						id="pdf-link-text"
+						value={linkText}
+						placeholder={t('preferences.pdfLinkDefault')}
+						onChange={(event) => setLinkText(event.target.value)}
+					/>
+				</div>
+			)}
 		</Section>
 	);
 }

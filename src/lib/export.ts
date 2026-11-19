@@ -39,7 +39,22 @@ export function buildCsv(jobs: StoredJob[]): Blob {
 	});
 }
 
-export async function buildXlsx(jobs: StoredJob[]): Promise<Blob> {
+/* Excel rejects HYPERLINK arguments longer than 255 characters, so those links stay plain text. The xlsx file format stores formulas without a leading "=". */
+function xlsxLinkCell(url: string, linkText: string) {
+	if (!url || url.length > 255) return { value: url, type: String };
+	const quote = (text: string) => `"${text.replace(/"/g, '""')}"`;
+	return {
+		type: 'Formula' as const,
+		value: `HYPERLINK(${quote(url)},${quote(linkText)})`,
+		textColor: '#33658A',
+		textDecoration: { underline: true as const },
+	};
+}
+
+export async function buildXlsx(
+	jobs: StoredJob[],
+	linkText: string
+): Promise<Blob> {
 	const { default: writeXlsxFile } =
 		await import('write-excel-file/universal');
 	const widths = [28, 28, 16, 22, 48, 14];
@@ -50,7 +65,11 @@ export async function buildXlsx(jobs: StoredJob[]): Promise<Blob> {
 	const data = [
 		header,
 		...toRows(jobs).map((row) =>
-			row.map((value) => ({ value, type: String }))
+			row.map((value, index) =>
+				importColumns[index] === 'applicationLink'
+					? xlsxLinkCell(value, linkText)
+					: { value, type: String }
+			)
 		),
 	];
 	return writeXlsxFile(data, {
