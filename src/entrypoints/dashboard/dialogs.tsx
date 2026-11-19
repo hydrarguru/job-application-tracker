@@ -1,9 +1,9 @@
 import { useState, type SubmitEvent } from 'react';
 import { Check, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { EmploymentTypeField } from '@/components/employment-type-field';
 import { useI18n } from '@/components/language';
+import { toast } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,

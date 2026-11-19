@@ -6,13 +6,12 @@ import {
 	SlidersHorizontal,
 	type LucideIcon,
 } from 'lucide-react';
-import { toast } from 'sonner';
 import { storage } from '#imports';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster, toast } from '@/components/ui/sonner';
 import { DatePicker } from '@/components/date-picker';
 import { EmploymentTypeField } from '@/components/employment-type-field';
 import { useI18n } from '@/components/language';
@@ -156,17 +155,6 @@ export default function App() {
 			toast.success(t('popup.added'), {
 				duration: addedToastMs,
 				className: 'toast-fade-out',
-				description: (
-					<span
-						aria-hidden="true"
-						className="toast-progress"
-						style={
-							{
-								'--toast-duration': `${addedToastMs}ms`,
-							} as React.CSSProperties
-						}
-					/>
-				),
 			});
 			clearForm();
 		} catch (error) {
