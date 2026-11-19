@@ -75,7 +75,8 @@ export default function App() {
 		desc: true,
 	});
 	const [editing, setEditing] = useState<StoredJob | null>(null);
-	const [deleting, setDeleting] = useState<StoredJob | null>(null);
+	const [deleting, setDeleting] = useState<StoredJob[] | null>(null);
+	const [selected, setSelected] = useState<Set<number>>(new Set());
 
 	async function load() {
 		setJobs(await getJobsFromDatabase());
@@ -144,6 +145,17 @@ export default function App() {
 					b.id - a.id
 			);
 	}, [jobs, query, sort, language, t]);
+
+	/* Only rows the search still shows count, so hidden selections are never deleted. */
+	const selectedJobs = filtered.filter((job) => selected.has(job.id));
+	const allSelected =
+		filtered.length > 0 && selectedJobs.length === filtered.length;
+
+	function toggleSelected(id: number) {
+		const next = new Set(selected);
+		if (!next.delete(id)) next.add(id);
+		setSelected(next);
+	}
 
 	function sortHeader(key: SortKey, extra = '') {
 		const active = sort.key === key;
@@ -292,6 +304,18 @@ export default function App() {
 							</span>
 						)}
 					</div>
+					{selectedJobs.length > 0 && (
+						<Button
+							variant="soft-destructive"
+							size="sm"
+							className="ml-auto"
+							onClick={() => setDeleting(selectedJobs)}>
+							<Trash2 strokeWidth={1.8} />
+							{t('dashboard.deleteSelected', {
+								count: selectedJobs.length,
+							})}
+						</Button>
+					)}
 					<label className="flex h-10 flex-[0_1_300px] items-center gap-2 rounded-[10px] border border-input bg-fill px-3 text-text-3 has-focus-visible:border-lapis has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring">
 						<Search
 							aria-hidden="true"
@@ -315,7 +339,33 @@ export default function App() {
 					<table className="w-full min-w-260 border-collapse text-sm">
 						<thead>
 							<tr className="bg-fill">
-								{sortHeader('companyName', 'pl-6')}
+								<th scope="col" className="w-0 py-2.5 pl-6">
+									<input
+										type="checkbox"
+										aria-label={t('dashboard.selectAll')}
+										checked={allSelected}
+										disabled={filtered.length === 0}
+										ref={(el) => {
+											if (el)
+												el.indeterminate =
+													selectedJobs.length > 0 &&
+													!allSelected;
+										}}
+										onChange={() =>
+											setSelected(
+												new Set(
+													allSelected
+														? []
+														: filtered.map(
+																(job) => job.id
+															)
+												)
+											)
+										}
+										className="size-4 cursor-pointer accent-lapis"
+									/>
+								</th>
+								{sortHeader('companyName')}
 								{sortHeader('jobRole')}
 								{sortHeader('employmentType')}
 								{sortHeader('jobArea')}
@@ -338,7 +388,23 @@ export default function App() {
 									<tr
 										key={job.id}
 										className="border-t border-line-soft">
-										<td className="py-2 pr-4 pl-6">
+										<td className="py-2 pl-6">
+											<input
+												type="checkbox"
+												aria-label={t(
+													'dashboard.select',
+													{
+														entry: `${job.companyName}, ${job.jobRole}`,
+													}
+												)}
+												checked={selected.has(job.id)}
+												onChange={() =>
+													toggleSelected(job.id)
+												}
+												className="size-4 cursor-pointer accent-lapis"
+											/>
+										</td>
+										<td className="px-4 py-2">
 											<div className="flex items-center gap-3">
 												<span
 													aria-hidden="true"
@@ -463,7 +529,7 @@ export default function App() {
 													variant="soft-destructive"
 													size="sm"
 													onClick={() =>
-														setDeleting(job)
+														setDeleting([job])
 													}>
 													<Trash2 strokeWidth={1.8} />
 													{t('dashboard.delete')}
@@ -526,7 +592,7 @@ export default function App() {
 				onSaved={load}
 			/>
 			<DeleteDialog
-				job={deleting}
+				jobs={deleting}
 				onClose={() => setDeleting(null)}
 				onDeleted={load}
 			/>

@@ -84,6 +84,12 @@ export const sv = {
 	'dashboard.keep': 'Nej, behåll',
 	'dashboard.confirmDelete': 'Ja, ta bort',
 	'dashboard.deleted': 'Ansökan har tagits bort.',
+	'dashboard.deletedMany': '{count} ansökningar har tagits bort.',
+	'dashboard.deleteManyText':
+		'{count} ansökningar tas bort. Det går inte att ångra.',
+	'dashboard.deleteSelected': 'Ta bort markerade ({count})',
+	'dashboard.selectAll': 'Markera alla ansökningar',
+	'dashboard.select': 'Markera {entry}',
 
 	'charts.eyebrow': 'Året i siffror',
 	'charts.year': 'År',

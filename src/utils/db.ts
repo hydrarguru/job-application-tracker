@@ -122,11 +122,15 @@ export async function setJobReported(
 }
 
 /**
- * Deletes a job by its key.
+ * Deletes jobs by their keys, all or none.
  */
-export async function deleteJobFromDatabase(id: number) {
+export async function deleteJobsFromDatabase(ids: number[]) {
 	const db = await open();
-	await db.delete(DATABASE_TABLE, id);
+	const transaction = db.transaction(DATABASE_TABLE, 'readwrite');
+	await Promise.all([
+		...ids.map((id) => transaction.store.delete(id)),
+		transaction.done,
+	]);
 	db.close();
 }
 
