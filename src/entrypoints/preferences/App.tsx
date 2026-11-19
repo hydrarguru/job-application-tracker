@@ -1,9 +1,9 @@
 import { useEffect, useState, type DragEvent, type ReactNode } from 'react';
 import { DatabaseZap, Download, FileUp, Trash2, Upload } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { AppShell } from '@/components/app-shell';
 import { useI18n } from '@/components/language';
+import { toast } from '@/components/ui/sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
