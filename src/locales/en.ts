@@ -83,6 +83,12 @@ export const en: Record<keyof typeof sv, string> = {
 	'dashboard.keep': 'No, keep it',
 	'dashboard.confirmDelete': 'Yes, delete',
 	'dashboard.deleted': 'Application deleted.',
+	'dashboard.deletedMany': '{count} applications deleted.',
+	'dashboard.deleteManyText':
+		'{count} applications will be deleted. This cannot be undone.',
+	'dashboard.deleteSelected': 'Delete selected ({count})',
+	'dashboard.selectAll': 'Select all applications',
+	'dashboard.select': 'Select {entry}',
 
 	'charts.eyebrow': 'Year in review',
 	'charts.year': 'Year',

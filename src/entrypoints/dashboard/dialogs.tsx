@@ -18,7 +18,7 @@ import type { MessageKey } from '@/lib/i18n';
 import { cleanUrl } from '@/lib/url';
 import { cn } from '@/lib/utils';
 import {
-	deleteJobFromDatabase,
+	deleteJobsFromDatabase,
 	updateJobInDatabase,
 	type StoredJob,
 } from '@/utils/db';
@@ -191,24 +191,28 @@ export function EditDialog({
 }
 
 export function DeleteDialog({
-	job,
+	jobs,
 	onClose,
 	onDeleted,
 }: {
-	job: StoredJob | null;
+	jobs: StoredJob[] | null;
 	onClose: () => void;
 	onDeleted: () => void;
 }) {
 	const { t } = useI18n();
 	/* Kept while the dialog animates closed, so its text doesn't vanish mid-fade. */
-	const [shown, setShown] = useState(job);
-	if (job && job !== shown) setShown(job);
+	const [shown, setShown] = useState(jobs);
+	if (jobs && jobs !== shown) setShown(jobs);
 
 	async function handleDelete() {
-		if (!job) return;
+		if (!jobs) return;
 		try {
-			await deleteJobFromDatabase(job.id);
-			toast.success(t('dashboard.deleted'));
+			await deleteJobsFromDatabase(jobs.map((job) => job.id));
+			toast.success(
+				jobs.length === 1
+					? t('dashboard.deleted')
+					: t('dashboard.deletedMany', { count: jobs.length })
+			);
 			onDeleted();
 		} catch (error) {
 			console.error(error);
@@ -217,7 +221,9 @@ export function DeleteDialog({
 	}
 
 	return (
-		<Dialog open={job !== null} onOpenChange={(open) => !open && onClose()}>
+		<Dialog
+			open={jobs !== null}
+			onOpenChange={(open) => !open && onClose()}>
 			<DialogContent
 				role="alertdialog"
 				className="max-w-100 gap-4 rounded-2xl p-5.5">
@@ -234,10 +240,13 @@ export function DeleteDialog({
 							{t('dashboard.deleteTitle')}
 						</DialogTitle>
 						<DialogDescription>
-							{shown &&
-								t('dashboard.deleteText', {
-									entry: `${shown.companyName} · ${shown.jobRole}`,
-								})}
+							{shown?.length === 1
+								? t('dashboard.deleteText', {
+										entry: `${shown[0].companyName} · ${shown[0].jobRole}`,
+									})
+								: t('dashboard.deleteManyText', {
+										count: shown?.length ?? 0,
+									})}
 						</DialogDescription>
 					</div>
 				</div>
