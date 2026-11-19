@@ -6,123 +6,996 @@
 		<title>J.A.T – Job Application Tracker</title>
 		<meta
 			name="description"
-			content="A browser extension for Chrome and Firefox that keeps track of the jobs you apply for, stored locally on your machine." />
+			content="A browser extension for Chrome and Firefox that keeps track of the jobs you apply for and fills in your activity report for Arbetsförmedlingen." />
 		<link rel="icon" href="favicon.ico" />
+		<link
+			rel="preload"
+			href="fonts/instrument-serif-latin-400-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin />
 		<style>
-			:root {
-				--bg: #fafafa;
-				--fg: #18181b;
-				--muted: #52525b;
-				--accent: #2563eb;
-				--card: #ffffff;
-				--border: #e4e4e7;
+			@font-face {
+				font-family: 'Geist';
+				src: url('fonts/geist-latin-wght-normal.woff2') format('woff2');
+				font-weight: 100 900;
+				font-display: swap;
 			}
-			@media (prefers-color-scheme: dark) {
-				:root {
-					--bg: #09090b;
-					--fg: #fafafa;
-					--muted: #a1a1aa;
-					--accent: #60a5fa;
-					--card: #18181b;
-					--border: #27272a;
-				}
+			@font-face {
+				font-family: 'Instrument Serif';
+				src: url('fonts/instrument-serif-latin-400-normal.woff2')
+					format('woff2');
+				font-weight: 400;
+				font-display: swap;
+			}
+			/* Palette copied from src/assets/theme.css so the site matches the extension. */
+			:root {
+				--radius: 0.625rem;
+				--lapis: #33658a;
+				--lapis-deep: #264d6a;
+				--sky: #86bbd8;
+				--olive-text: #56693a;
+				--saffron: #f6ae2d;
+				--orange: #f26419;
+				--ink: #13202b;
+				--page: #f4f6f8;
+				--surface: #ffffff;
+				--line: #e3e8ed;
+				--text-2: #3b4a56;
+				--text-3: #5b6b78;
+				--on-ink: #a9c3d3;
+				--tint-lapis: #eef3f7;
+				--tint-saffron: #fdf1da;
+				--tint-olive: #ecf0e4;
+				--serif: 'Instrument Serif', Georgia, serif;
+				color-scheme: light;
 			}
 			* {
 				box-sizing: border-box;
 			}
+			html {
+				scroll-behavior: smooth;
+			}
 			body {
 				margin: 0;
-				background: var(--bg);
-				color: var(--fg);
+				background: var(--page);
+				color: var(--ink);
 				font:
-					16px/1.6 system-ui,
+					16px/1.6 'Geist',
+					system-ui,
 					sans-serif;
+				-webkit-font-smoothing: antialiased;
 			}
-			main {
-				max-width: 52rem;
+			a {
+				color: var(--lapis);
+			}
+			a:hover {
+				color: var(--lapis-deep);
+			}
+			:focus-visible {
+				outline: 2px solid var(--lapis);
+				outline-offset: 2px;
+			}
+			img {
+				max-width: 100%;
+				height: auto;
+			}
+			.wrap {
+				max-width: 75rem;
 				margin: 0 auto;
-				padding: 4rem 1rem;
+				padding: 0 1rem;
 			}
-			header {
+			@media (min-width: 640px) {
+				.wrap {
+					padding: 0 2rem;
+				}
+			}
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+			.eyebrow {
+				margin: 0;
+				font-size: 0.8125rem;
+				font-weight: 500;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--text-3);
+			}
+
+			/* Header, matching the ink bar in src/components/app-shell.tsx */
+			.site-header {
+				position: sticky;
+				top: 0;
+				z-index: 10;
+				background: var(--ink);
+				color: #fff;
+			}
+			.site-header .wrap {
 				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				padding-top: 0.875rem;
+				padding-bottom: 0.875rem;
+			}
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: 0.625rem;
+				color: #fff;
+				text-decoration: none;
+				font-family: var(--serif);
+				font-size: 1.375rem;
+			}
+			.brand:hover {
+				color: #fff;
+			}
+			.logo {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 2.125rem;
+				height: 2.125rem;
+				border-radius: 10px;
+				background: var(--lapis);
+			}
+			.logo svg {
+				width: 1.125rem;
+				height: 1.125rem;
+			}
+			.header-actions {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+			}
+			.lang {
+				display: flex;
+				padding: 3px;
+				border-radius: 10px;
+				background: rgb(255 255 255 / 0.08);
+			}
+			.lang button {
+				min-width: 2.75rem;
+				height: 2.25rem;
+				border: 0;
+				border-radius: 8px;
+				background: transparent;
+				color: var(--on-ink);
+				font: inherit;
+				font-size: 0.875rem;
+				font-weight: 500;
+				cursor: pointer;
+			}
+			.lang button:hover {
+				color: #fff;
+			}
+			.lang button[aria-pressed='true'] {
+				background: rgb(134 187 216 / 0.16);
+				color: #fff;
+			}
+			.site-header :focus-visible {
+				outline-color: #fff;
+			}
+			.header-link {
+				color: var(--on-ink);
+				font-size: 0.875rem;
+				font-weight: 500;
+				text-decoration: none;
+			}
+			.header-link:hover {
+				color: #fff;
+			}
+
+			/* Hero */
+			.hero {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: 3rem;
+				align-items: center;
+				padding: 4rem 0 5rem;
+			}
+			@media (min-width: 900px) {
+				.hero {
+					grid-template-columns: 1.2fr 1fr;
+					padding: 6rem 0;
+				}
+			}
+			h1,
+			h2,
+			h3 {
+				font-family: var(--serif);
+				font-weight: 400;
+				letter-spacing: -0.01em;
+			}
+			h1 {
+				margin: 0.5rem 0 1.25rem;
+				font-size: clamp(2.75rem, 7vw, 4.5rem);
+				line-height: 1;
+			}
+			.lead {
+				margin: 0 0 1.5rem;
+				max-width: 34rem;
+				font-size: 1.1875rem;
+				color: var(--text-2);
+			}
+			.cta-row {
+				display: flex;
+				flex-wrap: wrap;
 				align-items: center;
 				gap: 1rem;
 			}
-			h1 {
-				margin: 0;
-				font-size: 2rem;
-			}
-			.lead {
-				color: var(--muted);
-				font-size: 1.125rem;
-			}
 			.button {
-				display: inline-block;
-				padding: 0.6rem 1.2rem;
-				border-radius: 0.5rem;
-				background: var(--accent);
+				display: inline-flex;
+				align-items: center;
+				height: 2.75rem;
+				padding: 0 1.25rem;
+				border-radius: var(--radius);
+				background: var(--lapis);
 				color: #fff;
+				font-weight: 500;
 				text-decoration: none;
-				font-weight: 600;
 			}
-			ul {
-				padding-left: 1.2rem;
+			.button:hover {
+				background: var(--lapis-deep);
+				color: #fff;
 			}
-			img.screenshot {
+			.muted {
+				color: var(--text-3);
+				font-size: 0.9375rem;
+			}
+			.privacy {
+				display: flex;
+				gap: 0.75rem;
+				align-items: flex-start;
+				margin-top: 2rem;
+				max-width: 34rem;
+				padding: 1rem 1.125rem;
+				border-radius: var(--radius);
+				background: var(--tint-olive);
+				color: var(--olive-text);
+				font-weight: 500;
+			}
+			.privacy svg {
+				flex: none;
+				margin-top: 0.2rem;
+			}
+			.hero-shot {
+				justify-self: center;
+				width: min(100%, 22rem);
+				border-radius: 1.25rem;
+				box-shadow:
+					0 1px 2px rgb(19 32 43 / 0.06),
+					0 24px 48px -12px rgb(19 32 43 / 0.25);
+			}
+
+			/* Scroll showcase */
+			.tour {
+				padding: 4rem 0 2rem;
+				border-top: 1px solid var(--line);
+			}
+			.tour-intro h2 {
+				margin: 0.5rem 0 0;
+				font-size: clamp(2.25rem, 5vw, 3.5rem);
+				line-height: 1.05;
+			}
+			.tour-grid {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: 2rem;
+			}
+			.steps {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			.step {
+				padding: 2.5rem 0;
+			}
+			.step h3 {
+				margin: 0.375rem 0 0.75rem;
+				font-size: 2rem;
+				line-height: 1.1;
+			}
+			.step p {
+				margin: 0;
+				color: var(--text-2);
+			}
+			.chapter {
+				align-self: flex-start;
+				display: inline-block;
+				padding: 0.125rem 0.625rem;
+				border-radius: 999px;
+				background: var(--tint-lapis);
+				color: var(--lapis-deep);
+				font-size: 0.8125rem;
+				font-weight: 500;
+			}
+			.chapter[data-tone='saffron'] {
+				background: var(--tint-saffron);
+				color: #7a5208;
+			}
+			.chapter[data-tone='olive'] {
+				background: var(--tint-olive);
+				color: var(--olive-text);
+			}
+			.step-shot {
+				display: block;
+				margin-top: 1.5rem;
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				background: var(--surface);
+			}
+			.frame {
+				display: none;
+			}
+
+			/* With JS on a wide screen, the screenshots move into one sticky frame. */
+			@media (min-width: 900px) {
+				.js .tour-grid {
+					grid-template-columns: minmax(18rem, 0.8fr) 1.2fr;
+					gap: 4rem;
+				}
+				.js .step {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					min-height: 75vh;
+					padding: 0 0 0 1.5rem;
+					border-left: 2px solid var(--line);
+					opacity: 0.45;
+					transition:
+						opacity 0.3s,
+						border-color 0.3s;
+				}
+				.js .step.is-active {
+					border-left-color: var(--lapis);
+					opacity: 1;
+				}
+				.js .step-shot {
+					position: absolute;
+					width: 1px;
+					height: 1px;
+					overflow: hidden;
+					clip-path: inset(50%);
+				}
+				.js .frame {
+					display: flex;
+					flex-direction: column;
+					position: sticky;
+					top: 6rem;
+					height: calc(100vh - 8rem);
+					border: 1px solid var(--line);
+					border-radius: 1rem;
+					background: var(--surface);
+					box-shadow: 0 24px 48px -16px rgb(19 32 43 / 0.2);
+					overflow: hidden;
+				}
+			}
+			.frame-bar {
+				display: flex;
+				gap: 6px;
+				padding: 0.75rem 1rem;
+				border-bottom: 1px solid var(--line);
+				background: var(--page);
+			}
+			.frame-bar span {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+				background: var(--line);
+			}
+			.frame-bar span:nth-child(1) {
+				background: var(--orange);
+			}
+			.frame-bar span:nth-child(2) {
+				background: var(--saffron);
+			}
+			.frame-bar span:nth-child(3) {
+				background: var(--sky);
+			}
+			.frame-view {
+				position: relative;
+				flex: 1;
+			}
+			.frame-view img {
+				position: absolute;
+				inset: 0;
 				width: 100%;
-				height: auto;
-				border: 1px solid var(--border);
-				border-radius: 0.75rem;
-				background: var(--card);
+				height: 100%;
+				padding: 1rem;
+				object-fit: contain;
+				opacity: 0;
+				transform: translateY(12px) scale(0.98);
+				transition:
+					opacity 0.45s ease,
+					transform 0.45s ease;
 			}
-			footer {
-				margin-top: 3rem;
-				color: var(--muted);
-				font-size: 0.875rem;
+			.frame-view img.is-active {
+				opacity: 1;
+				transform: none;
 			}
-			a {
-				color: var(--accent);
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+				.step,
+				.frame-view img {
+					transition: none !important;
+					transform: none !important;
+				}
+			}
+
+			/* Footer */
+			.site-footer {
+				margin-top: 4rem;
+				padding: 3rem 0;
+				background: var(--ink);
+				color: var(--on-ink);
+			}
+			.site-footer h2 {
+				margin: 0 0 0.75rem;
+				color: #fff;
+				font-size: 2.25rem;
+			}
+			.site-footer p {
+				margin: 0 0 1.25rem;
+				max-width: 36rem;
+			}
+			.site-footer a {
+				color: #fff;
+			}
+			.site-footer :focus-visible {
+				outline-color: #fff;
 			}
 		</style>
+		<script>
+			document.documentElement.classList.add('js');
+		</script>
 	</head>
 	<body>
-		<main>
-			<header>
-				<img src="icon.png" alt="" width="64" height="64" />
-				<h1>J.A.T – Job Application Tracker</h1>
-			</header>
-			<p class="lead">
-				A browser extension for Chrome, Edge, Brave and Firefox that
-				keeps track of the jobs you apply for.
-			</p>
-			<ul>
-				<li>
-					Your applications stay on your machine. Nothing is sent to a
-					server.
-				</li>
-				<li>Statistics per month as a chart and a table.</li>
-				<li>
-					Fills in the <em>Sökta jobb</em> form of your activity
-					report on Arbetsförmedlingen.
-				</li>
-				<li>Available in English and Swedish.</li>
-			</ul>
-			<p>
+		<header class="site-header">
+			<div class="wrap">
+				<a class="brand" href="#top">
+					<span class="logo">
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="#ffffff"
+							stroke-width="1.8"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
+							<path d="M12 3v13" />
+							<path d="M12 4l6 10h-6" />
+							<path d="M10 7l-4 7h4" />
+							<path d="M3 17h18l-2 3H5z" />
+						</svg>
+					</span>
+					J.A.T
+				</a>
+				<div class="header-actions">
+					<div class="lang" role="group" aria-label="Language">
+						<button
+							type="button"
+							data-lang="en"
+							lang="en"
+							aria-pressed="true">
+							EN
+						</button>
+						<button
+							type="button"
+							data-lang="sv"
+							lang="sv"
+							aria-pressed="false">
+							SV
+						</button>
+					</div>
+					<a
+						class="header-link"
+						href="https://github.com/hydrarguru/job-application-tracker"
+						>GitHub</a
+					>
+				</div>
+			</div>
+		</header>
+
+		<main id="top" class="wrap">
+			<section class="hero">
+				<div>
+					<p class="eyebrow" data-i18n="hero.eyebrow">
+						Browser extension
+					</p>
+					<h1 data-i18n="hero.title">
+						Keep track of every job you apply for
+					</h1>
+					<p class="lead" data-i18n="hero.lead">
+						J.A.T saves your job applications, shows how your search
+						is going, and fills in your activity report for
+						Arbetsförmedlingen.
+					</p>
+					<div class="cta-row">
+						<a
+							class="button"
+							href="https://github.com/hydrarguru/job-application-tracker#installation-steps"
+							data-i18n="hero.cta"
+							>Get it on GitHub</a
+						>
+						<span class="muted" data-i18n="hero.browsers"
+							>For Chrome, Edge, Brave and Firefox.</span
+						>
+					</div>
+					<p class="privacy">
+						<svg
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
+							<rect x="4" y="11" width="16" height="10" rx="2" />
+							<path d="M8 11V7a4 4 0 0 1 8 0v4" />
+						</svg>
+						<span data-i18n="hero.privacy"
+							>Your applications stay in your browser. Nothing is
+							sent to a server.</span
+						>
+					</p>
+				</div>
+				<img
+					class="hero-shot"
+					src="popup.png"
+					width="840"
+					height="1200"
+					alt="The J.A.T popup with the form for adding a new application"
+					data-i18n-alt="alt.popup" />
+			</section>
+
+			<section class="tour" aria-labelledby="tour-title">
+				<div class="tour-intro">
+					<p class="eyebrow" data-i18n="tour.eyebrow">How it works</p>
+					<h2 id="tour-title" data-i18n="tour.title">
+						From application to activity report
+					</h2>
+				</div>
+				<div class="tour-grid">
+					<ol class="steps">
+						<li class="step" data-shot="popup">
+							<span class="chapter" data-i18n="chapter.add"
+								>Add</span
+							>
+							<h3 data-i18n="step.popup.title">
+								Save an application in seconds
+							</h3>
+							<p data-i18n="step.popup.body">
+								Open the popup from the toolbar and fill in the
+								company, position, employment type, location,
+								link and date. J.A.T saves it right away.
+							</p>
+							<img
+								class="step-shot"
+								src="popup.png"
+								width="840"
+								height="1200"
+								loading="lazy"
+								alt="The J.A.T popup with the form for adding a new application"
+								data-i18n-alt="alt.popup" />
+						</li>
+						<li class="step" data-shot="dashboard">
+							<span class="chapter" data-i18n="chapter.overview"
+								>Overview</span
+							>
+							<h3 data-i18n="step.dashboard.title">
+								See every application in one place
+							</h3>
+							<p data-i18n="step.dashboard.body">
+								The overview shows your totals for today, this
+								month and all time. Search the list, open the
+								posting, and mark what you have reported.
+							</p>
+							<img
+								class="step-shot"
+								src="dashboard.png"
+								width="2880"
+								height="2318"
+								loading="lazy"
+								alt="The overview with totals and the list of applications"
+								data-i18n-alt="alt.dashboard" />
+						</li>
+						<li class="step" data-shot="dialog-edit">
+							<span class="chapter" data-i18n="chapter.overview"
+								>Overview</span
+							>
+							<h3 data-i18n="step.edit.title">
+								Fix a detail when things change
+							</h3>
+							<p data-i18n="step.edit.body">
+								Edit an entry in a dialog, or select several
+								applications and delete them together.
+							</p>
+							<img
+								class="step-shot"
+								src="dialog-edit.png"
+								width="2880"
+								height="1800"
+								loading="lazy"
+								alt="The dialog for editing an application"
+								data-i18n-alt="alt.edit" />
+						</li>
+						<li class="step" data-shot="reporting-beside">
+							<span
+								class="chapter"
+								data-tone="saffron"
+								data-i18n="chapter.report"
+								>Arbetsförmedlingen</span
+							>
+							<h3 data-i18n="step.reportList.title">
+								Your month, next to the form
+							</h3>
+							<p data-i18n="step.reportList.body">
+								Open the Sökta jobb form on Mina sidor and a
+								J.A.T panel appears beside it, listing the
+								applications from the month you are reporting,
+								with the unreported ones first.
+							</p>
+							<img
+								class="step-shot"
+								src="reporting-beside.png"
+								width="1905"
+								height="2000"
+								loading="lazy"
+								alt="The J.A.T panel next to the Sökta jobb form, listing the applications from October"
+								data-i18n-alt="alt.reportList" />
+						</li>
+						<li class="step" data-shot="reporting-preview">
+							<span
+								class="chapter"
+								data-tone="saffron"
+								data-i18n="chapter.report"
+								>Arbetsförmedlingen</span
+							>
+							<h3 data-i18n="step.reportPreview.title">
+								Preview before you fill
+							</h3>
+							<p data-i18n="step.reportPreview.body">
+								Pick an application to see what will be filled
+								in. You can change the values for this report
+								without touching the saved application.
+							</p>
+							<img
+								class="step-shot"
+								src="reporting-preview.png"
+								width="1422"
+								height="2740"
+								loading="lazy"
+								alt="Preview of an application in the J.A.T panel, with the Fyll i formuläret button"
+								data-i18n-alt="alt.reportPreview" />
+						</li>
+						<li class="step" data-shot="reporting-filled">
+							<span
+								class="chapter"
+								data-tone="saffron"
+								data-i18n="chapter.report"
+								>Arbetsförmedlingen</span
+							>
+							<h3 data-i18n="step.reportFilled.title">
+								Filled in, and you click Spara
+							</h3>
+							<p data-i18n="step.reportFilled.body">
+								J.A.T fills in the form and shows which fields
+								it filled. It never submits for you. Nothing
+								reaches Arbetsförmedlingen until you click Spara
+								yourself.
+							</p>
+							<img
+								class="step-shot"
+								src="reporting-filled.png"
+								width="1422"
+								height="2960"
+								loading="lazy"
+								alt="The Sökta jobb form filled in by J.A.T, with every field marked as filled in the panel"
+								data-i18n-alt="alt.reportFilled" />
+						</li>
+						<li class="step" data-shot="statistics">
+							<span
+								class="chapter"
+								data-tone="olive"
+								data-i18n="chapter.statistics"
+								>Statistics</span
+							>
+							<h3 data-i18n="step.statistics.title">
+								See how your search is going
+							</h3>
+							<p data-i18n="step.statistics.body">
+								Your top companies, positions and locations,
+								plus a chart of jobs applied for per month.
+							</p>
+							<img
+								class="step-shot"
+								src="statistics.png"
+								width="2880"
+								height="2214"
+								loading="lazy"
+								alt="Statistics with top companies, positions and locations, and a bar chart of jobs per month"
+								data-i18n-alt="alt.statistics" />
+						</li>
+						<li class="step" data-shot="statistics-table">
+							<span
+								class="chapter"
+								data-tone="olive"
+								data-i18n="chapter.statistics"
+								>Statistics</span
+							>
+							<h3 data-i18n="step.statisticsTable.title">
+								Prefer numbers? Use the table
+							</h3>
+							<p data-i18n="step.statisticsTable.body">
+								Switch the chart to a table to read the exact
+								count for every month.
+							</p>
+							<img
+								class="step-shot"
+								src="statistics-table.png"
+								width="2880"
+								height="2440"
+								loading="lazy"
+								alt="Statistics with jobs per month shown as a table"
+								data-i18n-alt="alt.statisticsTable" />
+						</li>
+						<li class="step" data-shot="preferences">
+							<span
+								class="chapter"
+								data-i18n="chapter.preferences"
+								>Preferences</span
+							>
+							<h3 data-i18n="step.preferences.title">
+								Your data, your way
+							</h3>
+							<p data-i18n="step.preferences.body">
+								Switch between English and Swedish, import
+								applications from a file, and export them as
+								CSV, Excel or PDF.
+							</p>
+							<img
+								class="step-shot"
+								src="preferences.png"
+								width="2880"
+								height="2174"
+								loading="lazy"
+								alt="Preferences with language, import and clear data settings"
+								data-i18n-alt="alt.preferences" />
+						</li>
+					</ol>
+					<div class="frame" aria-hidden="true">
+						<div class="frame-bar">
+							<span></span><span></span><span></span>
+						</div>
+						<div class="frame-view">
+							<img data-shot="popup" src="popup.png" alt="" />
+							<img
+								data-shot="dashboard"
+								src="dashboard.png"
+								alt="" />
+							<img
+								data-shot="dialog-edit"
+								src="dialog-edit.png"
+								loading="lazy"
+								alt="" />
+							<img
+								data-shot="reporting-beside"
+								src="reporting-beside.png"
+								loading="lazy"
+								alt="" />
+							<img
+								data-shot="reporting-preview"
+								src="reporting-preview.png"
+								loading="lazy"
+								alt="" />
+							<img
+								data-shot="reporting-filled"
+								src="reporting-filled.png"
+								loading="lazy"
+								alt="" />
+							<img
+								data-shot="statistics"
+								src="statistics.png"
+								loading="lazy"
+								alt="" />
+							<img
+								data-shot="statistics-table"
+								src="statistics-table.png"
+								loading="lazy"
+								alt="" />
+							<img
+								data-shot="preferences"
+								src="preferences.png"
+								loading="lazy"
+								alt="" />
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="wrap">
+				<h2 data-i18n="footer.title">Try J.A.T</h2>
+				<p data-i18n="footer.body">
+					J.A.T is free and open source. Follow the installation steps
+					on GitHub to build it and load it in your browser.
+				</p>
 				<a
 					class="button"
-					href="https://github.com/hydrarguru/job-application-tracker"
-					>View on GitHub</a
+					href="https://github.com/hydrarguru/job-application-tracker#installation-steps"
+					data-i18n="footer.cta"
+					>Installation steps</a
 				>
-			</p>
-			<img
-				class="screenshot"
-				src="dashboard.png"
-				alt="The J.A.T overview listing saved job applications" />
-			<footer>
-				<a href="https://github.com/hydrarguru/job-application-tracker"
-					>Source on GitHub</a
-				>
-			</footer>
-		</main>
+			</div>
+		</footer>
+
+		<script>
+			const messages = {
+				sv: {
+					'hero.eyebrow': 'Webbläsartillägg',
+					'hero.title': 'Håll koll på alla jobb du söker',
+					'hero.lead':
+						'J.A.T sparar dina jobbansökningar, visar hur jobbsökandet går och fyller i din aktivitetsrapport till Arbetsförmedlingen.',
+					'hero.cta': 'Hämta på GitHub',
+					'hero.browsers': 'För Chrome, Edge, Brave och Firefox.',
+					'hero.privacy':
+						'Dina ansökningar stannar i webbläsaren. Inget skickas till någon server.',
+					'tour.eyebrow': 'Så fungerar det',
+					'tour.title': 'Från ansökan till aktivitetsrapport',
+					'chapter.add': 'Lägg till',
+					'chapter.overview': 'Översikt',
+					'chapter.report': 'Arbetsförmedlingen',
+					'chapter.statistics': 'Statistik',
+					'chapter.preferences': 'Inställningar',
+					'step.popup.title': 'Spara en ansökan på några sekunder',
+					'step.popup.body':
+						'Öppna popupen i verktygsfältet och fyll i företag, tjänst, anställningsform, ort, länk och datum. J.A.T sparar den direkt.',
+					'step.dashboard.title': 'Alla ansökningar på ett ställe',
+					'step.dashboard.body':
+						'Översikten visar dina totaler för idag, den här månaden och totalt. Sök i listan, öppna annonsen och markera det du har rapporterat.',
+					'step.edit.title': 'Rätta en detalj när något ändras',
+					'step.edit.body':
+						'Redigera en ansökan i en dialog, eller markera flera ansökningar och ta bort dem samtidigt.',
+					'step.reportList.title': 'Din månad, bredvid formuläret',
+					'step.reportList.body':
+						'Öppna formuläret Sökta jobb på Mina sidor så visas en J.A.T-panel bredvid. Den listar ansökningarna från månaden du rapporterar, med de orapporterade först.',
+					'step.reportPreview.title':
+						'Förhandsgranska innan du fyller i',
+					'step.reportPreview.body':
+						'Välj en ansökan för att se vad som fylls i. Du kan ändra värdena för just den här rapporten utan att ändra den sparade ansökan.',
+					'step.reportFilled.title':
+						'Ifyllt, och du klickar på Spara',
+					'step.reportFilled.body':
+						'J.A.T fyller i formuläret och visar vilka fält som fylldes i. Inget skickas in åt dig. Ingenting når Arbetsförmedlingen förrän du själv klickar på Spara.',
+					'step.statistics.title': 'Se hur jobbsökandet går',
+					'step.statistics.body':
+						'Dina vanligaste företag, tjänster och orter, och ett diagram över sökta jobb per månad.',
+					'step.statisticsTable.title':
+						'Hellre siffror? Använd tabellen',
+					'step.statisticsTable.body':
+						'Byt diagrammet mot en tabell för att se exakt antal för varje månad.',
+					'step.preferences.title': 'Dina uppgifter, på ditt sätt',
+					'step.preferences.body':
+						'Växla mellan svenska och engelska, importera ansökningar från en fil och exportera dem som CSV, Excel eller PDF.',
+					'footer.title': 'Prova J.A.T',
+					'footer.body':
+						'J.A.T är gratis och har öppen källkod. Följ installationsstegen på GitHub för att bygga tillägget och läsa in det i webbläsaren.',
+					'footer.cta': 'Installationssteg',
+					'alt.popup':
+						'J.A.T-popupen med formuläret för att lägga till en ny ansökan',
+					'alt.dashboard':
+						'Översikten med totaler och listan med ansökningar',
+					'alt.edit': 'Dialogen för att redigera en ansökan',
+					'alt.reportList':
+						'J.A.T-panelen bredvid formuläret Sökta jobb, med ansökningarna från oktober',
+					'alt.reportPreview':
+						'Förhandsgranskning av en ansökan i J.A.T-panelen, med knappen Fyll i formuläret',
+					'alt.reportFilled':
+						'Formuläret Sökta jobb ifyllt av J.A.T, med varje fält markerat som ifyllt i panelen',
+					'alt.statistics':
+						'Statistik med vanligaste företag, tjänster och orter, och ett stapeldiagram över jobb per månad',
+					'alt.statisticsTable':
+						'Statistik med jobb per månad som en tabell',
+					'alt.preferences':
+						'Inställningar för språk, import och rensning av data',
+				},
+			};
+
+			function collectEnglish() {
+				const en = {};
+				for (const el of document.querySelectorAll('[data-i18n]')) {
+					en[el.dataset.i18n] = el.textContent
+						.trim()
+						.replace(/\s+/g, ' ');
+				}
+				for (const el of document.querySelectorAll('[data-i18n-alt]')) {
+					en[el.dataset.i18nAlt] = el.alt;
+				}
+				return en;
+			}
+			messages.en = collectEnglish();
+
+			function applyLanguage(lang) {
+				const text = messages[lang];
+				document.documentElement.lang = lang;
+				for (const el of document.querySelectorAll('[data-i18n]')) {
+					el.textContent = text[el.dataset.i18n];
+				}
+				for (const el of document.querySelectorAll('[data-i18n-alt]')) {
+					el.alt = text[el.dataset.i18nAlt];
+				}
+				for (const button of document.querySelectorAll('[data-lang]')) {
+					button.setAttribute(
+						'aria-pressed',
+						String(button.dataset.lang === lang)
+					);
+				}
+			}
+
+			function savedLanguage() {
+				try {
+					return localStorage.getItem('jat-lang');
+				} catch {
+					return null;
+				}
+			}
+
+			function chooseLanguage(lang) {
+				applyLanguage(lang);
+				try {
+					localStorage.setItem('jat-lang', lang);
+				} catch {}
+			}
+
+			for (const button of document.querySelectorAll('[data-lang]')) {
+				button.addEventListener('click', () =>
+					chooseLanguage(button.dataset.lang)
+				);
+			}
+
+			const browserLanguage = navigator.language.startsWith('sv')
+				? 'sv'
+				: 'en';
+			const initialLanguage = savedLanguage() ?? browserLanguage;
+			if (initialLanguage in messages) applyLanguage(initialLanguage);
+
+			const steps = document.querySelectorAll('.step');
+			const shots = document.querySelectorAll('.frame-view img');
+
+			function showStep(step) {
+				for (const other of steps) {
+					other.classList.toggle('is-active', other === step);
+				}
+				for (const shot of shots) {
+					shot.classList.toggle(
+						'is-active',
+						shot.dataset.shot === step.dataset.shot
+					);
+				}
+			}
+
+			// A step counts as current while it crosses the middle of the viewport.
+			const observer = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						if (entry.isIntersecting) showStep(entry.target);
+					}
+				},
+				{ rootMargin: '-50% 0px -50% 0px' }
+			);
+			for (const step of steps) observer.observe(step);
+			showStep(steps[0]);
+		</script>
 	</body>
 </html>
